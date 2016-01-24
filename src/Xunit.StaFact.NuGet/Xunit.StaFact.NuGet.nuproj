@@ -33,6 +33,7 @@
     <Copyright>Copyright © Andrew Arnott</Copyright>
     <Tags>STA xunit test unit WPF</Tags>
     <EmbedSourceFiles>true</EmbedSourceFiles>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xunit.StaFact.Desktop\Xunit.StaFact.Desktop.csproj" />
