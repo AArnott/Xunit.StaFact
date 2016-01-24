@@ -14,11 +14,16 @@ namespace Xunit.Sdk
         private readonly int mainThread = Environment.CurrentManagedThreadId;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="UISynchronizationContext"/> class.
         /// </summary>
         public UISynchronizationContext()
         {
         }
 
+        /// <summary>
+        /// Blocks the calling thread to pump messages until a task has completed.
+        /// </summary>
+        /// <param name="untilCompleted">The task that must complete to break out of the message loop.</param>
         public void PumpMessages(Task untilCompleted)
         {
             if (Environment.CurrentManagedThreadId != this.mainThread)
