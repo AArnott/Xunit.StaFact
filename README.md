@@ -14,6 +14,18 @@ execution on the same thread as they would in a real app.
 
 This project is available as a [NuGet package][NuPkg]
 
-See [samples](src/Xunit.StaFact.Tests/Samples.cs)
+## Samples
+
+```csharp
+[WpfFact]
+public async Task WpfFact_OnSTAThread()
+{
+    Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+    await Task.Yield();
+    Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
+}
+```
+
+See more [samples](src/Xunit.StaFact.Tests/Samples.cs).
 
 [NuPkg]: https://www.nuget.org/packages/Xunit.StaFact
