@@ -3,3 +3,6 @@ before_build:
 - ps: nuget restore src
 build:
   verbosity: minimal
+artifacts:
+- path: '**\*.nupkg'
+  name: NuGet package
