@@ -20,8 +20,10 @@ public class Samples
     public async Task WpfFact_OnSTAThread()
     {
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+        var syncContext = SynchronizationContext.Current;
         await Task.Yield();
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
+        Assert.Same(syncContext, SynchronizationContext.Current);
     }
 
     [WpfTheory]
@@ -29,19 +31,23 @@ public class Samples
     public async Task WpfTheory_OnSTAThread(int unused)
     {
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+        var syncContext = SynchronizationContext.Current;
         await Task.Yield();
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
+        Assert.Same(syncContext, SynchronizationContext.Current);
     }
 
     [UIFact]
     public async Task UIFact_OnSTAThread()
     {
         int initialThread = Environment.CurrentManagedThreadId;
+        var syncContext = SynchronizationContext.Current;
 #if DESKTOP
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
 #endif
         await Task.Yield();
         Assert.Equal(initialThread, Environment.CurrentManagedThreadId);
+        Assert.Same(syncContext, SynchronizationContext.Current);
 #if DESKTOP
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
 #endif
