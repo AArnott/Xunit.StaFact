@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -30,6 +31,20 @@ public class Samples
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
         await Task.Yield();
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
+    }
+
+    [UIFact]
+    public async Task UIFact_OnSTAThread()
+    {
+        int initialThread = Environment.CurrentManagedThreadId;
+#if DESKTOP
+        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+#endif
+        await Task.Yield();
+        Assert.Equal(initialThread, Environment.CurrentManagedThreadId);
+#if DESKTOP
+        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
+#endif
     }
 
     [StaFact]

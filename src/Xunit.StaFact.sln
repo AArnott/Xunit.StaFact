@@ -21,7 +21,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact.Tests", "Xuni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact.Desktop", "Xunit.StaFact.Desktop\Xunit.StaFact.Desktop.csproj", "{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact.Dotnet", "Xunit.StaFact.Dotnet\Xunit.StaFact.Dotnet.csproj", "{ACD8A329-0B0B-4F4A-867C-27A8518DFDA4}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xunit.StaFact.Shared", "Xunit.StaFact.Shared\Xunit.StaFact.Shared.shproj", "{2A47290C-60F3-41F9-B595-ECA279CD5912}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems*{acd8a329-0b0b-4f4a-867c-27a8518dfda4}*SharedItemsImports = 4
+		Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems*{2a47290c-60f3-41f9-b595-eca279cd5912}*SharedItemsImports = 13
+		Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems*{d9d885ec-0bc7-46c1-a4d7-6dec5a3123be}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -43,6 +52,10 @@ Global
 		{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACD8A329-0B0B-4F4A-867C-27A8518DFDA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACD8A329-0B0B-4F4A-867C-27A8518DFDA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACD8A329-0B0B-4F4A-867C-27A8518DFDA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACD8A329-0B0B-4F4A-867C-27A8518DFDA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

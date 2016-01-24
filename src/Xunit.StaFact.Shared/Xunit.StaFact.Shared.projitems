@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>2a47290c-60f3-41f9-b595-eca279cd5912</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Xunit.StaFact.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Sdk\UIFactDiscoverer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sdk\UISynchronizationContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sdk\UITestCase.cs" />
+  </ItemGroup>
+</Project>

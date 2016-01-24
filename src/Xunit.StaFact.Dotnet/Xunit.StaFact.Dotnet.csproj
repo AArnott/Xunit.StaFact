@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\dotnet\ReadOnlySourceTree.props" Condition="Exists('..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\dotnet\ReadOnlySourceTree.props')" />
+  <Import Project="..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\ReadOnlySourceTree.props" Condition="Exists('..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\ReadOnlySourceTree.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}</ProjectGuid>
+    <ProjectGuid>{ACD8A329-0B0B-4F4A-867C-27A8518DFDA4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xunit</RootNamespace>
-    <AssemblyName>Xunit.StaFact</AssemblyName>
+    <AssemblyName>Xunit.StaFact.Dotnet</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -27,8 +27,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Debug\Xunit.StaFact\Xunit.StaFact.XML</DocumentationFile>
-    <CodeAnalysisRuleSet>Xunit.StaFact.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Xunit.StaFact.Dotnet.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,24 +36,25 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Release\Xunit.StaFact\Xunit.StaFact.XML</DocumentationFile>
-    <CodeAnalysisRuleSet>Xunit.StaFact.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>opensource.snk</AssemblyOriginatorKeyFile>
+    <CodeAnalysisRuleSet>Xunit.StaFact.Dotnet.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StaFactAttribute.cs" />
-    <Compile Include="UIFactAttribute.cs" />
-    <Compile Include="WpfFactAttribute.cs" />
-    <Compile Include="WpfTheoryAttribute.cs" />
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="packages.config" />
+    <None Include="Xunit.StaFact.Dotnet.ruleset" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\Xunit.StaFact\stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\StyleCop.Analyzers.1.0.0-alpha-gafdc12e670\tools\analyzers\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\xunit.abstractions.2.0.0\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
@@ -63,20 +63,12 @@
       <HintPath>..\..\packages\xunit.extensibility.core.2.1.0\lib\portable-net45+win8+wp8+wpa81\xunit.core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="xunit.execution.dotnet, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\xunit.extensibility.execution.2.1.0\lib\portable-net45+win8+wp8+wpa81\xunit.execution.dotnet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="opensource.snk" />
-    <None Include="packages.config" />
-    <None Include="Xunit.StaFact.ruleset" />
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\..\packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
-    <Analyzer Include="..\..\packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\..\packages\StyleCop.Analyzers.1.0.0-rc3\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
-  </ItemGroup>
+  <Import Project="..\Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Nerdbank.GitVersioning.1.2.8\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets" Condition="Exists('..\..\packages\Nerdbank.GitVersioning.1.2.8\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -84,10 +76,17 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\Nerdbank.GitVersioning.1.2.8\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Nerdbank.GitVersioning.1.2.8\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets'))" />
-    <Error Condition="!Exists('..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\dotnet\ReadOnlySourceTree.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\dotnet\ReadOnlySourceTree.props'))" />
-    <Error Condition="!Exists('..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\dotnet\ReadOnlySourceTree.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\dotnet\ReadOnlySourceTree.targets'))" />
-    <Error Condition="!Exists('..\..\packages\NuProj.Common.0.10.30-beta-gcbd7693f91\build\dotnet\NuProj.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NuProj.Common.0.10.30-beta-gcbd7693f91\build\dotnet\NuProj.Common.targets'))" />
+    <Error Condition="!Exists('..\..\packages\NuProj.Common.0.10.30-beta-gcbd7693f91\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\NuProj.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NuProj.Common.0.10.30-beta-gcbd7693f91\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\NuProj.Common.targets'))" />
+    <Error Condition="!Exists('..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\ReadOnlySourceTree.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\ReadOnlySourceTree.props'))" />
+    <Error Condition="!Exists('..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\ReadOnlySourceTree.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\ReadOnlySourceTree.targets'))" />
   </Target>
-  <Import Project="..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\dotnet\ReadOnlySourceTree.targets" Condition="Exists('..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\dotnet\ReadOnlySourceTree.targets')" />
-  <Import Project="..\..\packages\NuProj.Common.0.10.30-beta-gcbd7693f91\build\dotnet\NuProj.Common.targets" Condition="Exists('..\..\packages\NuProj.Common.0.10.30-beta-gcbd7693f91\build\dotnet\NuProj.Common.targets')" />
+  <Import Project="..\..\packages\NuProj.Common.0.10.30-beta-gcbd7693f91\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\NuProj.Common.targets" Condition="Exists('..\..\packages\NuProj.Common.0.10.30-beta-gcbd7693f91\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\NuProj.Common.targets')" />
+  <Import Project="..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\ReadOnlySourceTree.targets" Condition="Exists('..\..\packages\ReadOnlySourceTree.0.1.24-beta\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\ReadOnlySourceTree.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

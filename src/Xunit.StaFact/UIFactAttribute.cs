@@ -4,15 +4,15 @@
 namespace Xunit
 {
     using System;
-    using Xunit.Sdk;
+    using Sdk;
 
     /// <summary>
     /// Identifies an xunit test that starts on an STA thread
-    /// with a WPF DispatcherSynchronizationContext.
+    /// with a UI thread-like SynchronizationContext.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.Sdk.WpfFactDiscoverer", "Xunit.StaFact.{Platform}")]
-    public class WpfFactAttribute : FactAttribute
+    [XunitTestCaseDiscoverer("Xunit.Sdk.UIFactDiscoverer", "Xunit.StaFact.{Platform}")]
+    public class UIFactAttribute : FactAttribute
     {
     }
 }
