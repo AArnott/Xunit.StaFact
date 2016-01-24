@@ -35,10 +35,15 @@
     <EmbedSourceFiles>true</EmbedSourceFiles>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Xunit.StaFact.Desktop\Xunit.StaFact.Desktop.csproj" />
     <ProjectReference Include="..\Xunit.StaFact\Xunit.StaFact.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="build\net45\Xunit.StaFact.props" />
+    <Content Include="build\_Xunit.StaFact.props" />
   </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -56,6 +61,18 @@
       <Version>$(NuGetPackageVersion)</Version>
       <NuSpecProperties>$(NuGetProperties);CommitId=$(GitCommitIdShort)</NuSpecProperties>
     </PropertyGroup>
+  </Target>
+  <Target Name="MovePlatformExecutionAssemblies" AfterTargets="GetPackageFiles" DependsOnTargets="GetPackageFiles">
+    <ItemGroup>
+      <!-- MOVE desktop execution assembly to the build folder. -->
+      <PackageFile>
+        <TargetPath Condition=" '%(FileName)' == 'xunit.stafact.desktop' ">build\%(FileName)%(Extension)</TargetPath>
+      </PackageFile>
+      <!-- COPY dotnet assembly to the build folder as well. -->
+      <PackageFile Include="@(PackageFile)" Condition=" '%(FileName)' == 'xunit.stafact.dotnet' ">
+        <TargetPath>build\%(FileName)%(Extension)</TargetPath>
+      </PackageFile>
+    </ItemGroup>
   </Target>
   <ProjectExtensions>
     <ProjectCapabilities>

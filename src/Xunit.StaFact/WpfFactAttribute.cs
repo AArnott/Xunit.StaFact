@@ -12,7 +12,7 @@ namespace Xunit
     /// with a WPF <see cref="DispatcherSynchronizationContext"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.WpfFactDiscoverer", ThisAssembly.AssemblyName)]
+    [XunitTestCaseDiscoverer("Xunit.Sdk.WpfFactDiscoverer", "Xunit.StaFact.{Platform}")]
     public class WpfFactAttribute : FactAttribute
     {
     }

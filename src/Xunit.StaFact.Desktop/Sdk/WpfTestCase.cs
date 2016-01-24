@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
-namespace Xunit
+namespace Xunit.Sdk
 {
     using System;
     using System.Collections.Generic;
@@ -10,8 +10,7 @@ namespace Xunit
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Threading;
-    using Xunit.Abstractions;
-    using Xunit.Sdk;
+    using Abstractions;
 
     /// <summary>
     /// Wraps test cases for FactAttribute and TheoryAttribute so the test case runs on the WPF STA thread

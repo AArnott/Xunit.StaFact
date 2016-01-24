@@ -10,7 +10,7 @@ namespace Xunit
     /// Identifies an xunit test that starts on an STA thread.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.StaFactDiscoverer", ThisAssembly.AssemblyName)]
+    [XunitTestCaseDiscoverer("Xunit.Sdk.StaFactDiscoverer", "Xunit.StaFact.{Platform}")]
     public class StaFactAttribute : FactAttribute
     {
     }

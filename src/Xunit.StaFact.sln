@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact.Tests", "Xunit.StaFact.Tests\Xunit.StaFact.Tests.csproj", "{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact.Desktop", "Xunit.StaFact.Desktop\Xunit.StaFact.Desktop.csproj", "{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

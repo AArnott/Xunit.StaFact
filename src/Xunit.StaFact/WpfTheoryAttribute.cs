@@ -12,7 +12,7 @@ namespace Xunit
     /// with a WPF <see cref="DispatcherSynchronizationContext"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.WpfTheoryDiscoverer", ThisAssembly.AssemblyName)]
+    [XunitTestCaseDiscoverer("Xunit.Sdk.WpfTheoryDiscoverer", "Xunit.StaFact.{Platform}")]
     public class WpfTheoryAttribute : TheoryAttribute
     {
     }
