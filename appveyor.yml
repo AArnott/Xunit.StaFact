@@ -4,6 +4,8 @@ before_build:
 - ps: nuget restore src
 build:
   verbosity: minimal
+test:
+  assemblies: '**\*.Tests.dll'
 artifacts:
 - path: '**\*.nupkg'
   name: NuGet package
