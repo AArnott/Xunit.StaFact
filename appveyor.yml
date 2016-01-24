@@ -7,5 +7,5 @@ build:
 test:
   assemblies: '**\*.Tests.dll'
 artifacts:
-- path: '**\*.nupkg'
+- path: 'bin\**\*.nupkg'
   name: NuGet package
