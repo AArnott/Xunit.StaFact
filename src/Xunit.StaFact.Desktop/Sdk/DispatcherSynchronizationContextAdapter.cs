@@ -20,6 +20,7 @@ namespace Xunit.Sdk
 
         internal override void CompleteOperations()
         {
+            throw new NotSupportedException("Async void test methods are not supported by the WPF dispatcher. Use Async Task instead.");
         }
 
         internal override void PumpTill(Task task)

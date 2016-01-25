@@ -33,5 +33,24 @@ namespace Xunit.StaFact.Tests
             Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
             Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
         }
+
+        [WpfFact, Trait("Category", "FailureExpected")]
+        public async void AsyncVoidNotSupported()
+        {
+        }
+
+        [WpfFact, Trait("Category", "FailureExpected")]
+        public async Task FailAfterYield_Task()
+        {
+            await Task.Yield();
+            Assert.False(true);
+        }
+
+        [WpfFact, Trait("Category", "FailureExpected")]
+        public async Task FailAfterDelay_Task()
+        {
+            await Task.Delay(10);
+            Assert.False(true);
+        }
     }
 }
