@@ -6,6 +6,9 @@ build:
   verbosity: minimal
 test:
   assemblies: '**\*.Tests.dll'
+  categories:
+    except:
+    - FailureExpected
 artifacts:
 - path: 'bin\**\*.nupkg'
   name: NuGet package

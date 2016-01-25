@@ -74,28 +74,28 @@ namespace Xunit.StaFact.Tests
             await Task.Delay(10);
         }
 
-        [UIFact]
+        [UIFact, Trait("FailureExpected", "")]
         public async void FailAfterYield()
         {
             await Task.Yield();
             Assert.False(true);
         }
 
-        [UIFact]
+        [UIFact, Trait("FailureExpected", "")]
         public async void FailAfterDelay()
         {
             await Task.Delay(10);
             Assert.False(true);
         }
 
-        [UIFact]
+        [UIFact, Trait("FailureExpected", "")]
         public async Task FailAfterYield_Task()
         {
             await Task.Yield();
             Assert.False(true);
         }
 
-        [UIFact]
+        [UIFact, Trait("FailureExpected", "")]
         public async Task FailAfterDelay_Task()
         {
             await Task.Delay(10);
