@@ -28,6 +28,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>Xunit.StaFact.Dotnet.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\..\bin\Debug\Xunit.StaFact.Dotnet\Xunit.StaFact.Dotnet.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,6 +38,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>Xunit.StaFact.Dotnet.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\..\bin\Release\Xunit.StaFact.Dotnet\Xunit.StaFact.Dotnet.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
@@ -67,6 +69,12 @@
       <HintPath>..\..\packages\xunit.extensibility.execution.2.1.0\lib\portable-net45+win8+wp8+wpa81\xunit.execution.dotnet.dll</HintPath>
       <Private>True</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Xunit.StaFact\Xunit.StaFact.csproj">
+      <Project>{8c500c20-0cd6-4257-a9ed-c571da6e68d6}</Project>
+      <Name>Xunit.StaFact</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
