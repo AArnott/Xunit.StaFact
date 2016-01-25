@@ -15,136 +15,93 @@ namespace Xunit.Sdk
     /// Wraps test cases for FactAttribute and TheoryAttribute so the test case runs on the WPF STA thread
     /// </summary>
     [DebuggerDisplay(@"\{ class = {TestMethod.TestClass.Class.Name}, method = {TestMethod.Method.Name}, display = {DisplayName}, skip = {SkipReason} \}")]
-    public class UITestCase : LongLivedMarshalByRefObject, IXunitTestCase
+    public class UITestCase : XunitTestCase
     {
-        private IXunitTestCase testCase;
+        private SyncContextType synchronizationContextType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UITestCase"/> class.
         /// </summary>
-        /// <param name="testCase">The test case.</param>
-        public UITestCase(IXunitTestCase testCase)
+        /// <param name="synchronizationContextType">The type of <see cref="SynchronizationContext"/> to use.</param>
+        /// <param name="diagnosticMessageSink">The message sink used to send diagnostic messages</param>
+        /// <param name="defaultMethodDisplay">Default method display to use (when not customized).</param>
+        /// <param name="testMethod">The test method this test case belongs to.</param>
+        /// <param name="testMethodArguments">The arguments for the test method.</param>
+        public UITestCase(
+            SyncContextType synchronizationContextType,
+            IMessageSink diagnosticMessageSink,
+            TestMethodDisplay defaultMethodDisplay,
+            ITestMethod testMethod,
+            object[] testMethodArguments = null)
+            : base(diagnosticMessageSink, defaultMethodDisplay, testMethod, testMethodArguments)
         {
-            this.testCase = testCase;
+            this.synchronizationContextType = synchronizationContextType;
         }
 
-        /// <summary/>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UITestCase"/> class
+        /// for deserialization.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Called by the de-serializer", error: true)]
+        [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
         public UITestCase()
         {
         }
 
-        /// <inheritdoc/>
-        public IMethodInfo Method => this.testCase.Method;
-
-        /// <inheritdoc/>
-        public string DisplayName => this.testCase.DisplayName;
-
-        /// <inheritdoc/>
-        public string SkipReason => this.testCase.SkipReason;
-
-        /// <inheritdoc/>
-        public ISourceInformation SourceInformation
+        public enum SyncContextType
         {
-            get { return this.testCase.SourceInformation; }
-            set { this.testCase.SourceInformation = value; }
+            /// <summary>
+            /// Use the <see cref="UISynchronizationContext"/>, which works in portable profiles.
+            /// </summary>
+            Portable,
+
+#if DESKTOP
+            /// <summary>
+            /// Use the DispatcherSynchronizationContext, which is only available on Desktop.
+            /// </summary>
+            WPF,
+#endif
+        }
+
+        private SyncContextAdapter Adapter
+        {
+            get
+            {
+                switch (this.synchronizationContextType)
+                {
+                    case SyncContextType.Portable:
+                        return UISynchronizationContext.Adapter.Default;
+#if DESKTOP
+                    case SyncContextType.WPF:
+                        return DispatcherSynchronizationContextAdapter.Default;
+#endif
+                    default:
+                        throw new NotSupportedException("Unsupported type of SynchronizationContext.");
+                }
+            }
+        }
+
+        public override void Serialize(IXunitSerializationInfo data)
+        {
+            base.Serialize(data);
+            data.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
+        }
+
+        public override void Deserialize(IXunitSerializationInfo data)
+        {
+            base.Deserialize(data);
+            this.synchronizationContextType = (SyncContextType)data.GetValue(nameof(this.synchronizationContextType), typeof(SyncContextType));
         }
 
         /// <inheritdoc/>
-        public ITestMethod TestMethod => this.testCase.TestMethod;
-
-        /// <inheritdoc/>
-        public object[] TestMethodArguments => this.testCase.TestMethodArguments;
-
-        /// <inheritdoc/>
-        public Dictionary<string, List<string>> Traits => this.testCase.Traits;
-
-        /// <inheritdoc/>
-        public string UniqueID => this.testCase.UniqueID;
-
-        /// <inheritdoc/>
-        public Task<RunSummary> RunAsync(
+        public override Task<RunSummary> RunAsync(
             IMessageSink diagnosticMessageSink,
             IMessageBus messageBus,
             object[] constructorArguments,
             ExceptionAggregator aggregator,
             CancellationTokenSource cancellationTokenSource)
         {
-#if DESKTOP
-            var tcs = new TaskCompletionSource<RunSummary>();
-            var thread = new Thread(() =>
-            {
-                // Set up the SynchronizationContext so that any awaits
-                // resume on the STA thread as they would in a GUI app.
-                var syncContext = new UISynchronizationContext();
-                SynchronizationContext.SetSynchronizationContext(syncContext);
-
-                // Start off the test method.
-                var testCaseTask = this.testCase.RunAsync(diagnosticMessageSink, messageBus, constructorArguments, aggregator, cancellationTokenSource);
-                syncContext.PumpMessages(testCaseTask);
-                CopyTaskResultFrom(tcs, testCaseTask);
-            });
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-            return tcs.Task;
-#else
-            return Task.Run(delegate
-            {
-                // Set up the SynchronizationContext so that any awaits
-                // resume on the STA thread as they would in a GUI app.
-                var syncContext = new UISynchronizationContext();
-                SynchronizationContext.SetSynchronizationContext(syncContext);
-
-                // Start off the test method.
-                var task = this.testCase.RunAsync(diagnosticMessageSink, messageBus, constructorArguments, aggregator, cancellationTokenSource);
-                syncContext.PumpMessages(task);
-                return task.GetAwaiter().GetResult();
-            });
-#endif
-        }
-
-        /// <inheritdoc/>
-        public void Deserialize(IXunitSerializationInfo info)
-        {
-            this.testCase = info.GetValue<IXunitTestCase>("InnerTestCase");
-        }
-
-        /// <inheritdoc/>
-        public void Serialize(IXunitSerializationInfo info)
-        {
-            info.AddValue("InnerTestCase", this.testCase);
-        }
-
-        private static void CopyTaskResultFrom<T>(TaskCompletionSource<T> tcs, Task<T> template)
-        {
-            if (tcs == null)
-            {
-                throw new ArgumentNullException(nameof(tcs));
-            }
-
-            if (template == null)
-            {
-                throw new ArgumentNullException(nameof(template));
-            }
-
-            if (!template.IsCompleted)
-            {
-                throw new ArgumentException("Task must be completed first.", nameof(template));
-            }
-
-            if (template.IsFaulted)
-            {
-                tcs.SetException(template.Exception);
-            }
-            else if (template.IsCanceled)
-            {
-                tcs.SetCanceled();
-            }
-            else
-            {
-                tcs.SetResult(template.Result);
-            }
+            return new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, this.Adapter).RunAsync();
         }
     }
 }
