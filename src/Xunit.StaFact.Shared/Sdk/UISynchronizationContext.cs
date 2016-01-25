@@ -5,6 +5,8 @@ namespace Xunit.Sdk
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
+    using System.Runtime.ExceptionServices;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -126,7 +128,37 @@ namespace Xunit.Sdk
         /// <inheritdoc />
         public override void Send(SendOrPostCallback d, object state)
         {
-            throw new NotImplementedException();
+            if (Environment.CurrentManagedThreadId == this.mainThread)
+            {
+                d(state);
+            }
+            else
+            {
+                Exception ex = null;
+                var evt = new ManualResetEventSlim();
+                this.Post(
+                    _ =>
+                    {
+                        try
+                        {
+                            d(state);
+                        }
+                        catch (Exception e)
+                        {
+                            ex = e;
+                        }
+                        finally
+                        {
+                            evt.Set();
+                        }
+                    },
+                    null);
+                evt.Wait();
+                if (ex != null)
+                {
+                    ExceptionDispatchInfo.Capture(ex).Throw();
+                }
+            }
         }
 
         private void VerifyState()

@@ -117,5 +117,40 @@ namespace Xunit.StaFact.Tests
             Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
 #endif
         }
+
+        [UIFact]
+        public async Task SendBackFromOtherThread()
+        {
+            var sc = SynchronizationContext.Current;
+            bool delegateComplete = false;
+            await Task.Run(delegate
+            {
+                sc.Send(
+                    s =>
+                    {
+                        Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
+                        Assert.Equal(5, (int)s);
+                    },
+                    5);
+                delegateComplete = true;
+            });
+            Assert.True(delegateComplete);
+        }
+
+        [UIFact]
+        public async Task SendBackFromOtherThread_Throws()
+        {
+            var sc = SynchronizationContext.Current;
+            await Task.Run(delegate
+            {
+                Assert.Throws<ApplicationException>(() =>
+                    sc.Send(
+                        s =>
+                        {
+                            throw new ApplicationException();
+                        },
+                        5));
+            });
+        }
     }
 }
