@@ -6,7 +6,7 @@
     <SharedGUID>2a47290c-60f3-41f9-b595-eca279cd5912</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Xunit.StaFact.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Xunit</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Sdk\SyncContextAdapter.cs" />
