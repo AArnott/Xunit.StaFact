@@ -12,7 +12,7 @@ namespace Xunit
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     [XunitTestCaseDiscoverer("Xunit.Sdk.WpfTheoryDiscoverer", "Xunit.StaFact.{Platform}")]
-    public class WpfTheoryAttribute : TheoryAttribute
+    internal/*broken*/ class WpfTheoryAttribute : TheoryAttribute
     {
     }
 }
