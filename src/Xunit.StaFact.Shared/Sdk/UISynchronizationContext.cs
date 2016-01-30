@@ -10,6 +10,9 @@ namespace Xunit.Sdk
     using System.Threading;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// A portable implementation of a single-threaded SynchronizationContext.
+    /// </summary>
     internal class UISynchronizationContext : SynchronizationContext
     {
         private readonly Queue<KeyValuePair<SendOrPostCallback, object>> messageQueue = new Queue<KeyValuePair<SendOrPostCallback, object>>();

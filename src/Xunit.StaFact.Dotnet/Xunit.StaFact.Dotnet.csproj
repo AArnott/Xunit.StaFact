@@ -72,6 +72,12 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Xunit.StaFact\Xunit.StaFact.csproj">
+      <Project>{8c500c20-0cd6-4257-a9ed-c571da6e68d6}</Project>
+      <Name>Xunit.StaFact</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Nerdbank.GitVersioning.1.2.8\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets" Condition="Exists('..\..\packages\Nerdbank.GitVersioning.1.2.8\build\portable-net+win+wpa+wp+sl+net-cf+netmf+MonoAndroid+MonoTouch+Xamarin.iOS\Nerdbank.GitVersioning.targets')" />
