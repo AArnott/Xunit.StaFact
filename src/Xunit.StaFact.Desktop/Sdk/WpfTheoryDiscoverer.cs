@@ -10,24 +10,23 @@ namespace Xunit.Sdk
     /// <summary>
     /// The discovery class for <see cref="WpfTheoryAttribute"/>
     /// </summary>
-    public class WpfTheoryDiscoverer : IXunitTestCaseDiscoverer
+    public class WpfTheoryDiscoverer : TheoryDiscoverer
     {
-        private readonly TheoryDiscoverer theoryDiscoverer;
+        private readonly IMessageSink diagnosticMessageSink;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WpfTheoryDiscoverer"/> class.
         /// </summary>
         /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
         public WpfTheoryDiscoverer(IMessageSink diagnosticMessageSink)
+            : base(diagnosticMessageSink)
         {
-            this.theoryDiscoverer = new TheoryDiscoverer(diagnosticMessageSink);
+            this.diagnosticMessageSink = diagnosticMessageSink;
         }
 
-        /// <inheritdoc/>
-        public IEnumerable<IXunitTestCase> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
+        protected override IXunitTestCase CreateTestCaseForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute, object[] dataRow)
         {
-            return this.theoryDiscoverer.Discover(discoveryOptions, testMethod, factAttribute)
-                                   .Select(testCase => new WpfTestCase(testCase));
+            return new UITestCase(UITestCase.SyncContextType.WPF, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow);
         }
     }
 }

@@ -5,29 +5,29 @@ namespace Xunit.Sdk
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Windows.Threading;
     using Abstractions;
 
     /// <summary>
     /// The discovery class for <see cref="WpfFactAttribute"/>
     /// </summary>
-    public class WpfFactDiscoverer : IXunitTestCaseDiscoverer
+    public class WpfFactDiscoverer : FactDiscoverer
     {
-        private readonly FactDiscoverer factDiscoverer;
+        private readonly IMessageSink diagnosticMessageSink;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WpfFactDiscoverer"/> class.
         /// </summary>
         /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
         public WpfFactDiscoverer(IMessageSink diagnosticMessageSink)
+            : base(diagnosticMessageSink)
         {
-            this.factDiscoverer = new FactDiscoverer(diagnosticMessageSink);
+            this.diagnosticMessageSink = diagnosticMessageSink;
         }
 
-        /// <inheritdoc/>
-        public IEnumerable<IXunitTestCase> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
+        protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
         {
-            return this.factDiscoverer.Discover(discoveryOptions, testMethod, factAttribute)
-                                 .Select(testCase => new WpfTestCase(testCase));
+            return new UITestCase(UITestCase.SyncContextType.WPF, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
         }
     }
 }

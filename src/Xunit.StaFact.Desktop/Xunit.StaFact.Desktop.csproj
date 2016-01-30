@@ -27,6 +27,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>Xunit.StaFact.Desktop.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>..\..\bin\Debug\Xunit.StaFact.Desktop\Xunit.StaFact.Desktop.XML</DocumentationFile>
+    <NoWarn>CS1591;CS1574</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,6 +39,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>Xunit.StaFact.Desktop.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>..\..\bin\Release\Xunit.StaFact.Desktop\Xunit.StaFact.Desktop.XML</DocumentationFile>
+    <NoWarn>CS1591;CS1574</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -64,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sdk\DispatcherSynchronizationContextAdapter.cs" />
     <Compile Include="Sdk\StaFactDiscoverer.cs" />
     <Compile Include="Sdk\StaTestCase.cs" />
     <Compile Include="Sdk\WpfFactDiscoverer.cs" />

@@ -4,6 +4,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using Xunit;
 
 public class Samples
@@ -24,27 +25,12 @@ public class Samples
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
     }
 
-    [WpfTheory]
-    [InlineData(0)]
-    public async Task WpfTheory_OnSTAThread(int unused)
-    {
-        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
-        await Task.Yield();
-        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
-    }
-
     [UIFact]
     public async Task UIFact_OnSTAThread()
     {
         int initialThread = Environment.CurrentManagedThreadId;
-#if DESKTOP
-        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
-#endif
         await Task.Yield();
         Assert.Equal(initialThread, Environment.CurrentManagedThreadId);
-#if DESKTOP
-        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
-#endif
     }
 
     [StaFact]
@@ -53,7 +39,7 @@ public class Samples
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
         await Task.Yield();
 
-        // Without a SynchronizationContext, we won't come back to the STA thread.
+        // Without a single-threaded SynchronizationContext, we won't come back to the STA thread.
         Assert.Equal(ApartmentState.MTA, Thread.CurrentThread.GetApartmentState());
     }
 }
