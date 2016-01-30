@@ -26,6 +26,8 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>Xunit.StaFact.Desktop.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\..\bin\Debug\Xunit.StaFact.Desktop\Xunit.StaFact.Desktop.XML</DocumentationFile>
+    <NoWarn>CS1591;CS1574</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,6 +38,8 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>Xunit.StaFact.Desktop.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\..\bin\Release\Xunit.StaFact.Desktop\Xunit.StaFact.Desktop.XML</DocumentationFile>
+    <NoWarn>CS1591;CS1574</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

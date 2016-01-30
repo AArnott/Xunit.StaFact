@@ -15,6 +15,9 @@ namespace Xunit.Sdk
     {
         private SyncContextAdapter adapter;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UITestInvoker"/> class.
+        /// </summary>
         internal UITestInvoker(ITest test, IMessageBus messageBus, Type testClass, object[] constructorArguments, MethodInfo testMethod, object[] testMethodArguments, IReadOnlyList<BeforeAfterTestAttribute> beforeAfterAttributes, ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource, SyncContextAdapter syncContextAdapter)
             : base(test, messageBus, testClass, constructorArguments, testMethod, testMethodArguments, beforeAfterAttributes, aggregator, cancellationTokenSource)
         {

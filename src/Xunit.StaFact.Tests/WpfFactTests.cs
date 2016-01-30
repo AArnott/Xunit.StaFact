@@ -10,6 +10,7 @@ namespace Xunit.StaFact.Tests
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Threading;
+
     public class WpfFactTests
     {
         [WpfFact]
@@ -35,7 +36,9 @@ namespace Xunit.StaFact.Tests
         }
 
         [WpfFact, Trait("Category", "FailureExpected")]
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async void AsyncVoidNotSupported()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
         }
 

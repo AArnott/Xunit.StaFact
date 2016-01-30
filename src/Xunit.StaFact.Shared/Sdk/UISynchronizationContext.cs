@@ -71,6 +71,10 @@ namespace Xunit.Sdk
             }
         }
 
+        /// <summary>
+        /// Pump messages until all pending operations have completed
+        /// and the message queue is empty.
+        /// </summary>
         public void CompleteOperations()
         {
             this.VerifyState();
@@ -88,6 +92,11 @@ namespace Xunit.Sdk
             }
         }
 
+        /// <summary>
+        /// Executes an async delegate while synchronously blocking the calling thread,
+        /// but without deadlocking.
+        /// </summary>
+        /// <param name="work">The async delegate.</param>
         public void Run(Func<Task> work)
         {
             this.VerifyState();
@@ -95,11 +104,13 @@ namespace Xunit.Sdk
             this.PumpMessages(task);
         }
 
+        /// <inheritdoc />
         public override void OperationStarted()
         {
             Interlocked.Increment(ref this.activeOperations);
         }
 
+        /// <inheritdoc />
         public override void OperationCompleted()
         {
             int result = Interlocked.Decrement(ref this.activeOperations);
