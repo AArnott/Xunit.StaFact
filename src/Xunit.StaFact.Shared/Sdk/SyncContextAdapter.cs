@@ -14,6 +14,12 @@ namespace Xunit.Sdk
     internal abstract class SyncContextAdapter
     {
         /// <summary>
+        /// Gets a value indicating whether async void methods are supported.
+        /// </summary>
+        /// <value><c>true</c> if <see cref="CompleteOperations()"/> can be invoked.</value>
+        internal virtual bool CanCompleteOperations => true;
+
+        /// <summary>
         /// Creates a new <see cref="SynchronizationContext"/> of the derived type.
         /// </summary>
         /// <returns>The new instance.</returns>

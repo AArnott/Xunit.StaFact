@@ -51,6 +51,11 @@ namespace Xunit.Sdk
         public enum SyncContextType
         {
             /// <summary>
+            /// No <see cref="SynchronizationContext"/> at all.
+            /// </summary>
+            None,
+
+            /// <summary>
             /// Use the <see cref="UISynchronizationContext"/>, which works in portable profiles.
             /// </summary>
             Portable,
@@ -69,6 +74,9 @@ namespace Xunit.Sdk
             {
                 switch (this.synchronizationContextType)
                 {
+                    case SyncContextType.None:
+                        return NullAdapter.Default;
+
                     case SyncContextType.Portable:
                         return UISynchronizationContext.Adapter.Default;
 #if DESKTOP
@@ -102,6 +110,36 @@ namespace Xunit.Sdk
             CancellationTokenSource cancellationTokenSource)
         {
             return new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, this.Adapter).RunAsync();
+        }
+
+        private class NullAdapter : SyncContextAdapter
+        {
+#pragma warning disable SA1401
+            internal static readonly SyncContextAdapter Default = new NullAdapter();
+#pragma warning restore SA1401
+
+            private NullAdapter()
+            {
+            }
+
+            internal override bool CanCompleteOperations => false;
+
+            internal override void CompleteOperations()
+            {
+                throw new NotSupportedException();
+            }
+
+            internal override SynchronizationContext Create() => null;
+
+            internal override void PumpTill(Task task)
+            {
+                task.GetAwaiter().GetResult();
+            }
+
+            internal override void Run(Func<Task> work)
+            {
+                work().GetAwaiter().GetResult();
+            }
         }
     }
 }
