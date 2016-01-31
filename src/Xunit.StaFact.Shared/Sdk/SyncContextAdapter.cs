@@ -16,6 +16,7 @@ namespace Xunit.Sdk
         /// <summary>
         /// Gets a value indicating whether async void methods are supported.
         /// </summary>
+        /// <value><c>true</c> if <see cref="CompleteOperations()"/> can be invoked.</value>
         internal virtual bool CanCompleteOperations => true;
 
         /// <summary>

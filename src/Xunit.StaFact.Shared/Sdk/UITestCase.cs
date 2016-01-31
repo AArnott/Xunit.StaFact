@@ -114,7 +114,9 @@ namespace Xunit.Sdk
 
         private class NullAdapter : SyncContextAdapter
         {
+#pragma warning disable SA1401
             internal static readonly SyncContextAdapter Default = new NullAdapter();
+#pragma warning restore SA1401
 
             private NullAdapter()
             {
