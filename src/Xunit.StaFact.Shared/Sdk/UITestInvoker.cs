@@ -126,7 +126,7 @@ namespace Xunit.Sdk
                                     this.Aggregator.Add(task.Exception);
                                 }
                             }
-                            else
+                            else if (this.adapter.CanCompleteOperations)
                             {
                                 this.adapter.CompleteOperations();
                             }

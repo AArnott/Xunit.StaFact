@@ -6,29 +6,36 @@ namespace Xunit.Sdk
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using Abstractions;
 
     /// <summary>
     /// The discovery class for the <see cref="StaFactAttribute"/>.
     /// </summary>
-    public class StaFactDiscoverer : IXunitTestCaseDiscoverer
+    public class StaFactDiscoverer : FactDiscoverer
     {
-        private readonly FactDiscoverer factDiscoverer;
+        private readonly IMessageSink diagnosticMessageSink;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StaFactDiscoverer"/> class.
         /// </summary>
         /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
         public StaFactDiscoverer(IMessageSink diagnosticMessageSink)
+            : base(diagnosticMessageSink)
         {
-            this.factDiscoverer = new FactDiscoverer(diagnosticMessageSink);
+            this.diagnosticMessageSink = diagnosticMessageSink;
         }
 
         /// <inheritdoc/>
-        public IEnumerable<IXunitTestCase> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
+        protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
         {
-            return this.factDiscoverer.Discover(discoveryOptions, testMethod, factAttribute)
-                                 .Select(testCase => new StaTestCase(testCase));
+            if (testMethod.Method.ReturnType.Name == "System.Void" &&
+                testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
+            {
+                return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, "Async void methods are not supported.");
+            }
+
+            return new UITestCase(UITestCase.SyncContextType.None, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
         }
     }
 }
