@@ -30,6 +30,7 @@ namespace Xunit.Sdk
             while (!task.IsCompleted)
             {
                 Application.DoEvents();
+                Thread.Sleep(0); // give up thread to OS so we don't spin CPU too hard
             }
         }
 
