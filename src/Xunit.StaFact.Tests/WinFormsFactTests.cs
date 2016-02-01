@@ -7,24 +7,24 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Threading;
+using System.Windows.Forms;
 using Xunit;
-using DesktopFactAttribute = Xunit.WpfFactAttribute;
-using DesktopSyncContext = System.Windows.Threading.DispatcherSynchronizationContext;
+using DesktopFactAttribute = Xunit.WinFormsFactAttribute;
+using DesktopSyncContext = System.Windows.Forms.WindowsFormsSynchronizationContext;
 
 /// <summary>
 /// Verifies behavior of the <see cref="WinFormsFactAttribute"/>.
 /// </summary>
 /// <remarks>
 /// The members of this class should be kept in exact sync with those of the
-/// <see cref="WinFormsFactTests"/> since they should behave the same way.
+/// <see cref="WpfFactTests"/> since they should behave the same way.
 /// </remarks>
-public class WpfFactTests
+public class WinFormsFactTests
 {
     private readonly Thread ctorThread;
     private readonly SynchronizationContext ctorSyncContext;
 
-    public WpfFactTests()
+    public WinFormsFactTests()
     {
         this.ctorThread = Thread.CurrentThread;
         this.ctorSyncContext = SynchronizationContext.Current;
@@ -69,6 +69,7 @@ public class WpfFactTests
 
     private void AssertThreadCharacteristics()
     {
+        Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
         Assert.IsType<DesktopSyncContext>(SynchronizationContext.Current);
 
         Assert.Same(this.ctorThread, Thread.CurrentThread);

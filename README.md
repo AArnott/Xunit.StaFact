@@ -10,6 +10,9 @@ Windows Forms SynchronizationContexts to that thread to more fully
 emulate a windowed application and to ensure that async tests resume
 execution on the same thread as they would in a real app.
 
+A pure portable UIFactAttribute is also offered for basic UI thread
+behavior that doesn't tie directly to a specific GUI framework.
+
 ## Installation
 
 This project is available as a [NuGet package][NuPkg]

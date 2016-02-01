@@ -16,6 +16,8 @@ namespace Xunit.Sdk
         {
         }
 
+        internal override bool CanCompleteOperations => false;
+
         internal override SynchronizationContext Create() => new DispatcherSynchronizationContext();
 
         internal override void CompleteOperations()
