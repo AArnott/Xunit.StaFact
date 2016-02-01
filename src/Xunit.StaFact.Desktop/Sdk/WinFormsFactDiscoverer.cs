@@ -10,17 +10,17 @@ namespace Xunit.Sdk
     using Abstractions;
 
     /// <summary>
-    /// The discovery class for <see cref="WpfFactAttribute"/>
+    /// The discovery class for <see cref="WinFormsFactAttribute"/>
     /// </summary>
-    public class WpfFactDiscoverer : FactDiscoverer
+    public class WinFormsFactDiscoverer : FactDiscoverer
     {
         private readonly IMessageSink diagnosticMessageSink;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WpfFactDiscoverer"/> class.
+        /// Initializes a new instance of the <see cref="WinFormsFactDiscoverer"/> class.
         /// </summary>
         /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
-        public WpfFactDiscoverer(IMessageSink diagnosticMessageSink)
+        public WinFormsFactDiscoverer(IMessageSink diagnosticMessageSink)
             : base(diagnosticMessageSink)
         {
             this.diagnosticMessageSink = diagnosticMessageSink;
@@ -34,7 +34,7 @@ namespace Xunit.Sdk
                 return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, "Async void methods are not supported.");
             }
 
-            return new UITestCase(UITestCase.SyncContextType.WPF, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
+            return new UITestCase(UITestCase.SyncContextType.WinForms, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
         }
     }
 }

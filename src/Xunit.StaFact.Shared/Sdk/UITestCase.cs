@@ -62,9 +62,14 @@ namespace Xunit.Sdk
 
 #if DESKTOP
             /// <summary>
-            /// Use the DispatcherSynchronizationContext, which is only available on Desktop.
+            /// Use the <see cref="DispatcherSynchronizationContext"/>, which is only available on Desktop.
             /// </summary>
             WPF,
+
+            /// <summary>
+            /// Use the <see cref="WindowsFormsSynchronizationContext"/>, which is only available on Desktop.
+            /// </summary>
+            WinForms,
 #endif
         }
 
@@ -82,6 +87,9 @@ namespace Xunit.Sdk
 #if DESKTOP
                     case SyncContextType.WPF:
                         return DispatcherSynchronizationContextAdapter.Default;
+
+                    case SyncContextType.WinForms:
+                        return WinFormsSynchronizationContextAdapter.Default;
 #endif
                     default:
                         throw new NotSupportedException("Unsupported type of SynchronizationContext.");

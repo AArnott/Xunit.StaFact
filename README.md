@@ -17,7 +17,7 @@ This project is available as a [NuGet package][NuPkg]
 ## Samples
 
 ```csharp
-[WpfFact]
+[WinFormsFact]
 public async Task WpfFact_OnSTAThread()
 {
     Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
