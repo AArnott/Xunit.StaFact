@@ -30,7 +30,7 @@ namespace Xunit.StaFact.Tests
 
         [StaFact, Trait("Category", "FailureExpected")]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async void AsyncVoid()
+        public async void AsyncVoid_IsNotSupported()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             // this test should be rejected by test discovery because

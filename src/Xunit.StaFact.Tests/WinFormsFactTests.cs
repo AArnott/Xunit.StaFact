@@ -10,56 +10,71 @@ namespace Xunit.StaFact.Tests
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Forms;
+    using DesktopFactAttribute = Xunit.WinFormsFactAttribute;
+    using DesktopSyncContext = System.Windows.Forms.WindowsFormsSynchronizationContext;
 
+    /// <summary>
+    /// Verifies behavior of the <see cref="WinFormsFactAttribute"/>.
+    /// </summary>
+    /// <remarks>
+    /// The members of this class should be kept in exact sync with those of the
+    /// <see cref="WpfFactTests"/> since they should behave the same way.
+    /// </remarks>
     public class WinFormsFactTests
     {
         private readonly Thread ctorThread;
+        private readonly SynchronizationContext ctorSyncContext;
 
         public WinFormsFactTests()
         {
             this.ctorThread = Thread.CurrentThread;
+            this.ctorSyncContext = SynchronizationContext.Current;
         }
 
-        [WinFormsFact]
+        [DesktopFact]
         public void Void()
         {
-            Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
-            Assert.IsType<WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
-            Assert.Same(this.ctorThread, Thread.CurrentThread);
+            this.AssertThreadCharacteristics();
         }
 
-        [WinFormsFact]
+        [DesktopFact]
         public async Task AsyncTask()
         {
-            Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
-            Assert.IsType<WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
-            Assert.Same(this.ctorThread, Thread.CurrentThread);
-
+            this.AssertThreadCharacteristics();
             await Task.Yield();
-
-            Assert.Same(this.ctorThread, Thread.CurrentThread);
-            Assert.IsType<WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
+            this.AssertThreadCharacteristics();
         }
 
-        [WinFormsFact, Trait("Category", "FailureExpected")]
+        [DesktopFact, Trait("Category", "FailureExpected")]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async void AsyncVoidNotSupported()
+        public async void AsyncVoid_IsNotSupported()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
         }
 
-        [WinFormsFact, Trait("Category", "FailureExpected")]
+        [DesktopFact, Trait("Category", "FailureExpected")]
         public async Task FailAfterYield_Task()
         {
+            // Task.Yield posts a message immediately (before yielding)
             await Task.Yield();
             Assert.False(true);
         }
 
-        [WinFormsFact, Trait("Category", "FailureExpected")]
+        [DesktopFact, Trait("Category", "FailureExpected")]
         public async Task FailAfterDelay_Task()
         {
+            // Task.Delay waits for the elapsed time after yielding before posting a message.
             await Task.Delay(10);
             Assert.False(true);
+        }
+
+        private void AssertThreadCharacteristics()
+        {
+            Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
+            Assert.IsType<DesktopSyncContext>(SynchronizationContext.Current);
+
+            Assert.Same(this.ctorThread, Thread.CurrentThread);
+            Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
         }
     }
 }

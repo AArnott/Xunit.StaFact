@@ -53,6 +53,7 @@
     <Compile Include="UIFactTests.cs" />
     <Compile Include="WinFormsFactTests.cs" />
     <Compile Include="WpfFactTests.cs" />
+    <Compile Include="WpfTheoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\Xunit.StaFact\stylecop.json">

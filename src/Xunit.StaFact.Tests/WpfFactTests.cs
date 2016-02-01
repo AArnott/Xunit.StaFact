@@ -10,65 +10,70 @@ namespace Xunit.StaFact.Tests
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Threading;
+    using DesktopFactAttribute = Xunit.WpfFactAttribute;
+    using DesktopSyncContext = System.Windows.Threading.DispatcherSynchronizationContext;
 
+    /// <summary>
+    /// Verifies behavior of the <see cref="WinFormsFactAttribute"/>.
+    /// </summary>
+    /// <remarks>
+    /// The members of this class should be kept in exact sync with those of the
+    /// <see cref="WinFormsFactTests"/> since they should behave the same way.
+    /// </remarks>
     public class WpfFactTests
     {
         private readonly Thread ctorThread;
+        private readonly SynchronizationContext ctorSyncContext;
 
         public WpfFactTests()
         {
             this.ctorThread = Thread.CurrentThread;
+            this.ctorSyncContext = SynchronizationContext.Current;
         }
 
-        [WpfFact]
-        public async Task WpfFact_OnSTAThread()
+        [DesktopFact]
+        public void Void()
         {
-            Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
-            Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
-            var syncContext = SynchronizationContext.Current;
+            this.AssertThreadCharacteristics();
+        }
+
+        [DesktopFact]
+        public async Task AsyncTask()
+        {
+            this.AssertThreadCharacteristics();
             await Task.Yield();
-            Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
-            Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
+            this.AssertThreadCharacteristics();
         }
 
-        [WpfFact]
-        public void WpfFact_Void()
-        {
-            Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
-            Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
-            Assert.Same(this.ctorThread, Thread.CurrentThread);
-        }
-
-        ////[WpfTheory(Skip = "Fails at command line")]
-        [InlineData(0)]
-        public async Task WpfTheory_OnSTAThread(int unused)
-        {
-            Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
-            Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
-            await Task.Yield();
-            Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
-            Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
-        }
-
-        [WpfFact, Trait("Category", "FailureExpected")]
+        [DesktopFact, Trait("Category", "FailureExpected")]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async void AsyncVoidNotSupported()
+        public async void AsyncVoid_IsNotSupported()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
         }
 
-        [WpfFact, Trait("Category", "FailureExpected")]
+        [DesktopFact, Trait("Category", "FailureExpected")]
         public async Task FailAfterYield_Task()
         {
+            // Task.Yield posts a message immediately (before yielding)
             await Task.Yield();
             Assert.False(true);
         }
 
-        [WpfFact, Trait("Category", "FailureExpected")]
+        [DesktopFact, Trait("Category", "FailureExpected")]
         public async Task FailAfterDelay_Task()
         {
+            // Task.Delay waits for the elapsed time after yielding before posting a message.
             await Task.Delay(10);
             Assert.False(true);
+        }
+
+        private void AssertThreadCharacteristics()
+        {
+            Assert.IsType<DesktopSyncContext>(SynchronizationContext.Current);
+
+            Assert.Same(this.ctorThread, Thread.CurrentThread);
+            Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
         }
     }
 }
