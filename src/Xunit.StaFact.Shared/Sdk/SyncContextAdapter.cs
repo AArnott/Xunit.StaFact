@@ -43,5 +43,12 @@ namespace Xunit.Sdk
         /// and the message queue is empty.
         /// </summary>
         internal abstract void CompleteOperations();
+
+        /// <summary>
+        /// Clean up this instance.
+        /// </summary>
+        internal virtual void Cleanup()
+        {
+        }
     }
 }

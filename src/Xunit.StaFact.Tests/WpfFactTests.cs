@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 using Xunit;
 using DesktopFactAttribute = Xunit.WpfFactAttribute;
@@ -65,6 +66,15 @@ public class WpfFactTests
         // Task.Delay waits for the elapsed time after yielding before posting a message.
         await Task.Delay(10);
         Assert.False(true);
+    }
+
+    [DesktopFact]
+    public void ShouldShowWindow()
+    {
+        var window = new Window();
+        window.Show();
+
+        Assert.True(window.IsVisible);
     }
 
     private void AssertThreadCharacteristics()

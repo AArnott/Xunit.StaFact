@@ -56,6 +56,7 @@ namespace Xunit.Sdk
                                 }
 
                                 this.adapter.Run(this.AfterTestMethodInvokedAsync);
+                                this.adapter.Cleanup();
                             }
 
                             if (asyncLifetime != null)

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact", "Xunit.StaFact\Xunit.StaFact.csproj", "{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}"
 EndProject
@@ -27,8 +27,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xunit.StaFact.Shared", "Xun
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems*{acd8a329-0b0b-4f4a-867c-27a8518dfda4}*SharedItemsImports = 4
 		Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems*{2a47290c-60f3-41f9-b595-eca279cd5912}*SharedItemsImports = 13
+		Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems*{acd8a329-0b0b-4f4a-867c-27a8518dfda4}*SharedItemsImports = 4
 		Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems*{d9d885ec-0bc7-46c1-a4d7-6dec5a3123be}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
