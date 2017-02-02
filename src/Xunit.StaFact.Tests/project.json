@@ -2,9 +2,9 @@
   "dependencies": {
     "Nerdbank.GitVersioning": "1.2.8",
     "ReadOnlySourceTree": "0.1.24-beta",
-    "StyleCop.Analyzers": "1.0.0-rc3",
+    "StyleCop.Analyzers": "1.0.0",
     "xunit": "2.1.0",
-    "xunit.runner.console": "2.2.0-beta1-build3217",
+    "xunit.runner.console": "2.2.0-beta5-build3474",
     "xunit.runner.visualstudio": "2.1.0"
   },
   "frameworks": {
