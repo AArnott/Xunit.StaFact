@@ -31,47 +31,55 @@ namespace Xunit.Sdk
                 var uiSyncContext = this.adapter.Create();
                 SynchronizationContext.SetSynchronizationContext(uiSyncContext);
 
-                decimal result = 0;
-                this.Aggregator.Run(delegate
+                try
                 {
-                    if (!this.CancellationTokenSource.IsCancellationRequested)
+                    decimal result = 0;
+                    this.Aggregator.Run(delegate
                     {
-                        var testClassInstance = this.CreateTestClass();
-
-                        try
+                        if (!this.CancellationTokenSource.IsCancellationRequested)
                         {
-                            var asyncLifetime = testClassInstance as IAsyncLifetime;
-                            if (asyncLifetime != null)
-                            {
-                                this.adapter.Run(asyncLifetime.InitializeAsync);
-                            }
+                            var testClassInstance = this.CreateTestClass();
 
-                            if (!this.CancellationTokenSource.IsCancellationRequested)
+                            try
                             {
-                                this.adapter.Run(this.BeforeTestMethodInvokedAsync);
-
-                                if (!this.CancellationTokenSource.IsCancellationRequested && !this.Aggregator.HasExceptions)
+                                var asyncLifetime = testClassInstance as IAsyncLifetime;
+                                if (asyncLifetime != null)
                                 {
-                                    this.InvokeTestMethod(testClassInstance);
+                                    this.adapter.Run(asyncLifetime.InitializeAsync);
                                 }
 
-                                this.adapter.Run(this.AfterTestMethodInvokedAsync);
-                            }
+                                if (!this.CancellationTokenSource.IsCancellationRequested)
+                                {
+                                    this.adapter.Run(this.BeforeTestMethodInvokedAsync);
 
-                            if (asyncLifetime != null)
+                                    if (!this.CancellationTokenSource.IsCancellationRequested && !this.Aggregator.HasExceptions)
+                                    {
+                                        this.InvokeTestMethod(testClassInstance);
+                                    }
+
+                                    this.adapter.Run(this.AfterTestMethodInvokedAsync);
+                                }
+
+                                if (asyncLifetime != null)
+                                {
+                                    this.adapter.Run(() => this.Aggregator.RunAsync(asyncLifetime.DisposeAsync));
+                                }
+                            }
+                            finally
                             {
-                                this.adapter.Run(() => this.Aggregator.RunAsync(asyncLifetime.DisposeAsync));
+                                this.Aggregator.Run(() => this.Test.DisposeTestClass(testClassInstance, this.MessageBus, this.Timer, this.CancellationTokenSource));
                             }
                         }
-                        finally
-                        {
-                            this.Aggregator.Run(() => this.Test.DisposeTestClass(testClassInstance, this.MessageBus, this.Timer, this.CancellationTokenSource));
-                        }
-                    }
 
-                    result = this.Timer.Total;
-                });
-                return result;
+                        result = this.Timer.Total;
+                    });
+
+                    return result;
+                }
+                finally
+                {
+                    this.adapter.Cleanup();
+                }
             });
         }
 

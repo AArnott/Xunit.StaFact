@@ -41,5 +41,11 @@ namespace Xunit.Sdk
             this.PumpTill(task);
             task.GetAwaiter().GetResult();
         }
+
+        internal override void Cleanup()
+        {
+            Dispatcher.CurrentDispatcher.InvokeShutdown();
+            base.Cleanup();
+        }
     }
 }
