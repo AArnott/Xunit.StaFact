@@ -3,7 +3,7 @@
     <TargetFrameworks>net461;netcoreapp1.0</TargetFrameworks>
     <CodeAnalysisRuleSet>Xunit.StaFact.Tests.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>CS1591</NoWarn>
+    <NoWarn>CS1591;CS1701;$(NoWarn)</NoWarn>
     <IsPackable>false</IsPackable>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
