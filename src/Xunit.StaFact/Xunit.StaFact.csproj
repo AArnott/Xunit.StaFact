@@ -1,66 +1,35 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworks>netstandard1.1;net452</TargetFrameworks>
     <RootNamespace>Xunit</RootNamespace>
-    <AssemblyName>Xunit.StaFact</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Debug\Xunit.StaFact\Xunit.StaFact.XML</DocumentationFile>
     <CodeAnalysisRuleSet>Xunit.StaFact.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Release\Xunit.StaFact\Xunit.StaFact.XML</DocumentationFile>
-    <CodeAnalysisRuleSet>Xunit.StaFact.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
     <AssemblyOriginatorKeyFile>opensource.snk</AssemblyOriginatorKeyFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <Title>STA/UI thread testing with xunit</Title>
+    <Authors>Andrew Arnott</Authors>
+    <Owners>andarno</Owners>
+    <Summary>Execute unit test on STA and Dispatcher threads</Summary>
+    <Description>Make your xunit tests more closely emulate your application by running them on STA threads, with support for various SynchronizationContexts.</Description>
+    <PackageProjectUrl>https://github.com/AArnott/Xunit.StaFact</PackageProjectUrl>
+    <Copyright>Copyright © Andrew Arnott</Copyright>
+    <PackageTags>STA xunit test unit WPF</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StaFactAttribute.cs" />
-    <Compile Include="UIFactAttribute.cs" />
-    <Compile Include="WinFormsFactAttribute.cs" />
-    <Compile Include="WpfFactAttribute.cs" />
-    <Compile Include="WpfTheoryAttribute.cs" />
+    <Compile Remove="Sdk.Desktop\**" Condition=" '$(TargetFramework)' == 'netstandard1.1' " />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <PackageReference Include="xunit.extensibility.execution" Version="2.2.0" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="opensource.snk" />
-    <None Include="project.json" />
-    <None Include="Xunit.StaFact.ruleset" />
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">
+    <PropertyGroup>
+      <PackageLicenseUrl>https://raw.githubusercontent.com/AArnott/Xunit.StaFact/$(GitCommitIdShort)/LICENSE.txt</PackageLicenseUrl>
+    </PropertyGroup>
+  </Target>
 </Project>

@@ -60,14 +60,14 @@ namespace Xunit.Sdk
             /// </summary>
             Portable,
 
-#if DESKTOP
+#if NET452
             /// <summary>
-            /// Use the <see cref="DispatcherSynchronizationContext"/>, which is only available on Desktop.
+            /// Use the <see cref="System.Windows.Threading.DispatcherSynchronizationContext"/>, which is only available on Desktop.
             /// </summary>
             WPF,
 
             /// <summary>
-            /// Use the <see cref="WindowsFormsSynchronizationContext"/>, which is only available on Desktop.
+            /// Use the <see cref="System.Windows.Forms.WindowsFormsSynchronizationContext"/>, which is only available on Desktop.
             /// </summary>
             WinForms,
 #endif
@@ -84,7 +84,7 @@ namespace Xunit.Sdk
 
                     case SyncContextType.Portable:
                         return UISynchronizationContext.Adapter.Default;
-#if DESKTOP
+#if NET452
                     case SyncContextType.WPF:
                         return DispatcherSynchronizationContextAdapter.Default;
 
