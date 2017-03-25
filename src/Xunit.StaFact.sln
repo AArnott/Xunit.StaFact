@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact", "Xunit.StaFact\Xunit.StaFact.csproj", "{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}"
-EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "Xunit.StaFact.NuGet", "Xunit.StaFact.NuGet\Xunit.StaFact.NuGet.nuproj", "{483A65AF-A4DB-428A-955E-EF44452A7CD0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3DC2EEF3-BA28-4C7A-B4F4-FCA18FBABE99}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,23 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact.Tests", "Xunit.StaFact.Tests\Xunit.StaFact.Tests.csproj", "{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact.Desktop", "Xunit.StaFact.Desktop\Xunit.StaFact.Desktop.csproj", "{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact.Dotnet", "Xunit.StaFact.Dotnet\Xunit.StaFact.Dotnet.csproj", "{ACD8A329-0B0B-4F4A-867C-27A8518DFDA4}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xunit.StaFact.Shared", "Xunit.StaFact.Shared\Xunit.StaFact.Shared.shproj", "{2A47290C-60F3-41F9-B595-ECA279CD5912}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B6A7480A-717A-45F0-B600-0E25D71F579D}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems*{2a47290c-60f3-41f9-b595-eca279cd5912}*SharedItemsImports = 13
-		Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems*{acd8a329-0b0b-4f4a-867c-27a8518dfda4}*SharedItemsImports = 4
-		Xunit.StaFact.Shared\Xunit.StaFact.Shared.projitems*{d9d885ec-0bc7-46c1-a4d7-6dec5a3123be}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -45,22 +32,10 @@ Global
 		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{483A65AF-A4DB-428A-955E-EF44452A7CD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{483A65AF-A4DB-428A-955E-EF44452A7CD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{483A65AF-A4DB-428A-955E-EF44452A7CD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{483A65AF-A4DB-428A-955E-EF44452A7CD0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9D885EC-0BC7-46C1-A4D7-6DEC5A3123BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ACD8A329-0B0B-4F4A-867C-27A8518DFDA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACD8A329-0B0B-4F4A-867C-27A8518DFDA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACD8A329-0B0B-4F4A-867C-27A8518DFDA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACD8A329-0B0B-4F4A-867C-27A8518DFDA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

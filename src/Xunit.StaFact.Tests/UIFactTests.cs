@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-public class UIFactTests : IDisposable, IAsyncLifetime
+public partial class UIFactTests : IDisposable, IAsyncLifetime
 {
     private readonly SynchronizationContext ctorSyncContext;
     private readonly int ctorThreadId;
@@ -102,19 +102,13 @@ public class UIFactTests : IDisposable, IAsyncLifetime
     }
 
     [UIFact]
-    public async Task UIFact_OnSTAThread()
+    public async Task UIFact_OnSingleThreadedSyncContext()
     {
         int initialThread = Environment.CurrentManagedThreadId;
         var syncContext = SynchronizationContext.Current;
-#if DESKTOP
-        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
-#endif
         await Task.Yield();
         Assert.Equal(initialThread, Environment.CurrentManagedThreadId);
         Assert.Same(syncContext, SynchronizationContext.Current);
-#if DESKTOP
-        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
-#endif
     }
 
     [UIFact]
@@ -142,11 +136,11 @@ public class UIFactTests : IDisposable, IAsyncLifetime
         var sc = SynchronizationContext.Current;
         await Task.Run(delegate
         {
-            Assert.Throws<ApplicationException>(() =>
+            Assert.Throws<System.IO.IOException>(() =>
                 sc.Send(
                     s =>
                     {
-                        throw new ApplicationException();
+                        throw new System.IO.IOException();
                     },
                     5));
         });

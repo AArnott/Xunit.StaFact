@@ -11,7 +11,7 @@ namespace Xunit
     /// with a UI thread-like SynchronizationContext.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.Sdk.UIFactDiscoverer", "Xunit.StaFact.{Platform}")]
+    [XunitTestCaseDiscoverer("Xunit.Sdk.UIFactDiscoverer", ThisAssembly.AssemblyName)]
     public class UIFactAttribute : FactAttribute
     {
     }

@@ -1,14 +1,13 @@
-version: 1.0.{build}
+version: '{build}'
 skip_tags: true
-os: Visual Studio 2015
+os: Visual Studio 2017
 configuration: Release
-install:
-- ps: >-
-    iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/install-nuget-3-3-0.ps1'))
+environment:
+  VisualStudioVersion: 15.0
 before_build:
-- ps: nuget restore src -Verbosity quiet
-build:
-  verbosity: minimal
+- ps: msbuild src\Xunit.StaFact.sln /nologo /m /v:quiet /t:restore
+build_script:
+- ps: msbuild src\Xunit.StaFact.sln /nologo /m /fl /v:quiet /t:build,pack
 test:
   assemblies: '**\*.Tests.dll'
   categories:

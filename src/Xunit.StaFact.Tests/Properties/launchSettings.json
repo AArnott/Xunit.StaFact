@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Xunit.StaFact.Tests": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\andarno\\.nuget\\packages\\xunit.runner.console\\2.2.0\\tools\\xunit.console.exe",
+      "commandLineArgs": "\"C:\\git\\Xunit.StaFact\\bin\\Xunit.StaFact.Tests\\Debug\\net461\\Xunit.StaFact.Tests.dll\" -serialize"
+    }
+  }
+}
