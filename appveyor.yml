@@ -5,14 +5,14 @@ configuration: Release
 environment:
   VisualStudioVersion: 15.0
 before_build:
-- ps: msbuild src\Xunit.StaFact.sln /nologo /m /v:quiet /t:restore
+- ps: dotnet restore src
 build_script:
-- ps: msbuild src\Xunit.StaFact.sln /nologo /m /fl /v:quiet /t:build,pack
-test:
-  assemblies: '**\*.Tests.dll'
-  categories:
-    except:
-    - FailureExpected
+- ps: >-
+    dotnet build src /nologo
+
+    dotnet pack src --no-build /nologo
+test_script:
+- ps: dotnet test .\src\Xunit.StaFact.Tests\Xunit.StaFact.Tests.csproj --no-build --filter "Category!=FailureExpected"
 artifacts:
 - path: 'bin\**\*.nupkg'
   name: NuGet package
