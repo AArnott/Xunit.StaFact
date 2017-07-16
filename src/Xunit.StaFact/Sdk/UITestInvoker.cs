@@ -85,7 +85,7 @@ namespace Xunit.Sdk
 
         private Task<decimal> RunOnSTA(Func<decimal> action)
         {
-#if NET452
+#if NET45
             var tcs = new TaskCompletionSource<decimal>();
             var sta = new Thread(() =>
             {

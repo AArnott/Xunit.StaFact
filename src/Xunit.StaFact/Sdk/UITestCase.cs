@@ -60,7 +60,7 @@ namespace Xunit.Sdk
             /// </summary>
             Portable,
 
-#if NET452
+#if NET45
             /// <summary>
             /// Use the <see cref="System.Windows.Threading.DispatcherSynchronizationContext"/>, which is only available on Desktop.
             /// </summary>
@@ -84,7 +84,7 @@ namespace Xunit.Sdk
 
                     case SyncContextType.Portable:
                         return UISynchronizationContext.Adapter.Default;
-#if NET452
+#if NET45
                     case SyncContextType.WPF:
                         return DispatcherSynchronizationContextAdapter.Default;
 
