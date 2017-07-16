@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.1;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard1.1;net45;net452</TargetFrameworks>
     <RootNamespace>Xunit</RootNamespace>
     <CodeAnalysisRuleSet>Xunit.StaFact.ruleset</CodeAnalysisRuleSet>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>opensource.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <DefineConstants Condition=" '$(TargetFramework)' != 'netstandard1.1' ">$(DefineConstants);DESKTOP</DefineConstants>
 
     <Title>STA/UI thread testing with xunit</Title>
     <Authors>Andrew Arnott</Authors>
@@ -20,12 +21,13 @@
   <ItemGroup>
     <Compile Remove="Sdk.Desktop\**" Condition=" '$(TargetFramework)' == 'netstandard1.1' " />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard1.1' ">
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="xunit.extensibility.execution" Version="2.2.0" />
+    <PackageReference Include="xunit.extensibility.execution" Version="2.1.0"  Condition=" '$(TargetFramework)' == 'net45' " />
+    <PackageReference Include="xunit.extensibility.execution" Version="2.2.0"  Condition=" '$(TargetFramework)' != 'net45' " />
   </ItemGroup>
   <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">
     <PropertyGroup>
