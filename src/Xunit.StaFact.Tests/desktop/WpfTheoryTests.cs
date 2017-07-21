@@ -12,7 +12,7 @@ using Xunit;
 
 public class WpfTheoryTests
 {
-    ////[WpfTheory(Skip = "Fails at command line")]
+    [WpfTheory]
     [InlineData(0)]
     public async Task WpfTheory_OnSTAThread(int unused)
     {
