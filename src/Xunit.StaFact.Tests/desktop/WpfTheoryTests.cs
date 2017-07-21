@@ -12,7 +12,7 @@ using Xunit;
 
 public class WpfTheoryTests
 {
-    ////[WpfTheory(Skip = "Fails at command line")]
+    [WpfTheory]
     [InlineData(0)]
     public async Task WpfTheory_OnSTAThread(int unused)
     {
@@ -22,4 +22,5 @@ public class WpfTheoryTests
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
         Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
     }
+
 }

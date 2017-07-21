@@ -14,7 +14,8 @@ namespace Xunit
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     [XunitTestCaseDiscoverer("Xunit.Sdk.WpfTheoryDiscoverer", ThisAssembly.AssemblyName)]
-    internal/*broken*/ class WpfTheoryAttribute : TheoryAttribute
+    public
+/*broken*/ class WpfTheoryAttribute : TheoryAttribute
     {
     }
 }
