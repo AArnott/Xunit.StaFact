@@ -22,5 +22,4 @@ public class WpfTheoryTests
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
         Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
     }
-
 }
