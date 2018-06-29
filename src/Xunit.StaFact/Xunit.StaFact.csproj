@@ -26,8 +26,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="xunit.extensibility.execution" Version="2.1.0"  Condition=" '$(TargetFramework)' == 'net45' " />
-    <PackageReference Include="xunit.extensibility.execution" Version="2.2.0"  Condition=" '$(TargetFramework)' != 'net45' " />
+    <PackageReference Include="xunit.extensibility.execution" Version="2.1.0" Condition=" '$(TargetFramework)' == 'net45' " />
+    <PackageReference Include="xunit.extensibility.execution" Version="2.3.0" Condition=" '$(TargetFramework)' != 'net45' " />
   </ItemGroup>
   <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">
     <PropertyGroup>

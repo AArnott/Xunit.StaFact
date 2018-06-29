@@ -1,10 +1,11 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
+#if !NET45
+
 namespace Xunit.Sdk
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Abstractions;
 
     /// <summary>
@@ -12,8 +13,6 @@ namespace Xunit.Sdk
     /// </summary>
     public class WpfTheoryDiscoverer : TheoryDiscoverer
     {
-        private readonly IMessageSink diagnosticMessageSink;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WpfTheoryDiscoverer"/> class.
         /// </summary>
@@ -21,19 +20,18 @@ namespace Xunit.Sdk
         public WpfTheoryDiscoverer(IMessageSink diagnosticMessageSink)
             : base(diagnosticMessageSink)
         {
-            this.diagnosticMessageSink = diagnosticMessageSink;
         }
 
-#if NET45
-        protected override IXunitTestCase CreateTestCaseForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute, object[] dataRow)
-        {
-            return new UITestCase(UITestCase.SyncContextType.WPF, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow);
-        }
-#else
         protected override IEnumerable<IXunitTestCase> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute, object[] dataRow)
         {
-            yield return new UITestCase(UITestCase.SyncContextType.WPF, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow);
+            yield return new UITestCase(UITestCase.SyncContextType.WPF, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow);
         }
-#endif
+
+        protected override IEnumerable<IXunitTestCase> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
+        {
+            yield return new WpfTheoryTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
+        }
     }
 }
+
+#endif
