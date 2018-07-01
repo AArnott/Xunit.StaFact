@@ -12,14 +12,29 @@ public class WpfTheoryTests
 {
     [WpfTheory]
     [InlineData(0)]
-    public async Task WpfTheory_OnSTAThread(int zero)
+    [InlineData(1)]
+    public async Task WpfTheory_OnSTAThread(int arg)
     {
         Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
         await Task.Yield();
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
         Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
-        Assert.Equal(0, zero);
+        Assert.True(arg == 0 || arg == 1);
+    }
+
+    [Trait("Category", "FailureExpected")]
+    [WpfTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    public async Task WpfTheoryFails(int arg)
+    {
+        Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
+        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+        await Task.Yield();
+        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
+        Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
+        Assert.False(arg == 0 || arg == 1);
     }
 }
 
