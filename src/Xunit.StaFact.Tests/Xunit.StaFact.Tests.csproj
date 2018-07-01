@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net45;net461;netcoreapp1.0</TargetFrameworks>
+    <TargetFrameworks>net461;net45;netcoreapp1.0</TargetFrameworks>
     <CodeAnalysisRuleSet>Xunit.StaFact.Tests.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>CS1591;CS1701;$(NoWarn)</NoWarn>
