@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
-#if !NET45
-
 namespace Xunit.Sdk
 {
     using System;
@@ -22,5 +20,3 @@ namespace Xunit.Sdk
             => new UITestRunner(test, messageBus, testClass, constructorArguments, testMethod, testMethodArguments, skipReason, beforeAfterAttributes, aggregator, cancellationTokenSource, DispatcherSynchronizationContextAdapter.Default);
     }
 }
-
-#endif
