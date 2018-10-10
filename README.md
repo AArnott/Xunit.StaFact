@@ -1,7 +1,7 @@
 Xunit.StaFact
 ======================
 
-[![Build status](https://ci.appveyor.com/api/projects/status/oxq7bw2gxyksaji9/branch/master?svg=true)](https://ci.appveyor.com/project/AArnott/xunit-stafact/branch/master)
+[![Build Status](https://dev.azure.com/andrewarnott/OSS/_apis/build/status/Xunit.StaFact)](https://dev.azure.com/andrewarnott/OSS/_build/latest?definitionId=22)
 [![NuGet package](https://img.shields.io/nuget/v/xunit.stafact.svg)](https://nuget.org/packages/xunit.stafact)
 
 This project allows for Xunit tests to run on an STA thread instead of
