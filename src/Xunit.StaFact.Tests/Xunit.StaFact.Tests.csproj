@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net46;net45;netcoreapp1.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net461;net45;netcoreapp1.0;netcoreapp3.0</TargetFrameworks>
     <CodeAnalysisRuleSet>Xunit.StaFact.Tests.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>CS1591;CS1701;$(NoWarn)</NoWarn>
@@ -9,7 +9,7 @@
   <ItemGroup>
     <Compile Remove="desktop\**" Condition=" '$(TargetFramework)' == 'netcoreapp1.0' " />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net461' ">
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Windows.Forms" />
