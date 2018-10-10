@@ -68,6 +68,12 @@ namespace Xunit.Sdk
         public string UniqueID => this.testCase.UniqueID;
 
         /// <inheritdoc/>
+        public Exception InitializationException { get; set; }
+
+        /// <inheritdoc/>
+        public int Timeout => -1;
+
+        /// <inheritdoc/>
         public Task<RunSummary> RunAsync(
             IMessageSink diagnosticMessageSink,
             IMessageBus messageBus,

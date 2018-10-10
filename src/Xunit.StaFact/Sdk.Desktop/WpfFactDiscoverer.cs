@@ -31,7 +31,7 @@ namespace Xunit.Sdk
             if (testMethod.Method.ReturnType.Name == "System.Void" &&
                 testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
             {
-                return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, "Async void methods are not supported.");
+                return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
             }
 
             return new UITestCase(UITestCase.SyncContextType.WPF, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);

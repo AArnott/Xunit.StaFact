@@ -33,7 +33,7 @@ namespace Xunit.Sdk
             TestMethodDisplay defaultMethodDisplay,
             ITestMethod testMethod,
             object[] testMethodArguments = null)
-            : base(diagnosticMessageSink, defaultMethodDisplay, testMethod, testMethodArguments)
+            : base(diagnosticMessageSink, defaultMethodDisplay, TestMethodDisplayOptions.None, testMethod, testMethodArguments)
         {
             this.synchronizationContextType = synchronizationContextType;
         }
