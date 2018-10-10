@@ -67,11 +67,15 @@ namespace Xunit.Sdk
         /// <inheritdoc/>
         public string UniqueID => this.testCase.UniqueID;
 
+#if !NET45
+
         /// <inheritdoc/>
         public Exception InitializationException { get; set; }
 
         /// <inheritdoc/>
         public int Timeout => -1;
+
+#endif
 
         /// <inheritdoc/>
         public Task<RunSummary> RunAsync(

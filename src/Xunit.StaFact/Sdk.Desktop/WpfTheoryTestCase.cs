@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
+#if !NET45
+
 namespace Xunit.Sdk
 {
     using System.Threading;
@@ -18,3 +20,5 @@ namespace Xunit.Sdk
             => new WpfTheoryTestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, diagnosticMessageSink, messageBus, aggregator, cancellationTokenSource).RunAsync();
     }
 }
+
+#endif
