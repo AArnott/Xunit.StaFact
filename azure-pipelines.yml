@@ -24,7 +24,7 @@ jobs:
     displayName: Install .NET Core SDK 3.0
     inputs:
       packageType: sdk
-      version: 3.0.100-alpha1-009667
+      version: 3.0.100-alpha1-009708
 
   - script: dotnet --info
     displayName: Show dotnet SDK info

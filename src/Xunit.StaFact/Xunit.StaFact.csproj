@@ -25,7 +25,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
-     <FrameworkReference Include="Microsoft.DesktopUI" />
+     <FrameworkReference Include="Microsoft.DesktopUI" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="xunit.extensibility.execution" Version="2.1.0" Condition=" '$(TargetFramework)' == 'net45' " />
@@ -35,5 +35,14 @@
     <PropertyGroup>
       <PackageLicenseUrl>https://raw.githubusercontent.com/AArnott/Xunit.StaFact/$(GitCommitIdShort)/LICENSE.txt</PackageLicenseUrl>
     </PropertyGroup>
+  </Target>
+
+  <!-- Remove after we use a .NET Core SDK that includes https://github.com/dotnet/sdk/pull/2637 -->
+  <Target Name="_WorkaroundFrameworkReferencePrivateAssetsBugInSdk"
+          AfterTargets="ResolveFrameworkReferences">
+    <ItemGroup>
+      <PackageReference Condition="'%(PackageReference.PrivateAssets)' == 'true'"
+                        PrivateAssets="all" />
+    </ItemGroup>
   </Target>
 </Project>
