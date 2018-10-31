@@ -25,7 +25,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
-     <FrameworkReference Include="Microsoft.DesktopUI" PrivateAssets="all" />
+     <FrameworkReference Include="Microsoft.DesktopUI" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="xunit.extensibility.execution" Version="2.1.0" Condition=" '$(TargetFramework)' == 'net45' " />
