@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 using Xunit;
 
+#pragma warning disable xUnit1008
+
 public class WinFormsTheoryTests
 {
     [WinFormsTheory]
@@ -36,7 +38,7 @@ public class WinFormsTheoryTests
         await Task.Yield();
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
         Assert.IsType<WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
-        Assert.True(arg == 0 || arg == 1);
+        Assert.False(arg == 0 || arg == 1);
     }
 }
 
