@@ -3,39 +3,41 @@
 
 #if !NET45
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using Xunit;
 
 #pragma warning disable xUnit1008
 
-public class WpfTheoryTests
+public class WinFormsTheoryTests
 {
-    [WpfTheory]
+    [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1)]
-    public async Task WpfTheory_OnSTAThread(int arg)
+    public async Task WinFormsTheory_OnSTAThread(int arg)
     {
-        Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
+        Assert.IsType<WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
         await Task.Yield();
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
-        Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
+        Assert.IsType<WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
         Assert.True(arg == 0 || arg == 1);
     }
 
     [Trait("Category", "FailureExpected")]
-    [WpfTheory]
+    [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1)]
-    public async Task WpfTheoryFails(int arg)
+    public async Task WinFormsTheoryFails(int arg)
     {
-        Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
+        Assert.IsType<WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
         await Task.Yield();
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
-        Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
+        Assert.IsType<WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
         Assert.False(arg == 0 || arg == 1);
     }
 }

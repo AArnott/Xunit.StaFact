@@ -1,18 +1,22 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
+#if !NET45
+
 namespace Xunit
 {
     using System;
     using Xunit.Sdk;
 
     /// <summary>
-    /// Identifies an xunit test that starts on an STA thread
-    /// with a WindowsFormsSynchronizationContext.
+    /// Identifies an xunit theory that starts on an STA thread
+    /// with a WinForms SynchronizationContext.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.Sdk.WinFormsFactDiscoverer", ThisAssembly.AssemblyName)]
-    public class WinFormsFactAttribute : FactAttribute
+    [XunitTestCaseDiscoverer("Xunit.Sdk.WinFormsTheoryDiscoverer", ThisAssembly.AssemblyName)]
+    public class WinFormsTheoryAttribute : TheoryAttribute
     {
     }
 }
+
+#endif
