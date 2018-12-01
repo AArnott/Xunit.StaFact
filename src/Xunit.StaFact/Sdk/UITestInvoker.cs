@@ -131,7 +131,7 @@ namespace Xunit.Sdk
                                 this.adapter.PumpTill(task);
                                 if (task.Exception != null)
                                 {
-                                    this.Aggregator.Add(task.Exception);
+                                    this.Aggregator.Add(task.Exception.Flatten().InnerException ?? task.Exception);
                                 }
                             }
                             else if (this.adapter.CanCompleteOperations)
