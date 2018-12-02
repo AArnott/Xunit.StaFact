@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
-#if NET452
+#if !NET45
 
 namespace Xunit.Sdk
 {
@@ -29,7 +29,7 @@ namespace Xunit.Sdk
             if (testMethod.Method.ReturnType.Name == "System.Void" &&
                 testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
             {
-                yield return new ExecutionErrorTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, "Async void methods are not supported.");
+                yield return new ExecutionErrorTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
             }
 
             yield return new UITestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow);
@@ -39,7 +39,7 @@ namespace Xunit.Sdk
         {
             if (testMethod.Method.ReturnType.Name == "System.Void" && testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
             {
-                yield return new ExecutionErrorTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, "Async void methods are not supported.");
+                yield return new ExecutionErrorTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
             }
 
             yield return new UITestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
