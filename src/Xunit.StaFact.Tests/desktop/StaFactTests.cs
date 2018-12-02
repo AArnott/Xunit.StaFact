@@ -8,6 +8,11 @@ using Xunit;
 
 public class StaFactTests
 {
+    public StaFactTests()
+    {
+        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+    }
+
     [StaFact]
     public async Task StaWithoutSyncContext()
     {
