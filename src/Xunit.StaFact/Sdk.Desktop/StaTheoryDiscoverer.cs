@@ -42,7 +42,7 @@ namespace Xunit.Sdk
                 yield return new ExecutionErrorTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
             }
 
-            yield return new UITestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
+            yield return new UITheoryTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod);
         }
     }
 }
