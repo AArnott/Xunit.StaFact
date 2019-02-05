@@ -12,6 +12,12 @@ using Xunit;
 
 public class WpfTheoryTests
 {
+    public static object[][] MemberDataSource => new object[][]
+    {
+        new object[] { 1, 2 },
+        new object[] { 3, 4 },
+    };
+
     [WpfTheory]
     [InlineData(0)]
     [InlineData(1)]
@@ -37,6 +43,13 @@ public class WpfTheoryTests
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
         Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
         Assert.False(arg == 0 || arg == 1);
+    }
+
+    [StaTheory]
+    [MemberData(nameof(MemberDataSource))]
+    public void MemberBasedTheory(int a, int b)
+    {
+        Assert.Equal(b, a + 1);
     }
 }
 
