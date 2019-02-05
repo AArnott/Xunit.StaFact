@@ -1,0 +1,6 @@
+<Project>
+  <!-- Workaround .NET Core 3.0 SDK bug where the FrameworkReference is added without regard to the target framework. -->
+  <ItemGroup Condition="'$(TargetFramework)' != 'netcoreapp3.0'">
+    <FrameworkReference Remove="Microsoft.WindowsDesktop.App" />
+  </ItemGroup>
+</Project>
