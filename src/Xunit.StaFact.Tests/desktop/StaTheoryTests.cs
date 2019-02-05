@@ -3,6 +3,7 @@
 
 #if !NET45
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -53,6 +54,15 @@ public class StaTheoryTests
     public void MemberBasedTheory(int a, int b)
     {
         Assert.Equal(b, a + 1);
+    }
+
+    [StaTheory, Trait("Category", "FailureExpected")]
+    [InlineData(1)]
+    public async Task OperationCanceledException_Thrown(int a)
+    {
+        Assert.Equal(1, a);
+        await Task.Yield();
+        throw new OperationCanceledException();
     }
 }
 

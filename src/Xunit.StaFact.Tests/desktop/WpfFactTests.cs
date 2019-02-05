@@ -68,6 +68,13 @@ public class WpfFactTests
         Assert.False(true);
     }
 
+    [DesktopFact, Trait("Category", "FailureExpected")]
+    public async Task OperationCanceledException_Thrown()
+    {
+        await Task.Yield();
+        throw new OperationCanceledException();
+    }
+
     [DesktopFact]
     public void ShouldShowWindow()
     {

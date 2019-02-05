@@ -67,6 +67,13 @@ public class WinFormsFactTests
         Assert.False(true);
     }
 
+    [DesktopFact, Trait("Category", "FailureExpected")]
+    public async Task OperationCanceledException_Thrown()
+    {
+        await Task.Yield();
+        throw new OperationCanceledException();
+    }
+
     private void AssertThreadCharacteristics()
     {
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);

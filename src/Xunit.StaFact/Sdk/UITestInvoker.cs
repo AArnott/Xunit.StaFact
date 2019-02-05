@@ -6,7 +6,6 @@ namespace Xunit.Sdk
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using Abstractions;
@@ -129,9 +128,22 @@ namespace Xunit.Sdk
                             if (task != null)
                             {
                                 this.adapter.PumpTill(task);
-                                if (task.Exception != null)
+                                if (task.IsFaulted)
                                 {
                                     this.Aggregator.Add(task.Exception.Flatten().InnerException ?? task.Exception);
+                                }
+                                else if (task.IsCanceled)
+                                {
+                                    try
+                                    {
+                                        // In order to get the original exception, in order to preserve the callstack,
+                                        // we must "rethrow" the exception.
+                                        task.GetAwaiter().GetResult();
+                                    }
+                                    catch (OperationCanceledException ex)
+                                    {
+                                        this.Aggregator.Add(ex);
+                                    }
                                 }
                             }
                             else if (this.adapter.CanCompleteOperations)
