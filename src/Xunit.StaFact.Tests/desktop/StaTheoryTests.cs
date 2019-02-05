@@ -9,6 +9,12 @@ using Xunit;
 
 public class StaTheoryTests
 {
+    public static object[][] MemberDataSource => new object[][]
+    {
+        new object[] { 1, 2 },
+        new object[] { 3, 4 },
+    };
+
     [StaTheory]
     [InlineData(0)]
     [InlineData(1)]
@@ -40,6 +46,13 @@ public class StaTheoryTests
         Assert.Equal(ApartmentState.MTA, Thread.CurrentThread.GetApartmentState());
 
         Assert.False(arg == 0 || arg == 1);
+    }
+
+    [StaTheory]
+    [MemberData(nameof(MemberDataSource))]
+    public void MemberBasedTheory(int a, int b)
+    {
+        Assert.Equal(b, a + 1);
     }
 }
 
