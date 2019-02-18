@@ -22,12 +22,16 @@ public class StaTheoryTests
     public async Task StaTheory_OnSTAThread(int arg)
     {
         Assert.Null(SynchronizationContext.Current);
+#if !NETCOREAPP1_0
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+#endif
         await Task.Yield();
 
         // Without a single-threaded SynchronizationContext, we won't come back to the STA thread.
         Assert.Null(SynchronizationContext.Current);
+#if !NETCOREAPP1_0
         Assert.Equal(ApartmentState.MTA, Thread.CurrentThread.GetApartmentState());
+#endif
 
         Assert.True(arg == 0 || arg == 1);
     }
@@ -39,12 +43,16 @@ public class StaTheoryTests
     public async Task StaTheoryFails(int arg)
     {
         Assert.Null(SynchronizationContext.Current);
+#if !NETCOREAPP1_0
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+#endif
         await Task.Yield();
 
         // Without a single-threaded SynchronizationContext, we won't come back to the STA thread.
         Assert.Null(SynchronizationContext.Current);
+#if !NETCOREAPP1_0
         Assert.Equal(ApartmentState.MTA, Thread.CurrentThread.GetApartmentState());
+#endif
 
         Assert.False(arg == 0 || arg == 1);
     }

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net45;net452;netstandard1.1;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net45;net452;netstandard1.1;netstandard2.0;netcoreapp3.0</TargetFrameworks>
     <RootNamespace>Xunit</RootNamespace>
     <CodeAnalysisRuleSet>Xunit.StaFact.ruleset</CodeAnalysisRuleSet>
     <SignAssembly>true</SignAssembly>
@@ -19,7 +19,7 @@
     <UseWPF Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Sdk.Desktop\**" Condition=" '$(TargetFramework)' == 'netstandard1.1' " />
+    <Compile Remove="Sdk.Desktop\**" Condition=" '$(TargetFramework)' == 'netstandard1.1' or '$(TargetFramework)' == 'netstandard2.0' " />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net452' ">
     <Reference Include="System.Windows.Forms" />

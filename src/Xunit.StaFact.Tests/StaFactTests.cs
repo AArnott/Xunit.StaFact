@@ -10,26 +10,34 @@ public class StaFactTests
 {
     public StaFactTests()
     {
+#if !NETCOREAPP1_0
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+#endif
     }
 
     [StaFact]
     public async Task StaWithoutSyncContext()
     {
         Assert.Null(SynchronizationContext.Current);
+#if !NETCOREAPP1_0
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+#endif
         await Task.Yield();
 
         // Without a single-threaded SynchronizationContext, we won't come back to the STA thread.
         Assert.Null(SynchronizationContext.Current);
+#if !NETCOREAPP1_0
         Assert.Equal(ApartmentState.MTA, Thread.CurrentThread.GetApartmentState());
+#endif
     }
 
     [StaFact]
     public void Sta_Void()
     {
         Assert.Null(SynchronizationContext.Current);
+#if !NETCOREAPP1_0
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+#endif
     }
 
     [StaFact, Trait("Category", "FailureExpected")]

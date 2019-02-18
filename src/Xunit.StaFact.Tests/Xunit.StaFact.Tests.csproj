@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net461;net45;netcoreapp1.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net461;net45;netcoreapp1.0;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
     <CodeAnalysisRuleSet>Xunit.StaFact.Tests.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>CS1591;CS1701;$(NoWarn)</NoWarn>
@@ -8,7 +8,7 @@
     <UseWPF Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="desktop\**" Condition=" '$(TargetFramework)' == 'netcoreapp1.0' " />
+    <Compile Remove="desktop\**" Condition=" '$(TargetFramework)' == 'netcoreapp1.0' or '$(TargetFramework)' == 'netcoreapp2.1' " />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net461' ">
     <Reference Include="PresentationCore" />
