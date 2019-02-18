@@ -84,7 +84,7 @@ namespace Xunit.Sdk
 
         private Task<decimal> RunOnSTA(Func<decimal> action)
         {
-#if NETFRAMEWORK || NETCOREAPP
+#if !NETSTANDARD1_1
             var tcs = new TaskCompletionSource<decimal>();
             var sta = new Thread(() =>
             {

@@ -9,7 +9,7 @@ namespace Xunit.Sdk
     using Abstractions;
 
     /// <summary>
-    /// The discovery class for <see cref="WinFormsTheoryAttribute"/>
+    /// The discovery class for <see cref="UITheoryAttribute"/>
     /// </summary>
     public class UITheoryDiscoverer : TheoryDiscoverer
     {
