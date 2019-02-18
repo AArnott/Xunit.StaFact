@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
+#if !NETSTANDARD1_1
+
 namespace Xunit.Sdk
 {
     using System;
@@ -85,7 +87,7 @@ namespace Xunit.Sdk
             CancellationTokenSource cancellationTokenSource)
         {
             var tcs = new TaskCompletionSource<RunSummary>();
-            Action threadBody = () =>
+            var thread = new Thread(() =>
             {
                 try
                 {
@@ -99,16 +101,9 @@ namespace Xunit.Sdk
                 {
                     tcs.SetException(e);
                 }
-            };
-
-#if NETSTANDARD1_1
-            // We can't do STA threads on .NET Core 1.x. So just give a dedicated thread as a fallback.
-            Task.Factory.StartNew(threadBody, cancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-#else
-            var thread = new Thread(new ThreadStart(threadBody));
+            });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
-#endif
             return tcs.Task;
         }
 
@@ -156,3 +151,5 @@ namespace Xunit.Sdk
         }
     }
 }
+
+#endif
