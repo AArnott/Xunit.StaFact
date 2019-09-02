@@ -5,7 +5,11 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>CS1591;CS1701;$(NoWarn)</NoWarn>
     <IsPackable>false</IsPackable>
+
     <UseWPF Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWPF>
+    <UseWindowsForms Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWindowsForms>
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1105</MSBuildWarningsAsMessages>
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1106</MSBuildWarningsAsMessages>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="desktop\**" Condition=" '$(TargetFramework)' == 'netcoreapp1.0' or '$(TargetFramework)' == 'netcoreapp2.1' " />
