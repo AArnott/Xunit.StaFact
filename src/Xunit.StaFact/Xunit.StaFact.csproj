@@ -16,7 +16,11 @@
     <PackageProjectUrl>https://github.com/AArnott/Xunit.StaFact</PackageProjectUrl>
     <Copyright>Copyright © Andrew Arnott</Copyright>
     <PackageTags>STA xunit test unit WPF</PackageTags>
+    
     <UseWPF Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWPF>
+    <UseWindowsForms Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWindowsForms>
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1105</MSBuildWarningsAsMessages>
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1106</MSBuildWarningsAsMessages>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Sdk.Desktop\**" Condition=" '$(TargetFramework)' == 'netstandard1.1' or '$(TargetFramework)' == 'netstandard2.0' " />
