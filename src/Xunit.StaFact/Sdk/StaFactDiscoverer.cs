@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
-#if !NETSTANDARD1_1
-
 namespace Xunit.Sdk
 {
     using System;
@@ -34,16 +32,10 @@ namespace Xunit.Sdk
             if (testMethod.Method.ReturnType.Name == "System.Void" &&
                 testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
             {
-#if NET45
-                return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, "Async void methods are not supported.");
-#else
                 return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
-#endif
             }
 
             return new UITestCase(UITestCase.SyncContextType.None, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
         }
     }
 }
-
-#endif

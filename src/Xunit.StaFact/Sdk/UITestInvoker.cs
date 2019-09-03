@@ -84,7 +84,6 @@ namespace Xunit.Sdk
 
         private Task<decimal> RunOnSTA(Func<decimal> action)
         {
-#if !NETSTANDARD1_1
             var tcs = new TaskCompletionSource<decimal>();
             var sta = new Thread(() =>
             {
@@ -100,9 +99,6 @@ namespace Xunit.Sdk
             sta.SetApartmentState(ApartmentState.STA);
             sta.Start();
             return tcs.Task;
-#else
-            return Task.Run(action);
-#endif
         }
 
         private decimal InvokeTestMethod(object testClassInstance)
