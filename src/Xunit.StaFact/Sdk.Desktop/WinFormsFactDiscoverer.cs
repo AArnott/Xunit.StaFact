@@ -3,10 +3,9 @@
 
 namespace Xunit.Sdk
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.CompilerServices;
-    using System.Windows.Threading;
+    using System.Runtime.InteropServices;
     using Abstractions;
 
     /// <summary>
@@ -31,14 +30,12 @@ namespace Xunit.Sdk
             if (testMethod.Method.ReturnType.Name == "System.Void" &&
                 testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
             {
-#if NET45
-                return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, "Async void methods are not supported.");
-#else
                 return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
-#endif
             }
 
-            return new UITestCase(UITestCase.SyncContextType.WinForms, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WinForms, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
+                : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WinForms only exists on Windows.");
         }
     }
 }

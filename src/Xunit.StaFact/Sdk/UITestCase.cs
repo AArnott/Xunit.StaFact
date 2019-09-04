@@ -33,11 +33,7 @@ namespace Xunit.Sdk
             TestMethodDisplay defaultMethodDisplay,
             ITestMethod testMethod,
             object[] testMethodArguments = null)
-#if NET45
-            : base(diagnosticMessageSink, defaultMethodDisplay, testMethod, testMethodArguments)
-#else
             : base(diagnosticMessageSink, defaultMethodDisplay, TestMethodDisplayOptions.None, testMethod, testMethodArguments)
-#endif
         {
             this.synchronizationContextType = synchronizationContextType;
         }
@@ -77,29 +73,7 @@ namespace Xunit.Sdk
 #endif
         }
 
-        private SyncContextAdapter Adapter
-        {
-            get
-            {
-                switch (this.synchronizationContextType)
-                {
-                    case SyncContextType.None:
-                        return NullAdapter.Default;
-
-                    case SyncContextType.Portable:
-                        return UISynchronizationContext.Adapter.Default;
-#if NETFRAMEWORK || NETCOREAPP
-                    case SyncContextType.WPF:
-                        return DispatcherSynchronizationContextAdapter.Default;
-
-                    case SyncContextType.WinForms:
-                        return WinFormsSynchronizationContextAdapter.Default;
-#endif
-                    default:
-                        throw new NotSupportedException("Unsupported type of SynchronizationContext.");
-                }
-            }
-        }
+        private SyncContextAdapter Adapter => GetAdapter(this.synchronizationContextType);
 
         public override void Serialize(IXunitSerializationInfo data)
         {
@@ -122,6 +96,27 @@ namespace Xunit.Sdk
             CancellationTokenSource cancellationTokenSource)
         {
             return new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, this.Adapter).RunAsync();
+        }
+
+        internal static SyncContextAdapter GetAdapter(SyncContextType syncContextType)
+        {
+            switch (syncContextType)
+            {
+                case SyncContextType.None:
+                    return NullAdapter.Default;
+
+                case SyncContextType.Portable:
+                    return UISynchronizationContext.Adapter.Default;
+#if NETFRAMEWORK || NETCOREAPP
+                case SyncContextType.WPF:
+                    return DispatcherSynchronizationContextAdapter.Default;
+
+                case SyncContextType.WinForms:
+                    return WinFormsSynchronizationContextAdapter.Default;
+#endif
+                default:
+                    throw new NotSupportedException("Unsupported type of SynchronizationContext.");
+            }
         }
 
         private class NullAdapter : SyncContextAdapter

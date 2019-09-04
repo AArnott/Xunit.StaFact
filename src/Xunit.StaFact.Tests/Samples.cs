@@ -2,6 +2,7 @@
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
 using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -18,16 +19,13 @@ public class Samples
     {
         int initialThread = Environment.CurrentManagedThreadId;
         Assert.NotNull(SynchronizationContext.Current);
-#if !NETCOREAPP1_0
-        Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
-#endif
+        var expectedApartment = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ApartmentState.STA : ApartmentState.Unknown;
+        Assert.Equal(expectedApartment, Thread.CurrentThread.GetApartmentState());
 
         await Task.Yield();
         Assert.Equal(initialThread, Environment.CurrentManagedThreadId);
         Assert.NotNull(SynchronizationContext.Current);
     }
-
-#if !NETCOREAPP1_0
 
     /// <summary>
     /// Demonstrates that xunit [Fact] behavior is to invoke the test on an MTA thread.
@@ -35,12 +33,12 @@ public class Samples
     [Fact]
     public async Task Fact_OnMTAThread()
     {
-        Assert.Equal(ApartmentState.MTA, Thread.CurrentThread.GetApartmentState());
+        var expectedApartment = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ApartmentState.MTA : ApartmentState.Unknown;
+        Assert.Equal(expectedApartment, Thread.CurrentThread.GetApartmentState());
         await Task.Yield();
-        Assert.Equal(ApartmentState.MTA, Thread.CurrentThread.GetApartmentState());
+        Assert.Equal(expectedApartment, Thread.CurrentThread.GetApartmentState());
     }
 
-#endif
 #if NETFRAMEWORK || NETCOREAPP3_0
 
     /// <summary>

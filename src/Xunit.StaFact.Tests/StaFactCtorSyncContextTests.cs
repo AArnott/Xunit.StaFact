@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
-#if !NETCOREAPP1_0
-
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,5 +23,3 @@ public class StaFactCtorSyncContextTests
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
     }
 }
-
-#endif
