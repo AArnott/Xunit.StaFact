@@ -6,6 +6,7 @@ namespace Xunit.Sdk
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
     using Abstractions;
 
     /// <summary>
@@ -30,7 +31,9 @@ namespace Xunit.Sdk
                 yield return new ExecutionErrorTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
             }
 
-            yield return new UITestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow);
+            yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow)
+                : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "STA threads only exist on Windows.");
         }
 
         protected override IEnumerable<IXunitTestCase> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
@@ -40,7 +43,9 @@ namespace Xunit.Sdk
                 yield return new ExecutionErrorTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
             }
 
-            yield return new UITheoryTestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod);
+            yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                ? (IXunitTestCase)new UITheoryTestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod)
+                : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "STA threads only exist on Windows.");
         }
     }
 }

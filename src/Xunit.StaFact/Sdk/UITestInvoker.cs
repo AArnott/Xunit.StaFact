@@ -6,6 +6,7 @@ namespace Xunit.Sdk
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using System.Runtime.InteropServices;
     using System.Threading;
     using System.Threading.Tasks;
     using Abstractions;
@@ -25,7 +26,7 @@ namespace Xunit.Sdk
 
         public new Task<decimal> RunAsync()
         {
-            return this.RunOnSTA(() =>
+            return this.RunOnStaIfPossibleOtherwiseUseMta(() =>
             {
                 var uiSyncContext = this.adapter.Create();
                 SynchronizationContext.SetSynchronizationContext(uiSyncContext);
@@ -82,23 +83,30 @@ namespace Xunit.Sdk
             });
         }
 
-        private Task<decimal> RunOnSTA(Func<decimal> action)
+        private Task<decimal> RunOnStaIfPossibleOtherwiseUseMta(Func<decimal> action)
         {
-            var tcs = new TaskCompletionSource<decimal>();
-            var sta = new Thread(() =>
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                try
+                var tcs = new TaskCompletionSource<decimal>();
+                var sta = new Thread(() =>
                 {
-                    tcs.SetResult(action());
-                }
-                catch (Exception ex)
-                {
-                    tcs.SetException(ex);
-                }
-            });
-            sta.SetApartmentState(ApartmentState.STA);
-            sta.Start();
-            return tcs.Task;
+                    try
+                    {
+                        tcs.SetResult(action());
+                    }
+                    catch (Exception ex)
+                    {
+                        tcs.SetException(ex);
+                    }
+                });
+                sta.SetApartmentState(ApartmentState.STA);
+                sta.Start();
+                return tcs.Task;
+            }
+            else
+            {
+                return Task.Run(action);
+            }
         }
 
         private decimal InvokeTestMethod(object testClassInstance)
