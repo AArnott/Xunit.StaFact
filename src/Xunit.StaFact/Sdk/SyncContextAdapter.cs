@@ -26,6 +26,13 @@ namespace Xunit.Sdk
         internal abstract SynchronizationContext Create();
 
         /// <summary>
+        /// Runs code on the test thread before any user code is executed (before the test class is even instantiated).
+        /// </summary>
+        internal virtual void InitializeThread()
+        {
+        }
+
+        /// <summary>
         /// Executes an async delegate while synchronously blocking the calling thread,
         /// but without deadlocking.
         /// </summary>
