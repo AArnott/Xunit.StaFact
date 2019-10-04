@@ -81,7 +81,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(0, arg);
     }
 
-    [UITheory, Trait("Category", "FailureExpected")]
+    [UITheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public async void FailAfterYield(int arg)
     {
@@ -89,7 +89,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(1, arg);
     }
 
-    [UITheory, Trait("Category", "FailureExpected")]
+    [UITheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public async void FailAfterDelay(int arg)
     {
@@ -97,7 +97,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(1, arg);
     }
 
-    [UITheory, Trait("Category", "FailureExpected")]
+    [UITheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public async Task FailAfterYield_Task(int arg)
     {
@@ -105,7 +105,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(1, arg);
     }
 
-    [UITheory, Trait("Category", "FailureExpected")]
+    [UITheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public async Task FailAfterDelay_Task(int arg)
     {
@@ -126,7 +126,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.True(arg == 0 || arg == 1);
     }
 
-    [Trait("Category", "FailureExpected")]
+    [Trait("TestCategory", "FailureExpected")]
     [UITheory]
     [InlineData(0)]
     [InlineData(1)]

@@ -6,10 +6,10 @@ namespace Xunit.Sdk
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
-    using Abstractions;
+    using Xunit.Abstractions;
 
     /// <summary>
-    /// The discovery class for <see cref="WinFormsFactAttribute"/>
+    /// The discovery class for <see cref="WinFormsFactAttribute"/>.
     /// </summary>
     public class WinFormsFactDiscoverer : FactDiscoverer
     {

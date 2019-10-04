@@ -25,7 +25,7 @@ public class WinFormsTheoryTests
         Assert.True(arg == 0 || arg == 1);
     }
 
-    [Trait("Category", "FailureExpected")]
+    [Trait("TestCategory", "FailureExpected")]
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1)]

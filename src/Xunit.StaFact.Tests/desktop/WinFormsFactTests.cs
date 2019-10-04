@@ -44,14 +44,14 @@ public class WinFormsFactTests
         this.AssertThreadCharacteristics();
     }
 
-    [DesktopFact, Trait("Category", "FailureExpected")]
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     public async void AsyncVoid_IsNotSupported()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     {
     }
 
-    [DesktopFact, Trait("Category", "FailureExpected")]
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
     public async Task FailAfterYield_Task()
     {
         // Task.Yield posts a message immediately (before yielding)
@@ -59,7 +59,7 @@ public class WinFormsFactTests
         Assert.False(true);
     }
 
-    [DesktopFact, Trait("Category", "FailureExpected")]
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
     public async Task FailAfterDelay_Task()
     {
         // Task.Delay waits for the elapsed time after yielding before posting a message.
@@ -67,7 +67,7 @@ public class WinFormsFactTests
         Assert.False(true);
     }
 
-    [DesktopFact, Trait("Category", "FailureExpected")]
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
     public async Task OperationCanceledException_Thrown()
     {
         await Task.Yield();

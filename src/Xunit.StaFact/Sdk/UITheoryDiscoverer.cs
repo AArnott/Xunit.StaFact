@@ -4,10 +4,10 @@
 namespace Xunit.Sdk
 {
     using System.Collections.Generic;
-    using Abstractions;
+    using Xunit.Abstractions;
 
     /// <summary>
-    /// The discovery class for <see cref="UITheoryAttribute"/>
+    /// The discovery class for <see cref="UITheoryAttribute"/>.
     /// </summary>
     public class UITheoryDiscoverer : TheoryDiscoverer
     {

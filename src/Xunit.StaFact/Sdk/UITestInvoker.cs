@@ -9,7 +9,7 @@ namespace Xunit.Sdk
     using System.Runtime.InteropServices;
     using System.Threading;
     using System.Threading.Tasks;
-    using Abstractions;
+    using Xunit.Abstractions;
 
     public class UITestInvoker : XunitTestInvoker
     {

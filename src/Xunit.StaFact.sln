@@ -7,14 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xunit.StaFact", "Xunit.StaF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3DC2EEF3-BA28-4C7A-B4F4-FCA18FBABE99}"
 	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
 		..\.gitignore = ..\.gitignore
 		..\azure-pipelines.yml = ..\azure-pipelines.yml
 		Directory.Build.props = Directory.Build.props
-		global.json = global.json
-		..\LICENSE.txt = ..\LICENSE.txt
-		nuget.config = nuget.config
+		..\global.json = ..\global.json
+		..\nuget.config = ..\nuget.config
 		..\README.md = ..\README.md
-		version.json = version.json
+		..\version.json = ..\version.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xunit.StaFact.Tests", "Xunit.StaFact.Tests\Xunit.StaFact.Tests.csproj", "{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}"
