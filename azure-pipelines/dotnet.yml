@@ -12,7 +12,7 @@ steps:
   displayName: dotnet test -f net472
   inputs:
     command: test
-    arguments: --no-build -c $(BuildConfiguration) -f net472 --filter "TestCategory!=FailureExpected" -v n /p:CollectCoverage=true
+    arguments: --no-build -c $(BuildConfiguration) -f net472 --filter "TestCategory!=FailureExpected" -v n
     testRunTitle: net472-$(Agent.JobName)
     workingDirectory: src
   condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
