@@ -30,7 +30,7 @@ public class StaTheoryTests
         Assert.True(arg == 0 || arg == 1);
     }
 
-    [Trait("Category", "FailureExpected")]
+    [Trait("TestCategory", "FailureExpected")]
     [StaTheory]
     [InlineData(0)]
     [InlineData(1)]
@@ -54,7 +54,7 @@ public class StaTheoryTests
         Assert.Equal(b, a + 1);
     }
 
-    [StaTheory, Trait("Category", "FailureExpected")]
+    [StaTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(1)]
     public async Task OperationCanceledException_Thrown(int a)
     {

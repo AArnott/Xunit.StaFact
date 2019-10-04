@@ -5,18 +5,12 @@
     <CodeAnalysisRuleSet>Xunit.StaFact.ruleset</CodeAnalysisRuleSet>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>opensource.snk</AssemblyOriginatorKeyFile>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
 
     <Title>STA/UI thread testing with xunit</Title>
-    <Authors>Andrew Arnott</Authors>
-    <Owners>andarno</Owners>
     <Summary>Execute unit test on STA and Dispatcher threads</Summary>
     <Description>Make your xunit tests more closely emulate your application by running them on STA threads, with support for various SynchronizationContexts.</Description>
-    <PackageProjectUrl>https://github.com/AArnott/Xunit.StaFact</PackageProjectUrl>
-    <Copyright>Copyright © Andrew Arnott</Copyright>
     <PackageTags>STA xunit test unit WPF</PackageTags>
-    
+
     <UseWPF Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWPF>
     <UseWindowsForms Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWindowsForms>
     <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1105</MSBuildWarningsAsMessages>
@@ -32,18 +26,4 @@
   <ItemGroup>
     <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
   </ItemGroup>
-  <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">
-    <PropertyGroup>
-      <PackageLicenseUrl>https://raw.githubusercontent.com/AArnott/Xunit.StaFact/$(GitCommitIdShort)/LICENSE.txt</PackageLicenseUrl>
-    </PropertyGroup>
-  </Target>
-
-  <!-- Remove after we use a .NET Core SDK that includes https://github.com/dotnet/sdk/pull/2637 -->
-  <Target Name="_WorkaroundFrameworkReferencePrivateAssetsBugInSdk"
-          AfterTargets="ResolveFrameworkReferences">
-    <ItemGroup>
-      <PackageReference Condition="'%(PackageReference.PrivateAssets)' == 'true'"
-                        PrivateAssets="all" />
-    </ItemGroup>
-  </Target>
 </Project>

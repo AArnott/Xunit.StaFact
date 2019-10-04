@@ -1,6 +1,8 @@
 <Project>
-  <!-- Workaround .NET Core 3.0 SDK bug where the FrameworkReference is added without regard to the target framework. -->
-  <ItemGroup Condition="'$(TargetFramework)' != 'netcoreapp3.0'">
-    <FrameworkReference Remove="Microsoft.WindowsDesktop.App" />
-  </ItemGroup>
+  <PropertyGroup Condition=" '$(IsTestProject)' == 'true' ">
+    <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+    <Exclude>[xunit.*]*</Exclude>
+    <!-- Ensure we preserve each coverlet output file per target framework: https://github.com/tonerdo/coverlet/issues/177 -->
+    <CoverletOutput>$(OutputPath)/</CoverletOutput>
+  </PropertyGroup>
 </Project>

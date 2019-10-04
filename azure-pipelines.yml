@@ -1,97 +1,21 @@
 trigger:
   branches:
-    include: ["master"]
+    include:
+    - master
+    - 'validate/*'
   paths:
-    exclude: ["doc", "*.md", ".appveyor.yml", ".travis.yml"]
+    exclude:
+    - doc/
+    - '*.md'
+    - .vscode/
 
 variables:
   TreatWarningsAsErrors: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   BuildConfiguration: Release
   BuildPlatform: Any CPU
+  ci_feed: 6ed146e5-8e9c-46d6-a40f-da9367ed50cd/c20edbb7-8403-4456-8f43-f46b47e360b1
+  NUGET_PACKAGES: $(Agent.TempDirectory)/.nuget/packages
 
 jobs:
-- job: Windows
-  pool: Hosted VS2017
-  steps:
-  - script: |
-      dotnet tool install --tool-path . nbgv
-      .\nbgv cloud -p src
-    displayName: Set build number
-    condition: ne(variables['system.pullrequest.isfork'], true)
-
-  - task: DotNetCoreInstaller@0
-    displayName: Install .NET Core SDK 3.0
-    inputs:
-      packageType: sdk
-      version: 3.0.100-preview8-013656
-
-  - script: dotnet --info
-    displayName: Show dotnet SDK info
-
-  - task: DotNetCoreCLI@2
-    displayName: Restore
-    inputs:
-      command: restore
-      verbosityRestore: normal # detailed, normal, minimal
-      projects: src/**/*.sln
-      feedsToUse: config
-      nugetConfigPath: src/nuget.config
-
-  - task: DotNetCoreCLI@2
-    displayName: Build
-    inputs:
-      projects: src/**/*.sln
-      arguments: --no-restore -c $(BuildConfiguration)
-
-  - task: DotNetCoreCLI@2
-    displayName: Pack
-    inputs:
-      command: pack
-      projects: src/**/*.sln
-      configuration: $(BuildConfiguration)
-      nobuild: true
-      verbosityPack: normal
-      packDirectory: $(Build.ArtifactStagingDirectory)/deployables
-
-  - task: DotNetCoreCLI@2
-    displayName: Run tests
-    inputs:
-      command: test
-      projects: src/Nerdbank.Streams.Tests/Nerdbank.Streams.Tests.csproj
-      nobuild: true
-      arguments: --filter "TestCategory!=FailsInCloudTest" -v n
-    continueOnError: true # we have a lot of unit tests that are SUPPOSED to fail
-
-  - task: CopyFiles@1
-    inputs:
-      Contents: |
-        obj/**/project.assets.json
-      TargetFolder: $(Build.ArtifactStagingDirectory)/projectAssetsJson
-    displayName: Collecting project.assets.json artifacts
-    condition: succeededOrFailed()
-
-  ## The rest of these steps are for deployment and skipped for PR builds
-
-  #- task: PublishBuildArtifacts@1
-  #  inputs:
-  #    PathtoPublish: $(build.sourcesdirectory)/bin
-  #    ArtifactName: bin
-  #    ArtifactType: Container
-  #  condition: and(succeeded(), ne(variables['system.pullrequest.isfork'], true))
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)/projectAssetsJson
-      ArtifactName: projectAssetsJson
-      ArtifactType: Container
-    displayName: Publish projectAssetsJson artifacts
-    condition: and(succeededOrFailed(), ne(variables['system.pullrequest.isfork'], true))
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)/deployables
-      ArtifactName: deployables
-      ArtifactType: Container
-    displayName: Publish deployables artifacts
-    condition: and(succeeded(), ne(variables['system.pullrequest.isfork'], true))
+- template: azure-pipelines/build.yml

@@ -74,28 +74,28 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         await Task.Delay(10);
     }
 
-    [UIFact, Trait("Category", "FailureExpected")]
+    [UIFact, Trait("TestCategory", "FailureExpected")]
     public async void FailAfterYield()
     {
         await Task.Yield();
         Assert.False(true);
     }
 
-    [UIFact, Trait("Category", "FailureExpected")]
+    [UIFact, Trait("TestCategory", "FailureExpected")]
     public async void FailAfterDelay()
     {
         await Task.Delay(10);
         Assert.False(true);
     }
 
-    [UIFact, Trait("Category", "FailureExpected")]
+    [UIFact, Trait("TestCategory", "FailureExpected")]
     public async Task FailAfterYield_Task()
     {
         await Task.Yield();
         Assert.False(true);
     }
 
-    [UIFact, Trait("Category", "FailureExpected")]
+    [UIFact, Trait("TestCategory", "FailureExpected")]
     public async Task FailAfterDelay_Task()
     {
         await Task.Delay(10);

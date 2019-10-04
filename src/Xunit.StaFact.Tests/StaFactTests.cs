@@ -32,7 +32,7 @@ public class StaFactTests
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
     }
 
-    [StaFact, Trait("Category", "FailureExpected")]
+    [StaFact, Trait("TestCategory", "FailureExpected")]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     public async void AsyncVoid_IsNotSupported()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
