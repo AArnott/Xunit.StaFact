@@ -38,6 +38,7 @@ namespace Xunit.Sdk
                     {
                         if (!this.CancellationTokenSource.IsCancellationRequested)
                         {
+                            this.adapter.InitializeThread();
                             var testClassInstance = this.CreateTestClass();
 
                             try

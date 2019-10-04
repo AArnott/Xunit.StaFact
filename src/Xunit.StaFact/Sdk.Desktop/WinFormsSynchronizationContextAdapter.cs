@@ -34,6 +34,8 @@ namespace Xunit.Sdk
             }
         }
 
+        internal override void InitializeThread() => Application.OleRequired();
+
         internal override void Run(Func<Task> work)
         {
             var task = work();
