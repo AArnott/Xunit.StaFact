@@ -5,7 +5,7 @@ namespace Xunit.Sdk
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using Abstractions;
+    using Xunit.Abstractions;
 
     public class UITheoryTestCase : XunitTheoryTestCase
     {

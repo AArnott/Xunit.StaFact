@@ -4,7 +4,7 @@
 namespace Xunit
 {
     using System;
-    using Sdk;
+    using Xunit.Sdk;
 
     /// <summary>
     /// Identifies an xunit test that starts on an STA thread.

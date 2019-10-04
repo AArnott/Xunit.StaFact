@@ -5,10 +5,10 @@ namespace Xunit.Sdk
 {
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
-    using Abstractions;
+    using Xunit.Abstractions;
 
     /// <summary>
-    /// The discovery class for <see cref="WinFormsTheoryAttribute"/>
+    /// The discovery class for <see cref="WinFormsTheoryAttribute"/>.
     /// </summary>
     public class WinFormsTheoryDiscoverer : TheoryDiscoverer
     {

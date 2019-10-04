@@ -6,7 +6,7 @@ namespace Xunit.Sdk
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
-    using Abstractions;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// The discovery class for the <see cref="StaFactAttribute"/>.

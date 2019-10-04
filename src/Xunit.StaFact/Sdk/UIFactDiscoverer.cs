@@ -6,7 +6,7 @@ namespace Xunit.Sdk
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Abstractions;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// The discovery class for the <see cref="UIFactAttribute"/>.

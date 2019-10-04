@@ -5,10 +5,10 @@ namespace Xunit.Sdk
 {
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
-    using Abstractions;
+    using Xunit.Abstractions;
 
     /// <summary>
-    /// The discovery class for <see cref="WpfTheoryAttribute"/>
+    /// The discovery class for <see cref="WpfTheoryAttribute"/>.
     /// </summary>
     public class WpfTheoryDiscoverer : TheoryDiscoverer
     {
