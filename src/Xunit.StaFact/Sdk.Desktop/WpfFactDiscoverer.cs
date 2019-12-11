@@ -34,7 +34,7 @@ namespace Xunit.Sdk
             }
 
             return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WPF, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
+                ? (IXunitTestCase)new WpfAdapterUITestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
                 : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WPF only exists on Windows.");
         }
     }

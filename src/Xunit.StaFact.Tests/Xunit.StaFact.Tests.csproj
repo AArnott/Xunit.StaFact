@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <TargetFrameworks>net472;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
-    <CodeAnalysisRuleSet>Xunit.StaFact.Tests.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\tests.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>CS1591;CS1701;$(NoWarn)</NoWarn>
     <IsPackable>false</IsPackable>
@@ -33,6 +33,7 @@
     <PackageReference Include="xunit" Version="2.4.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Xunit.StaFact.NetCoreWindowsDesktop\Xunit.StaFact.NetCoreWindowsDesktop.csproj" Condition=" '$(TargetFramework)' == 'netcoreapp3.0' " />
     <ProjectReference Include="..\Xunit.StaFact\Xunit.StaFact.csproj" />
   </ItemGroup>
 </Project>

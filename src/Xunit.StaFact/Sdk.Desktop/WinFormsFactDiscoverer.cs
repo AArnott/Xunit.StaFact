@@ -34,7 +34,7 @@ namespace Xunit.Sdk
             }
 
             return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WinForms, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
+                ? (IXunitTestCase)new WinFormsAdapterUITestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
                 : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WinForms only exists on Windows.");
         }
     }

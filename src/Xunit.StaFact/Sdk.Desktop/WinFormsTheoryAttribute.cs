@@ -10,11 +10,13 @@ namespace Xunit
 
     /// <summary>
     /// Identifies an xunit theory that starts on an STA thread
-    /// with a WPF DispatcherSynchronizationContext.
+    /// with a WinForms SynchronizationContext.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.Sdk.WpfTheoryDiscoverer", ThisAssembly.AssemblyName)]
-    public class WpfTheoryAttribute : TheoryAttribute
+#pragma warning disable CS0436 // Type conflicts with imported type
+    [XunitTestCaseDiscoverer("Xunit.Sdk.WinFormsTheoryDiscoverer", ThisAssembly.AssemblyName)]
+#pragma warning restore CS0436 // Type conflicts with imported type
+    public class WinFormsTheoryAttribute : TheoryAttribute
     {
     }
 }

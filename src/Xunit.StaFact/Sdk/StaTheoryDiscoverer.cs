@@ -32,7 +32,7 @@ namespace Xunit.Sdk
             }
 
             yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow)
+                ? (IXunitTestCase)new NullAdapterUITestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow)
                 : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "STA threads only exist on Windows.");
         }
 
@@ -44,7 +44,7 @@ namespace Xunit.Sdk
             }
 
             yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                ? (IXunitTestCase)new UITheoryTestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod)
+                ? (IXunitTestCase)new NullAdapterUITheoryTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod)
                 : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "STA threads only exist on Windows.");
         }
     }

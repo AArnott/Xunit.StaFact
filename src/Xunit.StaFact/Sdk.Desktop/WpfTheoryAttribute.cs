@@ -9,12 +9,14 @@ namespace Xunit
     using Xunit.Sdk;
 
     /// <summary>
-    /// Identifies an xunit test that starts on an STA thread
+    /// Identifies an xunit theory that starts on an STA thread
     /// with a WPF DispatcherSynchronizationContext.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.Sdk.WpfFactDiscoverer", ThisAssembly.AssemblyName)]
-    public class WpfFactAttribute : FactAttribute
+#pragma warning disable CS0436 // Type conflicts with imported type
+    [XunitTestCaseDiscoverer("Xunit.Sdk.WpfTheoryDiscoverer", ThisAssembly.AssemblyName)]
+#pragma warning restore CS0436 // Type conflicts with imported type
+    public class WpfTheoryAttribute : TheoryAttribute
     {
     }
 }

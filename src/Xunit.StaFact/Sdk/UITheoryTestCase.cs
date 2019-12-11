@@ -9,37 +9,22 @@ namespace Xunit.Sdk
     using System.Threading.Tasks;
     using Xunit.Abstractions;
 
-    public class UITheoryTestCase : XunitTheoryTestCase
+    public abstract class UITheoryTestCase : XunitTheoryTestCase
     {
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
-        public UITheoryTestCase()
-        {
-        }
-
-        public UITheoryTestCase(UITestCase.SyncContextType synchronizationContextType, IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod)
+        public UITheoryTestCase(IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod)
             : base(diagnosticMessageSink, defaultMethodDisplay, defaultMethodDisplayOptions, testMethod)
         {
-            this.SynchronizationContextType = synchronizationContextType;
         }
 
-        internal UITestCase.SyncContextType SynchronizationContextType { get; private set; }
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
+        protected UITheoryTestCase()
+        {
+        }
+
+        internal abstract SyncContextAdapter Adapter { get; }
 
         public override Task<RunSummary> RunAsync(IMessageSink diagnosticMessageSink, IMessageBus messageBus, object[] constructorArguments, ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource)
             => new UITheoryTestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, diagnosticMessageSink, messageBus, aggregator, cancellationTokenSource).RunAsync();
-
-        public override void Deserialize(IXunitSerializationInfo data)
-        {
-            base.Deserialize(data);
-
-            this.SynchronizationContextType = (UITestCase.SyncContextType)Enum.Parse(typeof(UITestCase.SyncContextType), data.GetValue<string>("SyncContextType"));
-        }
-
-        public override void Serialize(IXunitSerializationInfo data)
-        {
-            base.Serialize(data);
-
-            data.AddValue("SyncContextType", this.SynchronizationContextType.ToString());
-        }
     }
 }

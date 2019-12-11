@@ -10,11 +10,13 @@ namespace Xunit
 
     /// <summary>
     /// Identifies an xunit test that starts on an STA thread
-    /// with a WindowsFormsSynchronizationContext.
+    /// with a WPF DispatcherSynchronizationContext.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.Sdk.WinFormsFactDiscoverer", ThisAssembly.AssemblyName)]
-    public class WinFormsFactAttribute : FactAttribute
+#pragma warning disable CS0436 // Type conflicts with imported type
+    [XunitTestCaseDiscoverer("Xunit.Sdk.WpfFactDiscoverer", ThisAssembly.AssemblyName)]
+#pragma warning restore CS0436 // Type conflicts with imported type
+    public class WpfFactAttribute : FactAttribute
     {
     }
 }

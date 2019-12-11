@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Xunit</RootNamespace>
+    <CodeAnalysisRuleSet>..\shipping.ruleset</CodeAnalysisRuleSet>
+
+    <Description>
+      Make your xunit tests more closely emulate your application by running them on STA threads, with support for various SynchronizationContexts.
+      This package should be installed to for WPF/WinForms support on .NET Core 3.0. For any other purpose, use the Xunit.StaFact package.
+    </Description>
+
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Xunit.StaFact\Sdk.Desktop\**" LinkBase="Sdk.Desktop" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Xunit.StaFact\Xunit.StaFact.csproj" />
+  </ItemGroup>
+  
+</Project>

@@ -2,13 +2,8 @@
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
 using Xunit;
 using DesktopFactAttribute = Xunit.WpfFactAttribute;
 using DesktopSyncContext = System.Windows.Threading.DispatcherSynchronizationContext;
@@ -78,7 +73,7 @@ public class WpfFactTests
     [DesktopFact]
     public void ShouldShowWindow()
     {
-        var window = new Window();
+        var window = new System.Windows.Window();
         window.Show();
 
         Assert.True(window.IsVisible);

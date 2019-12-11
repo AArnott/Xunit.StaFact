@@ -1,23 +1,20 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
   <PropertyGroup>
     <TargetFrameworks>net472;netstandard2.0;netcoreapp3.0</TargetFrameworks>
     <RootNamespace>Xunit</RootNamespace>
-    <CodeAnalysisRuleSet>Xunit.StaFact.ruleset</CodeAnalysisRuleSet>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>opensource.snk</AssemblyOriginatorKeyFile>
+    <CodeAnalysisRuleSet>..\shipping.ruleset</CodeAnalysisRuleSet>
 
-    <Title>STA/UI thread testing with xunit</Title>
-    <Summary>Execute unit test on STA and Dispatcher threads</Summary>
-    <Description>Make your xunit tests more closely emulate your application by running them on STA threads, with support for various SynchronizationContexts.</Description>
-    <PackageTags>STA xunit test unit WPF</PackageTags>
+    <Description>
+      Make your xunit tests more closely emulate your application by running them on STA threads, with support for various SynchronizationContexts.
+      Users of .NET Core 3.0 WPF and/or WinForms should install the Xunit.StaFact.NetCoreWindowsDesktop package instead.
+    </Description>
 
-    <UseWPF Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWPF>
-    <UseWindowsForms Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWindowsForms>
     <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1105</MSBuildWarningsAsMessages>
     <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1106</MSBuildWarningsAsMessages>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Sdk.Desktop\**" Condition=" '$(TargetFramework)' == 'netstandard2.0' " />
+    <Compile Remove="Sdk.Desktop\**" Condition=" '$(TargetFramework)' != 'net472' " />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="System.Windows.Forms" />

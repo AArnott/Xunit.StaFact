@@ -3,6 +3,8 @@
 
 namespace Xunit.Sdk
 {
+    using System;
+    using System.ComponentModel;
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
@@ -11,7 +13,7 @@ namespace Xunit.Sdk
     /// <summary>
     /// The discovery class for the <see cref="StaFactAttribute"/>.
     /// </summary>
-    public class StaFactDiscoverer : FactDiscoverer
+    public partial class StaFactDiscoverer : FactDiscoverer
     {
         private readonly IMessageSink diagnosticMessageSink;
 
@@ -35,7 +37,7 @@ namespace Xunit.Sdk
             }
 
             return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.None, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
+                ? (IXunitTestCase)new NullAdapterUITestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
                 : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "STA threads only exist on Windows.");
         }
     }
