@@ -39,7 +39,7 @@ public class Samples
         Assert.Equal(expectedApartment, Thread.CurrentThread.GetApartmentState());
     }
 
-#if NETFRAMEWORK || NETCOREAPP3_1
+#if (NETFRAMEWORK || NETCOREAPP3_1) && !NON_WINDOWS
 
     /// <summary>
     /// Demonstrates that <see cref="WpfFactAttribute"/> invokes tests expecting an STA thread

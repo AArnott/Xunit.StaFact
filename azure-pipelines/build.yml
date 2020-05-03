@@ -22,7 +22,9 @@ jobs:
   - checkout: self
     clean: true
   - template: install-dependencies.yml
-  - template: dotnet.yml
+    parameters:
+      initArgs: -NoRestore
+  - template: dotnet.NonWindows.yml
 
 - job: macOS
   dependsOn: Windows
@@ -32,7 +34,9 @@ jobs:
   - checkout: self
     clean: true
   - template: install-dependencies.yml
-  - template: dotnet.yml
+    parameters:
+      initArgs: -NoRestore
+  - template: dotnet.NonWindows.yml
 
 - job: WrapUp
   dependsOn:
