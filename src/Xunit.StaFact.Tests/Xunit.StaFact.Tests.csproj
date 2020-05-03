@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net472;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net472;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <CodeAnalysisRuleSet>Xunit.StaFact.Tests.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>CS1591;CS1701;$(NoWarn)</NoWarn>
     <IsPackable>false</IsPackable>
 
-    <UseWPF Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWPF>
-    <UseWindowsForms Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">true</UseWindowsForms>
+    <UseWPF Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">true</UseWPF>
+    <UseWindowsForms Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">true</UseWindowsForms>
     <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1105</MSBuildWarningsAsMessages>
     <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1106</MSBuildWarningsAsMessages>
   </PropertyGroup>
@@ -26,8 +26,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="2.6.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+    <PackageReference Include="coverlet.msbuild" Version="2.8.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
