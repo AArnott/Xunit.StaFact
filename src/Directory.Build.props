@@ -27,4 +27,10 @@
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" />
   </ItemGroup>
+
+  <Target Name="PrepareReleaseNotes" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">
+    <PropertyGroup>
+      <PackageReleaseNotes>https://github.com/AArnott/Xunit.StaFact/releases/tag/v$(Version)</PackageReleaseNotes>
+    </PropertyGroup>
+  </Target>
 </Project>
