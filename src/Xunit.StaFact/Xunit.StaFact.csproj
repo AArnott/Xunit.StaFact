@@ -26,4 +26,9 @@
   <ItemGroup>
     <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- Suppress the FrameworkReference in our nuspec file so that our package can still restore on Linux+Mac machines.
+         See https://github.com/AArnott/Xunit.StaFact/issues/35 for more info. -->
+    <FrameworkReference Update="Microsoft.WindowsDesktop.App" PrivateAssets="all" />
+  </ItemGroup>
 </Project>
