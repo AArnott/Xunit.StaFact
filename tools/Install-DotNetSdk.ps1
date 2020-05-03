@@ -1,3 +1,5 @@
+#!/usr/bin/env pwsh
+
 <#
 .SYNOPSIS
 Installs the .NET SDK specified in the global.json file at the root of this repository,
@@ -21,7 +23,7 @@ Param (
 )
 
 $DotNetInstallScriptRoot = "$PSScriptRoot/../obj/tools"
-if (!(Test-Path $DotNetInstallScriptRoot)) { New-Item -ItemType Directory -Path $DotNetInstallScriptRoot | Out-Null }
+if (!(Test-Path $DotNetInstallScriptRoot)) { New-Item -ItemType Directory -Path $DotNetInstallScriptRoot -WhatIf:$false | Out-Null }
 $DotNetInstallScriptRoot = Resolve-Path $DotNetInstallScriptRoot
 
 # Look up actual required .NET Core SDK version from global.json
@@ -63,7 +65,7 @@ Function Get-InstallerExe($Version, [switch]$Runtime) {
 
     # Get the latest/actual version for the specified one
     if (([Version]$Version).Build -eq -1) {
-        $versionInfo = -Split (Invoke-WebRequest -Uri "https://dotnetcli.blob.core.windows.net/dotnet/$sdkOrRuntime/$Version/latest.version")
+        $versionInfo = -Split (Invoke-WebRequest -Uri "https://dotnetcli.blob.core.windows.net/dotnet/$sdkOrRuntime/$Version/latest.version" -UseBasicParsing)
         $Version = $versionInfo[-1]
     }
 
@@ -81,25 +83,6 @@ Function Install-DotNet($Version, [switch]$Runtime) {
     }
 }
 
-if ($InstallLocality -eq 'machine') {
-    if ($IsMacOS -or $IsLinux) {
-        Write-Error "Installing the .NET Core SDK or runtime at a machine-wide location is only supported by this script on Windows."
-        exit 1
-    }
-
-    if ($PSCmdlet.ShouldProcess(".NET Core SDK $sdkVersion", "Install")) {
-        Install-DotNet -Version $sdkVersion
-    }
-
-    $runtimeVersions |% {
-        if ($PSCmdlet.ShouldProcess(".NET Core runtime $_", "Install")) {
-            Install-DotNet -Version $_ -Runtime
-        }
-    }
-
-    return
-}
-
 $switches = @(
     '-Architecture','x64'
 )
@@ -108,7 +91,23 @@ $envVars = @{
     'DOTNET_SKIP_FIRST_TIME_EXPERIENCE' = 'true';
 }
 
-if ($InstallLocality -eq 'repo') {
+if ($InstallLocality -eq 'machine') {
+    if ($IsWindows) {
+        if ($PSCmdlet.ShouldProcess(".NET Core SDK $sdkVersion", "Install")) {
+            Install-DotNet -Version $sdkVersion
+        }
+
+        $runtimeVersions | Get-Unique |% {
+            if ($PSCmdlet.ShouldProcess(".NET Core runtime $_", "Install")) {
+                Install-DotNet -Version $_ -Runtime
+            }
+        }
+
+        return
+    } else {
+        $DotNetInstallDir = '/usr/share/dotnet'
+    }
+} elseif ($InstallLocality -eq 'repo') {
     $DotNetInstallDir = "$DotNetInstallScriptRoot/.dotnet"
 } elseif ($env:AGENT_TOOLSDIRECTORY) {
     $DotNetInstallDir = "$env:AGENT_TOOLSDIRECTORY/dotnet"
@@ -133,7 +132,7 @@ if ($IsMacOS -or $IsLinux) {
 }
 
 if (-not (Test-Path $DotNetInstallScriptPath)) {
-    Invoke-WebRequest -Uri $DownloadUri -OutFile $DotNetInstallScriptPath
+    Invoke-WebRequest -Uri $DownloadUri -OutFile $DotNetInstallScriptPath -UseBasicParsing
     if ($IsMacOS -or $IsLinux) {
         chmod +x $DotNetInstallScriptPath
     }
@@ -156,41 +155,5 @@ $runtimeVersions | Get-Unique |% {
 }
 
 if ($PSCmdlet.ShouldProcess("Set DOTNET environment variables to discover these installed runtimes?")) {
-    if ($env:TF_BUILD) {
-        Write-Host "Azure Pipelines detected. Logging commands will be used to propagate environment variables and prepend path."
-    }
-
-    if ($IsMacOS -or $IsLinux) {
-        $envVars['PATH'] = "${DotNetInstallDir}:$env:PATH"
-    } else {
-        $envVars['PATH'] = "$DotNetInstallDir;$env:PATH"
-    }
-
-    $envVars.GetEnumerator() |% {
-        Set-Item -Path env:$($_.Key) -Value $_.Value
-
-        # If we're running in Azure Pipelines, set these environment variables
-        if ($env:TF_BUILD) {
-            Write-Host "##vso[task.setvariable variable=$($_.Key);]$($_.Value)"
-        }
-    }
-
-    if ($env:TF_BUILD) {
-        Write-Host "##vso[task.prependpath]$DotNetInstallDir"
-    }
-}
-
-if ($env:PS1UnderCmd -eq '1') {
-    Write-Warning "Environment variable changes will be lost because you're running under cmd.exe. Run these commands manually:"
-    $envVars.GetEnumerator() |% {
-        if ($_.Key -eq 'PATH') {
-            # Special case this one for readability
-            Write-Host "SET PATH=$DotNetInstallDir;%PATH%"
-        } else {
-            Write-Host "SET $($_.Key)=$($_.Value)"
-        }
-    }
-} else {
-    Write-Host "Environment variables set:" -ForegroundColor Blue
-    $envVars
+    & "$PSScriptRoot/../azure-pipelines/Set-EnvVars.ps1" -Variables $envVars -PrependPath $DotNetInstallDir | Out-Null
 }
