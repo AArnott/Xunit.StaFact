@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+    <CodeAnalysisRuleSet>..\Xunit.StaFact.Tests\Xunit.StaFact.Tests.ruleset</CodeAnalysisRuleSet>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>CS1591;CS1701;$(NoWarn)</NoWarn>
+    <IsPackable>false</IsPackable>
+    <DefineConstants>$(DefineConstants);NON_WINDOWS</DefineConstants>
+
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1105</MSBuildWarningsAsMessages>
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1106</MSBuildWarningsAsMessages>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Xunit.StaFact.Tests\**\*.cs" />
+    <Compile Remove="..\Xunit.StaFact.Tests\desktop\**\*.cs" Condition=" '$(TargetFramework)' == 'netcoreapp2.1' or '$(OS)' != 'Windows' " />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Xunit.StaFact.Tests\xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="2.8.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="xunit.runner.console" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <!-- This project only builds after a reference to the Xunit.StaFact package is added.
+         This is done within Azure Pipelines to test the package built on Windows. -->
+  </ItemGroup>
+</Project>
