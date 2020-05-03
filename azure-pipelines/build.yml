@@ -15,6 +15,7 @@ jobs:
   - template: dotnet.yml
 
 - job: Linux
+  dependsOn: Windows
   pool:
     vmImage: Ubuntu 18.04
   steps:
@@ -24,6 +25,7 @@ jobs:
   - template: dotnet.yml
 
 - job: macOS
+  dependsOn: Windows
   pool:
     vmImage: macOS-10.15
   steps:
