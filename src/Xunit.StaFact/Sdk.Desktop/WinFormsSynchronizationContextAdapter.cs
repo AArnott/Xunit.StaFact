@@ -25,11 +25,6 @@ namespace Xunit.Sdk
             throw new NotSupportedException("Async void test methods are not supported by the WinForms dispatcher. Use Async Task instead.");
         }
 
-        internal override void CompleteOperations(SynchronizationContext syncContext)
-        {
-            throw new NotSupportedException("Async void test methods are not supported by the WinForms dispatcher. Use Async Task instead.");
-        }
-
         internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
         {
             while (!task.IsCompleted)
@@ -40,12 +35,5 @@ namespace Xunit.Sdk
         }
 
         internal override void InitializeThread() => Application.OleRequired();
-
-        internal override void Run(SynchronizationContext synchronizationContext, Func<Task> work)
-        {
-            var task = work();
-            this.PumpTill(synchronizationContext, task);
-            task.GetAwaiter().GetResult();
-        }
     }
 }

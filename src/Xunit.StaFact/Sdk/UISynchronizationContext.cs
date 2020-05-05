@@ -110,18 +110,6 @@ namespace Xunit.Sdk
             }
         }
 
-        /// <summary>
-        /// Executes an async delegate while synchronously blocking the calling thread,
-        /// but without deadlocking.
-        /// </summary>
-        /// <param name="work">The async delegate.</param>
-        public void Run(Func<Task> work)
-        {
-            this.VerifyState();
-            Task task = work();
-            this.PumpMessages(task);
-        }
-
         /// <inheritdoc />
         public override void OperationStarted()
         {
@@ -265,19 +253,9 @@ namespace Xunit.Sdk
 
             internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext) => ((UISynchronizationContext)syncContext).WaitForOperationCompletionAsync();
 
-            internal override void CompleteOperations(SynchronizationContext syncContext)
-            {
-                ((UISynchronizationContext)syncContext).CompleteOperations();
-            }
-
             internal override void PumpTill(SynchronizationContext syncContext, Task task)
             {
                 ((UISynchronizationContext)syncContext).PumpMessages(task);
-            }
-
-            internal override void Run(SynchronizationContext syncContext, Func<Task> work)
-            {
-                ((UISynchronizationContext)syncContext).Run(work);
             }
         }
     }
