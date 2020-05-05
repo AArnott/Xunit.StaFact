@@ -16,8 +16,10 @@ namespace Xunit.Sdk
         /// <summary>
         /// Gets a value indicating whether async void methods are supported.
         /// </summary>
-        /// <value><c>true</c> if <see cref="CompleteOperations()"/> can be invoked.</value>
+        /// <value><c>true</c> if <see cref="CompleteOperations"/> can be invoked.</value>
         internal virtual bool CanCompleteOperations => true;
+
+        internal virtual bool ShouldSetAsCurrent => true;
 
         /// <summary>
         /// Creates a new <see cref="SynchronizationContext"/> of the derived type.
@@ -36,20 +38,28 @@ namespace Xunit.Sdk
         /// Executes an async delegate while synchronously blocking the calling thread,
         /// but without deadlocking.
         /// </summary>
+        /// <param name="syncContext">The <see cref="SynchronizationContext"/> returned from <see cref="Create"/>.</param>
         /// <param name="work">The async delegate.</param>
-        internal abstract void Run(Func<Task> work);
+        internal abstract void Run(SynchronizationContext syncContext, Func<Task> work);
 
         /// <summary>
         /// Pumps messages until a task completes.
         /// </summary>
+        /// <param name="syncContext">The <see cref="SynchronizationContext"/> returned from <see cref="Create"/>.</param>
         /// <param name="task">The task to wait on.</param>
-        internal abstract void PumpTill(Task task);
+        internal abstract void PumpTill(SynchronizationContext syncContext, Task task);
 
         /// <summary>
         /// Pump messages until all pending operations have completed
         /// and the message queue is empty.
         /// </summary>
-        internal abstract void CompleteOperations();
+        internal abstract void CompleteOperations(SynchronizationContext syncContext);
+
+        /// <summary>
+        /// Returns a <see cref="Task"/> that completes when all pending operations have completed.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> that completes when all pending operations have completed.</returns>
+        internal abstract Task WaitForOperationCompletionAsync(SynchronizationContext syncContext);
 
         /// <summary>
         /// Clean up this instance.

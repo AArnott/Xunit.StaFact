@@ -88,14 +88,16 @@ namespace Xunit.Sdk
         }
 
         /// <inheritdoc/>
-        public override Task<RunSummary> RunAsync(
+        public override async Task<RunSummary> RunAsync(
             IMessageSink diagnosticMessageSink,
             IMessageBus messageBus,
             object[] constructorArguments,
             ExceptionAggregator aggregator,
             CancellationTokenSource cancellationTokenSource)
         {
-            return new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, this.Adapter).RunAsync();
+            using var threadRental = await ThreadRental.CreateAsync(this.Adapter, this.TestMethod);
+            await threadRental.SynchronizationContext;
+            return await new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, threadRental).RunAsync();
         }
 
         internal static SyncContextAdapter GetAdapter(SyncContextType syncContextType)
@@ -119,34 +121,15 @@ namespace Xunit.Sdk
             }
         }
 
-        private class NullAdapter : SyncContextAdapter
+        private class NullAdapter : UISynchronizationContext.Adapter
         {
-#pragma warning disable SA1401
-            internal static readonly SyncContextAdapter Default = new NullAdapter();
-#pragma warning restore SA1401
+            internal static new readonly NullAdapter Default = new NullAdapter();
 
             private NullAdapter()
             {
             }
 
-            internal override bool CanCompleteOperations => false;
-
-            internal override void CompleteOperations()
-            {
-                throw new NotSupportedException();
-            }
-
-            internal override SynchronizationContext Create() => null;
-
-            internal override void PumpTill(Task task)
-            {
-                task.GetAwaiter().GetResult();
-            }
-
-            internal override void Run(Func<Task> work)
-            {
-                work().GetAwaiter().GetResult();
-            }
+            internal override bool ShouldSetAsCurrent => false;
         }
     }
 }
