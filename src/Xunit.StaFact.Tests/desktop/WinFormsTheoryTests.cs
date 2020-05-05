@@ -38,4 +38,12 @@ public class WinFormsTheoryTests
         Assert.IsType<WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
         Assert.False(arg == 0 || arg == 1);
     }
+
+    [WinFormsTheory]
+    [MemberData(nameof(NonSerializableObject.Data), MemberType = typeof(NonSerializableObject))]
+    public void ThreadAffinitizedDataObject(NonSerializableObject o)
+    {
+        Assert.Equal(System.Diagnostics.Process.GetCurrentProcess().Id, o.ProcessId);
+        Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
+    }
 }

@@ -6,13 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-public class StaTheoryTests
+public partial class StaTheoryTests
 {
     public static object[][] MemberDataSource => new object[][]
-    {
-        new object[] { 1, 2 },
-        new object[] { 3, 4 },
-    };
+            {
+                new object[] { 1, 2 },
+                new object[] { 3, 4 },
+            };
 
     [StaTheory]
     [InlineData(0)]
@@ -61,5 +61,13 @@ public class StaTheoryTests
         Assert.Equal(1, a);
         await Task.Yield();
         throw new OperationCanceledException();
+    }
+
+    [StaTheory]
+    [MemberData(nameof(NonSerializableObject.Data), MemberType = typeof(NonSerializableObject))]
+    public void ThreadAffinitizedDataObject(NonSerializableObject o)
+    {
+        Assert.Equal(System.Diagnostics.Process.GetCurrentProcess().Id, o.ProcessId);
+        Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
     }
 }

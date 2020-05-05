@@ -44,19 +44,27 @@ public class WpfTheoryTests
         Assert.False(arg == 0 || arg == 1);
     }
 
-    [StaTheory]
+    [WpfTheory]
     [MemberData(nameof(MemberDataSource))]
     public void MemberBasedTheory(int a, int b)
     {
         Assert.Equal(b, a + 1);
     }
 
-    [StaTheory, Trait("TestCategory", "FailureExpected")]
+    [WpfTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(1)]
     public async Task OperationCanceledException_Thrown(int a)
     {
         Assert.Equal(1, a);
         await Task.Yield();
         throw new OperationCanceledException();
+    }
+
+    [WpfTheory]
+    [MemberData(nameof(NonSerializableObject.Data), MemberType = typeof(NonSerializableObject))]
+    public void ThreadAffinitizedDataObject(NonSerializableObject o)
+    {
+        Assert.Equal(System.Diagnostics.Process.GetCurrentProcess().Id, o.ProcessId);
+        Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
     }
 }
