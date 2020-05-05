@@ -46,4 +46,8 @@ public class WinFormsTheoryTests
         Assert.Equal(System.Diagnostics.Process.GetCurrentProcess().Id, o.ProcessId);
         Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
     }
+
+    [WinFormsTheory, Trait("TestCategory", "FailureExpected")]
+    [InlineData(0)]
+    public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
 }

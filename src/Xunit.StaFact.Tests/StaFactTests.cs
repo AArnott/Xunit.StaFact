@@ -40,4 +40,7 @@ public class StaFactTests
         // this test should be rejected by test discovery because
         // async void tests aren't supportable when you have no SynchronizationContext.
     }
+
+    [StaFact, Trait("TestCategory", "FailureExpected")]
+    public void JustFailVoid() => throw new InvalidOperationException("Expected failure.");
 }

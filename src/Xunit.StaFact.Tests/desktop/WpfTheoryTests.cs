@@ -67,4 +67,8 @@ public class WpfTheoryTests
         Assert.Equal(System.Diagnostics.Process.GetCurrentProcess().Id, o.ProcessId);
         Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
     }
+
+    [WpfTheory, Trait("TestCategory", "FailureExpected")]
+    [InlineData(0)]
+    public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
 }

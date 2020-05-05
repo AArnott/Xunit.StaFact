@@ -9,10 +9,10 @@ using Xunit;
 public partial class StaTheoryTests
 {
     public static object[][] MemberDataSource => new object[][]
-            {
-                new object[] { 1, 2 },
-                new object[] { 3, 4 },
-            };
+    {
+        new object[] { 1, 2 },
+        new object[] { 3, 4 },
+    };
 
     [StaTheory]
     [InlineData(0)]
@@ -70,4 +70,8 @@ public partial class StaTheoryTests
         Assert.Equal(System.Diagnostics.Process.GetCurrentProcess().Id, o.ProcessId);
         Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
     }
+
+    [StaTheory, Trait("TestCategory", "FailureExpected")]
+    [InlineData(0)]
+    public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
 }

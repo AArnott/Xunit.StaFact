@@ -128,7 +128,6 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
 
     [Trait("TestCategory", "FailureExpected")]
     [UITheory]
-    [InlineData(0)]
     [InlineData(1)]
     public async Task UITheoryFails(int arg)
     {
@@ -147,4 +146,8 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(System.Diagnostics.Process.GetCurrentProcess().Id, o.ProcessId);
         Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
     }
+
+    [UITheory, Trait("TestCategory", "FailureExpected")]
+    [InlineData(0)]
+    public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
 }
