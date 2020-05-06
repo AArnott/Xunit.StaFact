@@ -20,12 +20,12 @@ namespace Xunit.Sdk
 
         internal override SynchronizationContext Create() => new DispatcherSynchronizationContext();
 
-        internal override void CompleteOperations()
+        internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext)
         {
             throw new NotSupportedException("Async void test methods are not supported by the WPF dispatcher. Use Async Task instead.");
         }
 
-        internal override void PumpTill(Task task)
+        internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
         {
             if (!task.IsCompleted)
             {
@@ -33,13 +33,6 @@ namespace Xunit.Sdk
                 task.ContinueWith(_ => frame.Continue = false, TaskScheduler.Default);
                 Dispatcher.PushFrame(frame);
             }
-        }
-
-        internal override void Run(Func<Task> work)
-        {
-            var task = work();
-            this.PumpTill(task);
-            task.GetAwaiter().GetResult();
         }
 
         internal override void Cleanup()

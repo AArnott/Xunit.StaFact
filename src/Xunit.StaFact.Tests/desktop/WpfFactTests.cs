@@ -84,6 +84,9 @@ public class WpfFactTests
         Assert.True(window.IsVisible);
     }
 
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
+    public void JustFailVoid() => throw new InvalidOperationException("Expected failure.");
+
     private void AssertThreadCharacteristics()
     {
         Assert.IsType<DesktopSyncContext>(SynchronizationContext.Current);

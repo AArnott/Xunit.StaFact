@@ -25,6 +25,7 @@ steps:
   displayName: Merge coverage
 - task: PublishCodeCoverageResults@1
   displayName: Publish code coverage results to Azure DevOps
+  continueOnError: true # https://developercommunity.visualstudio.com/content/problem/1018392/publish-code-coverage-results-task-fails-to-conver.html
   inputs:
     codeCoverageTool: cobertura
     summaryFileLocation: 'coveragereport/Cobertura.xml'

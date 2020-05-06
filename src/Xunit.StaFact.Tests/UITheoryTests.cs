@@ -128,7 +128,6 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
 
     [Trait("TestCategory", "FailureExpected")]
     [UITheory]
-    [InlineData(0)]
     [InlineData(1)]
     public async Task UITheoryFails(int arg)
     {
@@ -139,4 +138,16 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
         Assert.False(arg == 0 || arg == 1);
     }
+
+    [UITheory]
+    [MemberData(nameof(NonSerializableObject.Data), MemberType = typeof(NonSerializableObject))]
+    public void ThreadAffinitizedDataObject(NonSerializableObject o)
+    {
+        Assert.Equal(System.Diagnostics.Process.GetCurrentProcess().Id, o.ProcessId);
+        Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
+    }
+
+    [UITheory, Trait("TestCategory", "FailureExpected")]
+    [InlineData(0)]
+    public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
 }

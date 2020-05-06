@@ -3,16 +3,12 @@
 
 namespace Xunit.Sdk
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using Xunit.Sdk;
 
     public class UITestCaseRunner : XunitTestCaseRunner
     {
-        private SyncContextAdapter syncContextAdapter;
+        private ThreadRental threadRental;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UITestCaseRunner"/> class.
@@ -25,7 +21,7 @@ namespace Xunit.Sdk
         /// <param name="messageBus">The message bus to report run status to.</param>
         /// <param name="aggregator">The exception aggregator used to run code and collect exceptions.</param>
         /// <param name="cancellationTokenSource">The task cancellation token source, used to cancel the test run.</param>
-        /// <param name="syncContextAdapter">The <see cref="SynchronizationContext"/> adapter to use.</param>
+        /// <param name="threadRental">The <see cref="ThreadRental"/> instance to use.</param>
         internal UITestCaseRunner(
             IXunitTestCase testCase,
             string displayName,
@@ -35,15 +31,15 @@ namespace Xunit.Sdk
             IMessageBus messageBus,
             ExceptionAggregator aggregator,
             CancellationTokenSource cancellationTokenSource,
-            SyncContextAdapter syncContextAdapter)
+            ThreadRental threadRental)
             : base(testCase, displayName, skipReason, constructorArguments, testMethodArguments, messageBus, aggregator, cancellationTokenSource)
         {
-            this.syncContextAdapter = syncContextAdapter;
+            this.threadRental = threadRental;
         }
 
         protected override Task<RunSummary> RunTestAsync()
         {
-            return new UITestRunner(new XunitTest(this.TestCase, this.DisplayName), this.MessageBus, this.TestClass, this.ConstructorArguments, this.TestMethod, this.TestMethodArguments, this.SkipReason, this.BeforeAfterAttributes, this.Aggregator, this.CancellationTokenSource, this.syncContextAdapter).RunAsync();
+            return new UITestRunner(new XunitTest(this.TestCase, this.DisplayName), this.MessageBus, this.TestClass, this.ConstructorArguments, this.TestMethod, this.TestMethodArguments, this.SkipReason, this.BeforeAfterAttributes, this.Aggregator, this.CancellationTokenSource, this.threadRental).RunAsync();
         }
     }
 }

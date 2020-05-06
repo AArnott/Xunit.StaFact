@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-public class StaTheoryTests
+public partial class StaTheoryTests
 {
     public static object[][] MemberDataSource => new object[][]
     {
@@ -62,4 +62,16 @@ public class StaTheoryTests
         await Task.Yield();
         throw new OperationCanceledException();
     }
+
+    [StaTheory]
+    [MemberData(nameof(NonSerializableObject.Data), MemberType = typeof(NonSerializableObject))]
+    public void ThreadAffinitizedDataObject(NonSerializableObject o)
+    {
+        Assert.Equal(System.Diagnostics.Process.GetCurrentProcess().Id, o.ProcessId);
+        Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
+    }
+
+    [StaTheory, Trait("TestCategory", "FailureExpected")]
+    [InlineData(0)]
+    public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
 }

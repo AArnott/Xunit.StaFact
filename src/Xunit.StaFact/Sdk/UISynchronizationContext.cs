@@ -5,7 +5,6 @@ namespace Xunit.Sdk
 {
     using System;
     using System.Collections.Generic;
-    using System.Reflection;
     using System.Runtime.ExceptionServices;
     using System.Threading;
     using System.Threading.Tasks;
@@ -17,15 +16,22 @@ namespace Xunit.Sdk
     {
         private readonly Queue<KeyValuePair<SendOrPostCallback, object>> messageQueue = new Queue<KeyValuePair<SendOrPostCallback, object>>();
         private readonly int mainThread = Environment.CurrentManagedThreadId;
+        private readonly AsyncAutoResetEvent workItemDone = new AsyncAutoResetEvent();
+        private readonly bool shouldSetAsCurrent;
         private int activeOperations;
         private bool pumping;
+        private bool pumpingEnded;
+        private ExceptionAggregator aggregator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UISynchronizationContext"/> class.
         /// </summary>
-        public UISynchronizationContext()
+        public UISynchronizationContext(bool shouldSetAsCurrent)
         {
+            this.shouldSetAsCurrent = shouldSetAsCurrent;
         }
+
+        internal bool IsInContext => this.mainThread == Environment.CurrentManagedThreadId;
 
         private bool AnyMessagesInQueue
         {
@@ -71,6 +77,15 @@ namespace Xunit.Sdk
             finally
             {
                 this.pumping = false;
+                this.pumpingEnded = true;
+            }
+        }
+
+        public async Task WaitForOperationCompletionAsync()
+        {
+            while (this.AnyPendingOperations || this.AnyMessagesInQueue)
+            {
+                await this.workItemDone.WaitAsync().ConfigureAwait(false);
             }
         }
 
@@ -93,18 +108,6 @@ namespace Xunit.Sdk
             {
                 this.pumping = false;
             }
-        }
-
-        /// <summary>
-        /// Executes an async delegate while synchronously blocking the calling thread,
-        /// but without deadlocking.
-        /// </summary>
-        /// <param name="work">The async delegate.</param>
-        public void Run(Func<Task> work)
-        {
-            this.VerifyState();
-            Task task = work();
-            this.PumpMessages(task);
         }
 
         /// <inheritdoc />
@@ -132,6 +135,11 @@ namespace Xunit.Sdk
         /// <inheritdoc />
         public override void Post(SendOrPostCallback d, object state)
         {
+            if (this.pumpingEnded)
+            {
+                throw new InvalidOperationException("The message pump isn't running any more.");
+            }
+
             lock (this.messageQueue)
             {
                 this.messageQueue.Enqueue(new KeyValuePair<SendOrPostCallback, object>(d, state));
@@ -175,6 +183,11 @@ namespace Xunit.Sdk
             }
         }
 
+        internal void SetExceptionAggregator(ExceptionAggregator aggregator)
+        {
+            this.aggregator = aggregator;
+        }
+
         private void VerifyState()
         {
             if (Environment.CurrentManagedThreadId != this.mainThread)
@@ -182,7 +195,7 @@ namespace Xunit.Sdk
                 throw new InvalidOperationException("Wrong thread");
             }
 
-            if (SynchronizationContext.Current != this)
+            if (Current != this && this.shouldSetAsCurrent)
             {
                 throw new InvalidOperationException("Wrong sync context");
             }
@@ -207,8 +220,23 @@ namespace Xunit.Sdk
                 work = this.messageQueue.Dequeue();
             }
 
-            work.Key(work.Value);
-            return true;
+            try
+            {
+                if (this.aggregator is object)
+                {
+                    this.aggregator.Run(() => work.Key(work.Value));
+                }
+                else
+                {
+                    work.Key(work.Value);
+                }
+
+                return true;
+            }
+            finally
+            {
+                this.workItemDone.Set();
+            }
         }
 
         internal class Adapter : SyncContextAdapter
@@ -217,27 +245,17 @@ namespace Xunit.Sdk
             internal static readonly Adapter Default = new Adapter();
 #pragma warning restore SA1401
 
-            private Adapter()
+            protected Adapter()
             {
             }
 
-            private static UISynchronizationContext UISyncContext => (UISynchronizationContext)SynchronizationContext.Current;
+            internal override SynchronizationContext Create() => new UISynchronizationContext(this.ShouldSetAsCurrent);
 
-            internal override SynchronizationContext Create() => new UISynchronizationContext();
+            internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext) => ((UISynchronizationContext)syncContext).WaitForOperationCompletionAsync();
 
-            internal override void CompleteOperations()
+            internal override void PumpTill(SynchronizationContext syncContext, Task task)
             {
-                UISyncContext.CompleteOperations();
-            }
-
-            internal override void PumpTill(Task task)
-            {
-                UISyncContext.PumpMessages(task);
-            }
-
-            internal override void Run(Func<Task> work)
-            {
-                UISyncContext.Run(work);
+                ((UISynchronizationContext)syncContext).PumpMessages(task);
             }
         }
     }

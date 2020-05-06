@@ -19,6 +19,6 @@ namespace Xunit.Sdk
         internal new UITheoryTestCase TestCase => (UITheoryTestCase)base.TestCase;
 
         protected override XunitTestRunner CreateTestRunner(ITest test, IMessageBus messageBus, Type testClass, object[] constructorArguments, MethodInfo testMethod, object[] testMethodArguments, string skipReason, IReadOnlyList<BeforeAfterTestAttribute> beforeAfterAttributes, ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource)
-            => new UITestRunner(test, messageBus, testClass, constructorArguments, testMethod, testMethodArguments, skipReason, beforeAfterAttributes, aggregator, cancellationTokenSource, UITestCase.GetAdapter(this.TestCase.SynchronizationContextType));
+            => new UITestRunner(test, messageBus, testClass, constructorArguments, testMethod, testMethodArguments, skipReason, beforeAfterAttributes, aggregator, cancellationTokenSource, this.TestCase.ThreadRental);
     }
 }

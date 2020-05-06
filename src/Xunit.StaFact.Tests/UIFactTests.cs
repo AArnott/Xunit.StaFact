@@ -146,4 +146,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
                     5));
         });
     }
+
+    [UIFact, Trait("TestCategory", "FailureExpected")]
+    public void JustFailVoid() => throw new InvalidOperationException("Expected failure.");
 }
