@@ -25,13 +25,11 @@ namespace Xunit.Sdk
 
         internal UITestCase.SyncContextType SynchronizationContextType { get; private set; }
 
-        internal ThreadRental ThreadRental { get; private set; }
-
         public override async Task<RunSummary> RunAsync(IMessageSink diagnosticMessageSink, IMessageBus messageBus, object[] constructorArguments, ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource)
         {
-            this.ThreadRental = await ThreadRental.CreateAsync(UITestCase.GetAdapter(this.SynchronizationContextType), this.TestMethod);
-            await this.ThreadRental.SynchronizationContext;
-            return await new UITheoryTestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, diagnosticMessageSink, messageBus, aggregator, cancellationTokenSource).RunAsync();
+            using var threadRental = await ThreadRental.CreateAsync(UITestCase.GetAdapter(this.SynchronizationContextType), this.TestMethod);
+            await threadRental.SynchronizationContext;
+            return await new UITheoryTestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, diagnosticMessageSink, messageBus, aggregator, cancellationTokenSource, threadRental).RunAsync();
         }
 
         public override void Deserialize(IXunitSerializationInfo data)
@@ -46,12 +44,6 @@ namespace Xunit.Sdk
             base.Serialize(data);
 
             data.AddValue("SyncContextType", this.SynchronizationContextType.ToString());
-        }
-
-        public override void Dispose()
-        {
-            this.ThreadRental?.Dispose();
-            base.Dispose();
         }
     }
 }
