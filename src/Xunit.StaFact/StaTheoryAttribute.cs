@@ -12,7 +12,7 @@ namespace Xunit
     /// Tests will be Skipped on non-Windows operating systems.
     /// </summary>
     /// <remarks>
-    /// /// The test does *not* apply a <see cref="SynchronizationContext" />, so an async test
+    /// The test does *not* apply a <see cref="SynchronizationContext" />, so an async test
     /// will resume on a standard MTA thread from the thread pool.
     /// To get an STA thread even after awaiting expressions, use <see cref="UITheoryAttribute" />.
     /// </remarks>
