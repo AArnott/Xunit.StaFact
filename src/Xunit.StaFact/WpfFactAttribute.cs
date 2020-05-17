@@ -6,11 +6,13 @@
 namespace Xunit
 {
     using System;
+    using System.Windows.Threading;
     using Xunit.Sdk;
 
     /// <summary>
     /// Identifies an xunit test that starts on an STA thread
-    /// with a WPF DispatcherSynchronizationContext.
+    /// /// with a WPF <see cref="DispatcherSynchronizationContext" />.
+    /// Tests will be Skipped on non-Windows operating systems.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     [XunitTestCaseDiscoverer("Xunit.Sdk.WpfFactDiscoverer", ThisAssembly.AssemblyName)]

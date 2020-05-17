@@ -6,11 +6,13 @@
 namespace Xunit
 {
     using System;
+    using System.Windows.Forms;
     using Xunit.Sdk;
 
     /// <summary>
     /// Identifies an xunit test that starts on an STA thread
-    /// with a WindowsFormsSynchronizationContext.
+    /// with a <see cref="WindowsFormsSynchronizationContext" />.
+    /// Tests will be Skipped on non-Windows operating systems.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     [XunitTestCaseDiscoverer("Xunit.Sdk.WinFormsFactDiscoverer", ThisAssembly.AssemblyName)]

@@ -4,11 +4,13 @@
 namespace Xunit
 {
     using System;
+    using System.Threading;
     using Xunit.Sdk;
 
     /// <summary>
-    /// Identifies an xunit test that starts on an STA thread
-    /// with a UI thread-like SynchronizationContext.
+    /// Identifies an xunit test that starts on a UI thread-like <see cref="SynchronizationContext" />
+    /// such that awaited expressions resume on the test's "main thread".
+    /// On Windows, the test runs on an STA thread.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     [XunitTestCaseDiscoverer("Xunit.Sdk.UIFactDiscoverer", ThisAssembly.AssemblyName)]
