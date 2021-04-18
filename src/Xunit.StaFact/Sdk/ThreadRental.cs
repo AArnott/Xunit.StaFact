@@ -49,18 +49,17 @@ namespace Xunit.Sdk
         internal static async Task<ThreadRental> CreateAsync(SyncContextAdapter syncContextAdapter, ITestMethod testMethod)
         {
             var disposalTaskSource = new TaskCompletionSource<object?>();
-            var tcs = new TaskCompletionSource<decimal>();
             var syncContextSource = new TaskCompletionSource<SynchronizationContext>();
             var thread = new Thread(() =>
             {
                 var uiSyncContext = syncContextAdapter.Create();
-                syncContextSource.SetResult(uiSyncContext);
                 if (syncContextAdapter.ShouldSetAsCurrent)
                 {
                     SynchronizationContext.SetSynchronizationContext(uiSyncContext);
                 }
 
                 syncContextAdapter.InitializeThread();
+                syncContextSource.SetResult(uiSyncContext);
                 syncContextAdapter.PumpTill(uiSyncContext, disposalTaskSource.Task);
             });
 
