@@ -94,17 +94,19 @@ namespace Xunit.Sdk
             ExceptionAggregator aggregator,
             CancellationTokenSource cancellationTokenSource)
         {
-            var task = Task.Run(async () =>
-            {
-                using ThreadRental threadRental = await ThreadRental.CreateAsync(this.Adapter, this.TestMethod);
-                await threadRental.SynchronizationContext;
-                var runner = new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, threadRental);
-                return await runner.RunAsync();
-            });
+            var task = Task.Run(
+                async () =>
+                {
+                    using var threadRental = await ThreadRental.CreateAsync(this.Adapter, this.TestMethod);
+                    await threadRental.SynchronizationContext;
+                    var runner = new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, threadRental);
+                    return await runner.RunAsync();
+                },
+                cancellationTokenSource.Token);
 
             // We need to block the XUnit thread to ensure it concurrency implementation.
-            task.Wait(TimeSpan.FromMinutes(30));
-            return Task.FromResult(task.Result);
+            RunSummary runSummary = task.GetAwaiter().GetResult();
+            return Task.FromResult(runSummary);
         }
 
         internal static SyncContextAdapter GetAdapter(SyncContextType syncContextType)
