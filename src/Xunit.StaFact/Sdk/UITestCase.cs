@@ -4,7 +4,6 @@
 namespace Xunit.Sdk
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Threading;
@@ -88,16 +87,27 @@ namespace Xunit.Sdk
         }
 
         /// <inheritdoc/>
-        public override async Task<RunSummary> RunAsync(
+        public override Task<RunSummary> RunAsync(
             IMessageSink diagnosticMessageSink,
             IMessageBus messageBus,
             object[] constructorArguments,
             ExceptionAggregator aggregator,
             CancellationTokenSource cancellationTokenSource)
         {
-            using var threadRental = await ThreadRental.CreateAsync(this.Adapter, this.TestMethod);
-            await threadRental.SynchronizationContext;
-            return await new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, threadRental).RunAsync();
+            var task = Task.Run(
+                async () =>
+                {
+                    using var threadRental = await ThreadRental.CreateAsync(this.Adapter, this.TestMethod);
+                    await threadRental.SynchronizationContext;
+                    var runner = new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, threadRental);
+                    return await runner.RunAsync();
+                },
+                cancellationTokenSource.Token);
+
+            // We need to block the XUnit thread to ensure its concurrency throttle is effective.
+            // See https://github.com/AArnott/Xunit.StaFact/pull/55#issuecomment-826187354 for details.
+            RunSummary runSummary = task.GetAwaiter().GetResult();
+            return Task.FromResult(runSummary);
         }
 
         internal static SyncContextAdapter GetAdapter(SyncContextType syncContextType)
