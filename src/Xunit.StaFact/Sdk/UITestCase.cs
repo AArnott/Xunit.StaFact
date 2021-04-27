@@ -104,7 +104,8 @@ namespace Xunit.Sdk
                 },
                 cancellationTokenSource.Token);
 
-            // We need to block the XUnit thread to ensure it concurrency implementation.
+            // We need to block the XUnit thread to ensure its concurrency throttle is effective.
+            // See https://github.com/AArnott/Xunit.StaFact/pull/55#issuecomment-826187354 for details.
             RunSummary runSummary = task.GetAwaiter().GetResult();
             return Task.FromResult(runSummary);
         }
