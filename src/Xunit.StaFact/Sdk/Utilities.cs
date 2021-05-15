@@ -31,7 +31,7 @@ namespace Xunit.Sdk
 
             public void OnCompleted(Action continuation)
             {
-                this.synchronizationContext.Post(s => ((Action)s)(), continuation);
+                this.synchronizationContext.Post(s => ((Action)s!)(), continuation);
             }
 
             public void UnsafeOnCompleted(Action continuation) => this.OnCompleted(continuation);

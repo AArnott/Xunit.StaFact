@@ -11,7 +11,7 @@ using Xunit;
 
 public partial class UIFactTests : IDisposable, IAsyncLifetime
 {
-    private readonly SynchronizationContext ctorSyncContext;
+    private readonly SynchronizationContext? ctorSyncContext;
     private readonly int ctorThreadId;
 
     public UIFactTests()
@@ -115,7 +115,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
     [UIFact]
     public async Task SendBackFromOtherThread()
     {
-        var sc = SynchronizationContext.Current;
+        var sc = SynchronizationContext.Current ?? throw new InvalidOperationException("No SynchronizationContext");
         bool delegateComplete = false;
         await Task.Run(delegate
         {
@@ -123,7 +123,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
                 s =>
                 {
                     Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
-                    Assert.Equal(5, (int)s);
+                    Assert.Equal(5, (int)s!);
                 },
                 5);
             delegateComplete = true;
@@ -134,7 +134,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
     [UIFact]
     public async Task SendBackFromOtherThread_Throws()
     {
-        var sc = SynchronizationContext.Current;
+        var sc = SynchronizationContext.Current ?? throw new InvalidOperationException("No SynchronizationContext");
         await Task.Run(delegate
         {
             Assert.Throws<System.IO.IOException>(() =>

@@ -2,9 +2,6 @@
   <PropertyGroup>
     <TargetFrameworks>net472;netstandard2.0;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>Xunit</RootNamespace>
-    <CodeAnalysisRuleSet>Xunit.StaFact.ruleset</CodeAnalysisRuleSet>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>opensource.snk</AssemblyOriginatorKeyFile>
 
     <Description>Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms SynchronizationContext, or even a cross-platform generic UI thread emulation with a SynchronizationContext that keeps code running on a "main thread" for that test.
 

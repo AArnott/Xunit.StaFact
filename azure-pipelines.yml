@@ -8,6 +8,13 @@ trigger:
     - doc/
     - '*.md'
     - .vscode/
+    - .github/
+
+parameters:
+- name: includeMacOS
+  displayName: Build on macOS
+  type: boolean
+  default: false # macOS is often bogged down in Azure Pipelines
 
 variables:
   TreatWarningsAsErrors: true
@@ -19,3 +26,5 @@ variables:
 
 jobs:
 - template: azure-pipelines/build.yml
+  parameters:
+    includeMacOS: ${{ parameters.includeMacOS }}
