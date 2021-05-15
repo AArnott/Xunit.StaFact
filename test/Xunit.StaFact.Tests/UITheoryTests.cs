@@ -10,7 +10,7 @@ using Xunit;
 
 public class UITheoryTests : IDisposable, IAsyncLifetime
 {
-    private readonly SynchronizationContext ctorSyncContext;
+    private readonly SynchronizationContext? ctorSyncContext;
     private readonly int ctorThreadId;
 
     public UITheoryTests()

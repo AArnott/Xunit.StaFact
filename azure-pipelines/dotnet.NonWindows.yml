@@ -7,7 +7,9 @@ steps:
 - pwsh: |
     try {
       dotnet nuget add source "$(Pipeline.Workspace)/deployables-Windows" -n "Pipeline Artifacts"
-      dotnet add src/Xunit.StaFact.Tests.ConsumedPackage package Xunit.StaFact -v (& (./azure-pipelines/Get-nbgv.ps1) get-version -p src -v NuGetPackageVersion)
+      $version = & (./azure-pipelines/Get-nbgv.ps1) get-version -v NuGetPackageVersion -p src/Xunit.StaFact
+      echo "Installing Xunit.StaFact versions $version"
+      dotnet add test/Xunit.StaFact.Tests.ConsumedPackage package Xunit.StaFact -v $version
     } catch {
       write-host $_
       exit 1
@@ -20,7 +22,7 @@ steps:
     command: test
     arguments: -c $(BuildConfiguration) -f netcoreapp2.1 --filter "TestCategory!=FailureExpected" -v n /p:CollectCoverage=true --settings "$(Build.Repository.LocalPath)/azure-pipelines/$(Agent.OS).runsettings"
     testRunTitle: netcoreapp2.1-$(Agent.JobName)
-    workingDirectory: src/Xunit.StaFact.Tests.ConsumedPackage
+    workingDirectory: test/Xunit.StaFact.Tests.ConsumedPackage
 
 - task: DotNetCoreCLI@2
   displayName: dotnet test -f netcoreapp3.1
@@ -28,7 +30,7 @@ steps:
     command: test
     arguments: -c $(BuildConfiguration) -f netcoreapp3.1 --filter "TestCategory!=FailureExpected" -v n /p:CollectCoverage=true --settings "$(Build.Repository.LocalPath)/azure-pipelines/$(Agent.OS).runsettings"
     testRunTitle: netcoreapp3.1-$(Agent.JobName)
-    workingDirectory: src/Xunit.StaFact.Tests.ConsumedPackage
+    workingDirectory: test/Xunit.StaFact.Tests.ConsumedPackage
 
 - task: PowerShell@2
   inputs:

@@ -74,7 +74,7 @@ namespace Xunit.Sdk
                                                 await task;
                                                 if (task.IsFaulted)
                                                 {
-                                                    this.Aggregator.Add(task.Exception.Flatten().InnerException ?? task.Exception);
+                                                    this.Aggregator.Add(task.Exception!.Flatten().InnerException ?? task.Exception);
                                                 }
                                                 else if (task.IsCanceled)
                                                 {

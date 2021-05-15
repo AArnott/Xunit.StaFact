@@ -14,14 +14,14 @@ namespace Xunit.Sdk
     /// </summary>
     internal class UISynchronizationContext : SynchronizationContext
     {
-        private readonly Queue<KeyValuePair<SendOrPostCallback, object>> messageQueue = new Queue<KeyValuePair<SendOrPostCallback, object>>();
+        private readonly Queue<KeyValuePair<SendOrPostCallback, object?>> messageQueue = new Queue<KeyValuePair<SendOrPostCallback, object?>>();
         private readonly int mainThread = Environment.CurrentManagedThreadId;
         private readonly AsyncAutoResetEvent workItemDone = new AsyncAutoResetEvent();
         private readonly bool shouldSetAsCurrent;
         private int activeOperations;
         private bool pumping;
         private bool pumpingEnded;
-        private ExceptionAggregator aggregator;
+        private ExceptionAggregator? aggregator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UISynchronizationContext"/> class.
@@ -133,7 +133,7 @@ namespace Xunit.Sdk
         }
 
         /// <inheritdoc />
-        public override void Post(SendOrPostCallback d, object state)
+        public override void Post(SendOrPostCallback d, object? state)
         {
             if (this.pumpingEnded)
             {
@@ -142,13 +142,13 @@ namespace Xunit.Sdk
 
             lock (this.messageQueue)
             {
-                this.messageQueue.Enqueue(new KeyValuePair<SendOrPostCallback, object>(d, state));
+                this.messageQueue.Enqueue(new KeyValuePair<SendOrPostCallback, object?>(d, state));
                 Monitor.Pulse(this.messageQueue);
             }
         }
 
         /// <inheritdoc />
-        public override void Send(SendOrPostCallback d, object state)
+        public override void Send(SendOrPostCallback d, object? state)
         {
             if (Environment.CurrentManagedThreadId == this.mainThread)
             {
@@ -156,7 +156,7 @@ namespace Xunit.Sdk
             }
             else
             {
-                Exception ex = null;
+                Exception? ex = null;
                 var evt = new ManualResetEventSlim();
                 this.Post(
                     _ =>
@@ -208,7 +208,7 @@ namespace Xunit.Sdk
 
         private bool TryOneWorkItem()
         {
-            KeyValuePair<SendOrPostCallback, object> work = default(KeyValuePair<SendOrPostCallback, object>);
+            KeyValuePair<SendOrPostCallback, object?> work = default;
             lock (this.messageQueue)
             {
                 if (this.messageQueue.Count == 0)
