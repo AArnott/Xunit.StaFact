@@ -6,7 +6,7 @@ using System.Threading;
 
 public class UITestBase
 {
-    protected static void TestMethod([CallerMemberName] string name = null)
+    protected static void TestMethod([CallerMemberName] string? name = null)
     {
         try
         {
