@@ -24,8 +24,9 @@ namespace Xunit.Sdk
         /// <summary>
         /// Creates a new <see cref="SynchronizationContext"/> of the derived type.
         /// </summary>
+        /// <param name="name">The name of the context.</param>
         /// <returns>The new instance.</returns>
-        internal abstract SynchronizationContext Create();
+        internal abstract SynchronizationContext Create(string name);
 
         /// <summary>
         /// Runs code on the test thread before any user code is executed (before the test class is even instantiated).

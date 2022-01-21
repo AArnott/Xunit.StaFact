@@ -17,6 +17,7 @@ namespace Xunit.Sdk
         private readonly Queue<KeyValuePair<SendOrPostCallback, object?>> messageQueue = new Queue<KeyValuePair<SendOrPostCallback, object?>>();
         private readonly int mainThread = Environment.CurrentManagedThreadId;
         private readonly AsyncAutoResetEvent workItemDone = new AsyncAutoResetEvent();
+        private readonly string name;
         private readonly bool shouldSetAsCurrent;
         private int activeOperations;
         private bool pumping;
@@ -26,8 +27,9 @@ namespace Xunit.Sdk
         /// <summary>
         /// Initializes a new instance of the <see cref="UISynchronizationContext"/> class.
         /// </summary>
-        public UISynchronizationContext(bool shouldSetAsCurrent)
+        public UISynchronizationContext(string name, bool shouldSetAsCurrent)
         {
+            this.name = name;
             this.shouldSetAsCurrent = shouldSetAsCurrent;
         }
 
@@ -137,7 +139,7 @@ namespace Xunit.Sdk
         {
             if (this.pumpingEnded)
             {
-                throw new InvalidOperationException("The message pump isn't running any more.");
+                throw new InvalidOperationException($"The message pump in '{this.name}' isn't running any more.");
             }
 
             lock (this.messageQueue)
@@ -249,7 +251,7 @@ namespace Xunit.Sdk
             {
             }
 
-            internal override SynchronizationContext Create() => new UISynchronizationContext(this.ShouldSetAsCurrent);
+            internal override SynchronizationContext Create(string name) => new UISynchronizationContext(name, this.ShouldSetAsCurrent);
 
             internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext) => ((UISynchronizationContext)syncContext).WaitForOperationCompletionAsync();
 

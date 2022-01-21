@@ -26,7 +26,7 @@ namespace Xunit.Sdk
 
         internal override bool CanCompleteOperations => false;
 
-        internal override SynchronizationContext Create() => new WindowsFormsSynchronizationContext();
+        internal override SynchronizationContext Create(string name) => new WindowsFormsSynchronizationContext();
 
         internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext)
         {
