@@ -18,7 +18,7 @@ namespace Xunit.Sdk
 
         internal override bool CanCompleteOperations => false;
 
-        internal override SynchronizationContext Create() => new DispatcherSynchronizationContext();
+        internal override SynchronizationContext Create(string name) => new DispatcherSynchronizationContext();
 
         internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext)
         {
