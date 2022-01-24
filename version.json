@@ -3,6 +3,6 @@
   "version": "1.2-alpha",
   "publicReleaseRefSpec": [
     "^refs/heads/main$",
-    "^refs/tags/v\\d+\\.\\d+$"
+    "^refs/heads/v\\d+\\.\\d+$"
   ]
 }
