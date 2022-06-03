@@ -39,6 +39,6 @@ public async Task WpfFact_OnSTAThread()
 }
 ```
 
-See more [samples](src/Xunit.StaFact.Tests/Samples.cs).
+See more [samples](test/Xunit.StaFact.Tests/Samples.cs).
 
 [NuPkg]: https://www.nuget.org/packages/Xunit.StaFact
