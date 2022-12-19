@@ -50,10 +50,11 @@ namespace Xunit.Sdk
         {
             var disposalTaskSource = new TaskCompletionSource<object?>();
             var syncContextSource = new TaskCompletionSource<SynchronizationContext>();
-            var threadName = $"{testMethod.TestClass.Class.Name}.{testMethod.Method.Name}";
+            // var threadName = $"{testMethod.TestClass.Class.Name}.{testMethod.Method.Name}";
+            var threadName = "MainThread";
             var thread = new Thread(() =>
             {
-                var uiSyncContext = syncContextAdapter.Create(threadName);
+                var uiSyncContext = SynchronizationContext.Current;
                 if (syncContextAdapter.ShouldSetAsCurrent)
                 {
                     SynchronizationContext.SetSynchronizationContext(uiSyncContext);
