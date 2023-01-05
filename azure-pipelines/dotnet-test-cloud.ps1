@@ -44,6 +44,11 @@ if ($x86) {
   }
 }
 
+$frameworks = @()
+if ($IsMacOS -or $IsLinux) {
+  $frameworks += '-f','net6.0'
+}
+
 & $dotnet test $RepoRoot `
     --no-build `
     -c $Configuration `
@@ -55,6 +60,7 @@ if ($x86) {
     -bl:"$ArtifactStagingFolder/build_logs/test.binlog" `
     --diag "$ArtifactStagingFolder/test_logs/diag.log;TraceLevel=info" `
     --logger trx `
+    @frameworks `
 
 $unknownCounter = 0
 Get-ChildItem -Recurse -Path $RepoRoot\test\*.trx |% {
