@@ -17,7 +17,7 @@ parameters:
 - name: includeMacOS
   displayName: Build on macOS
   type: boolean
-  default: false # macOS is often bogged down in Azure Pipelines
+  default: true # macOS is often bogged down in Azure Pipelines
 - name: RunTests
   displayName: Run tests
   type: boolean
