@@ -3,8 +3,6 @@
 
 using System.Diagnostics;
 
-#nullable enable
-
 namespace Xunit.Sdk
 {
     /// <summary>

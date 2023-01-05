@@ -3,8 +3,6 @@
 
 using System.Runtime.InteropServices;
 
-#nullable enable
-
 namespace Xunit.Sdk
 {
     internal class ThreadRental : IDisposable
