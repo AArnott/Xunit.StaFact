@@ -59,7 +59,7 @@ namespace Xunit.Sdk
             /// </summary>
             Portable,
 
-#if NETFRAMEWORK || NETCOREAPP
+#if NETFRAMEWORK || WINDOWS
             /// <summary>
             /// Use the <see cref="System.Windows.Threading.DispatcherSynchronizationContext"/>, which is only available on Desktop.
             /// </summary>
@@ -119,7 +119,7 @@ namespace Xunit.Sdk
 
                 case SyncContextType.Portable:
                     return UISynchronizationContext.Adapter.Default;
-#if NETFRAMEWORK || NETCOREAPP
+#if NETFRAMEWORK || WINDOWS
                 case SyncContextType.WPF:
                     return DispatcherSynchronizationContextAdapter.Default;
 

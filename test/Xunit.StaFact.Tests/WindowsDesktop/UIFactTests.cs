@@ -16,7 +16,7 @@ public partial class UIFactTests
     public async Task UIFact_OnSTAThread()
     {
         int initialThread = Environment.CurrentManagedThreadId;
-        var syncContext = SynchronizationContext.Current;
+        SynchronizationContext? syncContext = SynchronizationContext.Current;
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
         await Task.Yield();
         Assert.Equal(initialThread, Environment.CurrentManagedThreadId);

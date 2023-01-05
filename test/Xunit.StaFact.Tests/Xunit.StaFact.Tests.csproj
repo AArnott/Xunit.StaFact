@@ -1,26 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-
-    <UseWPF Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">true</UseWPF>
-    <UseWindowsForms Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">true</UseWindowsForms>
-    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1105</MSBuildWarningsAsMessages>
-    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NETSDK1106</MSBuildWarningsAsMessages>
+    <TargetFrameworks>net472;net6.0;net6.0-windows</TargetFrameworks>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="desktop\**" Condition=" '$(TargetFramework)' == 'netcoreapp2.1' " />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="xunit.runner.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+  <ItemGroup Condition="'$(TargetingWindows)'!='true'">
+    <Compile Remove="WindowsDesktop\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeCoverage" />
