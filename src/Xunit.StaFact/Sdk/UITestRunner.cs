@@ -3,21 +3,20 @@
 
 using System.Reflection;
 
-namespace Xunit.Sdk
+namespace Xunit.Sdk;
+
+public class UITestRunner : XunitTestRunner
 {
-    public class UITestRunner : XunitTestRunner
+    private readonly ThreadRental threadRental;
+
+    internal UITestRunner(ITest test, IMessageBus messageBus, Type testClass, object[] constructorArguments, MethodInfo testMethod, object[] testMethodArguments, string skipReason, IReadOnlyList<BeforeAfterTestAttribute> beforeAfterAttributes, ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource, ThreadRental threadRental)
+        : base(test, messageBus, testClass, constructorArguments, testMethod, testMethodArguments, skipReason, beforeAfterAttributes, aggregator, cancellationTokenSource)
     {
-        private readonly ThreadRental threadRental;
+        this.threadRental = threadRental;
+    }
 
-        internal UITestRunner(ITest test, IMessageBus messageBus, Type testClass, object[] constructorArguments, MethodInfo testMethod, object[] testMethodArguments, string skipReason, IReadOnlyList<BeforeAfterTestAttribute> beforeAfterAttributes, ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource, ThreadRental threadRental)
-            : base(test, messageBus, testClass, constructorArguments, testMethod, testMethodArguments, skipReason, beforeAfterAttributes, aggregator, cancellationTokenSource)
-        {
-            this.threadRental = threadRental;
-        }
-
-        protected override Task<decimal> InvokeTestMethodAsync(ExceptionAggregator aggregator)
-        {
-            return new UITestInvoker(this.Test, this.MessageBus, this.TestClass, this.ConstructorArguments, this.TestMethod, this.TestMethodArguments, this.BeforeAfterAttributes, aggregator, this.CancellationTokenSource, this.threadRental).RunAsync();
-        }
+    protected override Task<decimal> InvokeTestMethodAsync(ExceptionAggregator aggregator)
+    {
+        return new UITestInvoker(this.Test, this.MessageBus, this.TestClass, this.ConstructorArguments, this.TestMethod, this.TestMethodArguments, this.BeforeAfterAttributes, aggregator, this.CancellationTokenSource, this.threadRental).RunAsync();
     }
 }

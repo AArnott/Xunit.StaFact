@@ -4,36 +4,35 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Xunit.Sdk
+namespace Xunit.Sdk;
+
+/// <summary>
+/// The discovery class for <see cref="WinFormsFactAttribute"/>.
+/// </summary>
+public class WinFormsFactDiscoverer : FactDiscoverer
 {
+    private readonly IMessageSink diagnosticMessageSink;
+
     /// <summary>
-    /// The discovery class for <see cref="WinFormsFactAttribute"/>.
+    /// Initializes a new instance of the <see cref="WinFormsFactDiscoverer"/> class.
     /// </summary>
-    public class WinFormsFactDiscoverer : FactDiscoverer
+    /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
+    public WinFormsFactDiscoverer(IMessageSink diagnosticMessageSink)
+        : base(diagnosticMessageSink)
     {
-        private readonly IMessageSink diagnosticMessageSink;
+        this.diagnosticMessageSink = diagnosticMessageSink;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WinFormsFactDiscoverer"/> class.
-        /// </summary>
-        /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
-        public WinFormsFactDiscoverer(IMessageSink diagnosticMessageSink)
-            : base(diagnosticMessageSink)
+    protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
+    {
+        if (testMethod.Method.ReturnType.Name == "System.Void" &&
+            testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
         {
-            this.diagnosticMessageSink = diagnosticMessageSink;
+            return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
         }
 
-        protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
-        {
-            if (testMethod.Method.ReturnType.Name == "System.Void" &&
-                testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
-            {
-                return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
-            }
-
-            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WinForms, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
-                : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WinForms only exists on Windows.");
-        }
+        return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WinForms, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
+            : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WinForms only exists on Windows.");
     }
 }

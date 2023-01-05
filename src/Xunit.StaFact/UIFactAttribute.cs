@@ -3,16 +3,15 @@
 
 using Xunit.Sdk;
 
-namespace Xunit
+namespace Xunit;
+
+/// <summary>
+/// Identifies an xunit test that starts on a UI thread-like <see cref="SynchronizationContext" />
+/// such that awaited expressions resume on the test's "main thread".
+/// On Windows, the test runs on an STA thread.
+/// </summary>
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+[XunitTestCaseDiscoverer("Xunit.Sdk.UIFactDiscoverer", ThisAssembly.AssemblyName)]
+public class UIFactAttribute : FactAttribute
 {
-    /// <summary>
-    /// Identifies an xunit test that starts on a UI thread-like <see cref="SynchronizationContext" />
-    /// such that awaited expressions resume on the test's "main thread".
-    /// On Windows, the test runs on an STA thread.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.Sdk.UIFactDiscoverer", ThisAssembly.AssemblyName)]
-    public class UIFactAttribute : FactAttribute
-    {
-    }
 }

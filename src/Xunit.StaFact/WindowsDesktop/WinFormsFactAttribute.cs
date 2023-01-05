@@ -3,16 +3,15 @@
 
 using Xunit.Sdk;
 
-namespace Xunit
+namespace Xunit;
+
+/// <summary>
+/// Identifies an xunit test that starts on an STA thread
+/// with a <see cref="WindowsFormsSynchronizationContext" />.
+/// Tests will be Skipped on non-Windows operating systems.
+/// </summary>
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+[XunitTestCaseDiscoverer("Xunit.Sdk.WinFormsFactDiscoverer", ThisAssembly.AssemblyName)]
+public class WinFormsFactAttribute : FactAttribute
 {
-    /// <summary>
-    /// Identifies an xunit test that starts on an STA thread
-    /// with a <see cref="WindowsFormsSynchronizationContext" />.
-    /// Tests will be Skipped on non-Windows operating systems.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.Sdk.WinFormsFactDiscoverer", ThisAssembly.AssemblyName)]
-    public class WinFormsFactAttribute : FactAttribute
-    {
-    }
 }

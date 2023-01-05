@@ -3,69 +3,68 @@
 
 using System.Diagnostics;
 
-namespace Xunit.Sdk
+namespace Xunit.Sdk;
+
+/// <summary>
+/// An asynchronous implementation of an AutoResetEvent.
+/// </summary>
+[DebuggerDisplay("Signaled: {signaled}")]
+internal class AsyncAutoResetEvent
 {
     /// <summary>
-    /// An asynchronous implementation of an AutoResetEvent.
+    /// A queue of folks awaiting signals.
     /// </summary>
-    [DebuggerDisplay("Signaled: {signaled}")]
-    internal class AsyncAutoResetEvent
+    private readonly Queue<TaskCompletionSource<object?>> signalAwaiters = new Queue<TaskCompletionSource<object?>>();
+
+    /// <summary>
+    /// A value indicating whether this event is already in a signaled state.
+    /// </summary>
+    /// <devremarks>
+    /// This should not need the volatile modifier because it is
+    /// always accessed within a lock.
+    /// </devremarks>
+    private bool signaled;
+
+    /// <summary>
+    /// Returns an awaitable that may be used to asynchronously acquire the next signal.
+    /// </summary>
+    /// <returns>An awaitable.</returns>
+    public Task WaitAsync()
     {
-        /// <summary>
-        /// A queue of folks awaiting signals.
-        /// </summary>
-        private readonly Queue<TaskCompletionSource<object?>> signalAwaiters = new Queue<TaskCompletionSource<object?>>();
-
-        /// <summary>
-        /// A value indicating whether this event is already in a signaled state.
-        /// </summary>
-        /// <devremarks>
-        /// This should not need the volatile modifier because it is
-        /// always accessed within a lock.
-        /// </devremarks>
-        private bool signaled;
-
-        /// <summary>
-        /// Returns an awaitable that may be used to asynchronously acquire the next signal.
-        /// </summary>
-        /// <returns>An awaitable.</returns>
-        public Task WaitAsync()
+        lock (this.signalAwaiters)
         {
-            lock (this.signalAwaiters)
+            if (this.signaled)
             {
-                if (this.signaled)
-                {
-                    this.signaled = false;
-                    return Task.CompletedTask;
-                }
-                else
-                {
-                    var waiter = new TaskCompletionSource<object?>(TaskCreationOptions.RunContinuationsAsynchronously);
-                    this.signalAwaiters.Enqueue(waiter);
-                    return waiter.Task;
-                }
+                this.signaled = false;
+                return Task.CompletedTask;
+            }
+            else
+            {
+                var waiter = new TaskCompletionSource<object?>(TaskCreationOptions.RunContinuationsAsynchronously);
+                this.signalAwaiters.Enqueue(waiter);
+                return waiter.Task;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sets the signal if it has not already been set, allowing one awaiter to handle the signal if one is already waiting.
+    /// </summary>
+    public void Set()
+    {
+        TaskCompletionSource<object?>? toRelease = null;
+        lock (this.signalAwaiters)
+        {
+            if (this.signalAwaiters.Count > 0)
+            {
+                toRelease = this.signalAwaiters.Dequeue();
+            }
+            else if (!this.signaled)
+            {
+                this.signaled = true;
             }
         }
 
-        /// <summary>
-        /// Sets the signal if it has not already been set, allowing one awaiter to handle the signal if one is already waiting.
-        /// </summary>
-        public void Set()
-        {
-            TaskCompletionSource<object?>? toRelease = null;
-            lock (this.signalAwaiters)
-            {
-                if (this.signalAwaiters.Count > 0)
-                {
-                    toRelease = this.signalAwaiters.Dequeue();
-                }
-                else if (!this.signaled)
-                {
-                    this.signaled = true;
-                }
-            }
-
-            toRelease?.TrySetResult(null);
-        }
+        toRelease?.TrySetResult(null);
     }
 }

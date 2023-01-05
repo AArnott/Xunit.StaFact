@@ -4,16 +4,15 @@
 using System.Windows.Threading;
 using Xunit.Sdk;
 
-namespace Xunit
+namespace Xunit;
+
+/// <summary>
+/// Identifies an xunit theory that starts on an STA thread
+/// with a WPF <see cref="DispatcherSynchronizationContext" />.
+/// Tests will be Skipped on non-Windows operating systems.
+/// </summary>
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+[XunitTestCaseDiscoverer("Xunit.Sdk.WpfTheoryDiscoverer", ThisAssembly.AssemblyName)]
+public class WpfTheoryAttribute : TheoryAttribute
 {
-    /// <summary>
-    /// Identifies an xunit theory that starts on an STA thread
-    /// with a WPF <see cref="DispatcherSynchronizationContext" />.
-    /// Tests will be Skipped on non-Windows operating systems.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.Sdk.WpfTheoryDiscoverer", ThisAssembly.AssemblyName)]
-    public class WpfTheoryAttribute : TheoryAttribute
-    {
-    }
 }

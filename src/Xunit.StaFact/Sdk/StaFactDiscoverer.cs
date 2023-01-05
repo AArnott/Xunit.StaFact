@@ -4,37 +4,36 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Xunit.Sdk
+namespace Xunit.Sdk;
+
+/// <summary>
+/// The discovery class for the <see cref="StaFactAttribute"/>.
+/// </summary>
+public class StaFactDiscoverer : FactDiscoverer
 {
+    private readonly IMessageSink diagnosticMessageSink;
+
     /// <summary>
-    /// The discovery class for the <see cref="StaFactAttribute"/>.
+    /// Initializes a new instance of the <see cref="StaFactDiscoverer"/> class.
     /// </summary>
-    public class StaFactDiscoverer : FactDiscoverer
+    /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
+    public StaFactDiscoverer(IMessageSink diagnosticMessageSink)
+        : base(diagnosticMessageSink)
     {
-        private readonly IMessageSink diagnosticMessageSink;
+        this.diagnosticMessageSink = diagnosticMessageSink;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StaFactDiscoverer"/> class.
-        /// </summary>
-        /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
-        public StaFactDiscoverer(IMessageSink diagnosticMessageSink)
-            : base(diagnosticMessageSink)
+    /// <inheritdoc/>
+    protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
+    {
+        if (testMethod.Method.ReturnType.Name == "System.Void" &&
+            testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
         {
-            this.diagnosticMessageSink = diagnosticMessageSink;
+            return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
         }
 
-        /// <inheritdoc/>
-        protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
-        {
-            if (testMethod.Method.ReturnType.Name == "System.Void" &&
-                testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
-            {
-                return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
-            }
-
-            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.None, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
-                : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "STA threads only exist on Windows.");
-        }
+        return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.None, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
+            : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "STA threads only exist on Windows.");
     }
 }

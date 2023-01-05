@@ -3,36 +3,35 @@
 
 using System.Runtime.CompilerServices;
 
-namespace Xunit.Sdk
+namespace Xunit.Sdk;
+
+internal static class Utilities
 {
-    internal static class Utilities
+    internal static SyncContextAwaiter GetAwaiter(this SynchronizationContext synchronizationContext) => new SyncContextAwaiter(synchronizationContext);
+
+    internal struct SyncContextAwaiter : ICriticalNotifyCompletion
     {
-        internal static SyncContextAwaiter GetAwaiter(this SynchronizationContext synchronizationContext) => new SyncContextAwaiter(synchronizationContext);
+        private readonly SynchronizationContext synchronizationContext;
 
-        internal struct SyncContextAwaiter : ICriticalNotifyCompletion
+        internal SyncContextAwaiter(SynchronizationContext synchronizationContext)
         {
-            private readonly SynchronizationContext synchronizationContext;
-
-            internal SyncContextAwaiter(SynchronizationContext synchronizationContext)
-            {
-                this.synchronizationContext = synchronizationContext;
-            }
-
-            /// <summary>
-            /// Gets a value indicating whether the caller is already running on the desired <see cref="SynchronizationContext"/>.
-            /// </summary>
-            public bool IsCompleted => (this.synchronizationContext is UISynchronizationContext uiSyncContext && uiSyncContext.IsInContext) || (SynchronizationContext.Current == this.synchronizationContext);
-
-            public void GetResult()
-            {
-            }
-
-            public void OnCompleted(Action continuation)
-            {
-                this.synchronizationContext.Post(s => ((Action)s!)(), continuation);
-            }
-
-            public void UnsafeOnCompleted(Action continuation) => this.OnCompleted(continuation);
+            this.synchronizationContext = synchronizationContext;
         }
+
+        /// <summary>
+        /// Gets a value indicating whether the caller is already running on the desired <see cref="SynchronizationContext"/>.
+        /// </summary>
+        public bool IsCompleted => (this.synchronizationContext is UISynchronizationContext uiSyncContext && uiSyncContext.IsInContext) || (SynchronizationContext.Current == this.synchronizationContext);
+
+        public void GetResult()
+        {
+        }
+
+        public void OnCompleted(Action continuation)
+        {
+            this.synchronizationContext.Post(s => ((Action)s!)(), continuation);
+        }
+
+        public void UnsafeOnCompleted(Action continuation) => this.OnCompleted(continuation);
     }
 }
