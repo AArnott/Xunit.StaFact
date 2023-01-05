@@ -1,11 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit.Abstractions;
 
 namespace Xunit.Sdk
 {
@@ -27,7 +23,7 @@ namespace Xunit.Sdk
 
         public override async Task<RunSummary> RunAsync(IMessageSink diagnosticMessageSink, IMessageBus messageBus, object[] constructorArguments, ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource)
         {
-            using var threadRental = await ThreadRental.CreateAsync(UITestCase.GetAdapter(this.SynchronizationContextType), this.TestMethod);
+            using ThreadRental threadRental = await ThreadRental.CreateAsync(UITestCase.GetAdapter(this.SynchronizationContextType), this.TestMethod);
             await threadRental.SynchronizationContext;
             return await new UITheoryTestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, diagnosticMessageSink, messageBus, aggregator, cancellationTokenSource, threadRental).RunAsync();
         }

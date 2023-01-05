@@ -1,11 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Xunit.Sdk
 {
@@ -243,9 +239,7 @@ namespace Xunit.Sdk
 
         internal class Adapter : SyncContextAdapter
         {
-#pragma warning disable SA1401
             internal static readonly Adapter Default = new Adapter();
-#pragma warning restore SA1401
 
             protected Adapter()
             {
