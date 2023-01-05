@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Xunit.Sdk
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     /// <summary>
     /// A base class that abstracts away particulars of a specific
     /// <see cref="SynchronizationContext"/> derived type.
@@ -16,7 +16,7 @@ namespace Xunit.Sdk
         /// <summary>
         /// Gets a value indicating whether async void methods are supported.
         /// </summary>
-        /// <value><c>true</c> if <see cref="WaitForOperationCompletionAsync(SynchronizationContext)"/> can be invoked.</value>
+        /// <value><see langword="true"/> if <see cref="WaitForOperationCompletionAsync(SynchronizationContext)"/> can be invoked.</value>
         internal virtual bool CanCompleteOperations => true;
 
         internal virtual bool ShouldSetAsCurrent => true;

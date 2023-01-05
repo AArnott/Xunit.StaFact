@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit.Abstractions;
 
 namespace Xunit.Sdk
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Xunit.Abstractions;
-
     /// <summary>
     /// The discovery class for the <see cref="UIFactAttribute"/>.
     /// </summary>

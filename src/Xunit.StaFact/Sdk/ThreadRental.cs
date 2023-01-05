@@ -1,16 +1,16 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
+
+using System;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit.Abstractions;
 
 #nullable enable
 
 namespace Xunit.Sdk
 {
-    using System;
-    using System.Runtime.InteropServices;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Xunit.Abstractions;
-
     internal class ThreadRental : IDisposable
     {
         private readonly TaskCompletionSource<object?> disposalTaskSource;
@@ -53,7 +53,7 @@ namespace Xunit.Sdk
             var threadName = $"{testMethod.TestClass.Class.Name}.{testMethod.Method.Name}";
             var thread = new Thread(() =>
             {
-                var uiSyncContext = syncContextAdapter.Create(threadName);
+                SynchronizationContext uiSyncContext = syncContextAdapter.Create(threadName);
                 if (syncContextAdapter.ShouldSetAsCurrent)
                 {
                     SynchronizationContext.SetSynchronizationContext(uiSyncContext);
@@ -73,7 +73,7 @@ namespace Xunit.Sdk
 
             thread.Start();
 
-            var syncContext = await syncContextSource.Task.ConfigureAwait(false);
+            SynchronizationContext syncContext = await syncContextSource.Task.ConfigureAwait(false);
 
             var rental = new ThreadRental(
                 syncContextAdapter,

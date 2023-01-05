@@ -1,15 +1,15 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
+
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit.Abstractions;
 
 namespace Xunit.Sdk
 {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Xunit.Abstractions;
-
     /// <summary>
     /// Wraps test cases for FactAttribute and TheoryAttribute so the test case runs on the WPF STA thread.
     /// </summary>
@@ -97,7 +97,7 @@ namespace Xunit.Sdk
             var task = Task.Run(
                 async () =>
                 {
-                    using var threadRental = await ThreadRental.CreateAsync(this.Adapter, this.TestMethod);
+                    using ThreadRental threadRental = await ThreadRental.CreateAsync(this.Adapter, this.TestMethod);
                     await threadRental.SynchronizationContext;
                     var runner = new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, threadRental);
                     return await runner.RunAsync();

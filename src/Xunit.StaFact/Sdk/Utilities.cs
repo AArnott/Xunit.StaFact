@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
+
+using System;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Xunit.Sdk
 {
-    using System;
-    using System.Runtime.CompilerServices;
-    using System.Threading;
-
     internal static class Utilities
     {
         internal static SyncContextAwaiter GetAwaiter(this SynchronizationContext synchronizationContext) => new SyncContextAwaiter(synchronizationContext);

@@ -23,7 +23,7 @@ Theory variants of these attributes allow for parameterized testing. Check out t
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
+    <PackageReference Include="xunit.extensibility.execution" />
   </ItemGroup>
   <ItemGroup>
     <!-- Suppress the FrameworkReference in our nuspec file so that our package can still restore on Linux+Mac machines.

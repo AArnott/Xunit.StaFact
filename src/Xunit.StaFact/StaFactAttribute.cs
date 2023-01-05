@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
+
+using System;
+using System.Threading;
+using Xunit.Sdk;
 
 namespace Xunit
 {
-    using System;
-    using System.Threading;
-    using Xunit.Sdk;
-
     /// <summary>
     /// Identifies an xunit test that starts on an STA thread.
     /// Tests will be Skipped on non-Windows operating systems.
