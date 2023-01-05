@@ -66,8 +66,8 @@ jobs:
   - template: publish-symbols.yml
     parameters:
       includeMacOS: ${{ parameters.includeMacOS }}
-  - ${{ if parameters.RunTests }}:
-    - template: publish-codecoverage.yml
-      parameters:
-        includeMacOS: ${{ parameters.includeMacOS }}
+#  - ${{ if parameters.RunTests }}:
+#    - template: publish-codecoverage.yml
+#      parameters:
+#        includeMacOS: ${{ parameters.includeMacOS }}
   - template: publish-deployables.yml
