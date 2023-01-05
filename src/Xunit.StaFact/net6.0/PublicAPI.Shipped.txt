@@ -1,0 +1,43 @@
+#nullable enable
+override Xunit.Sdk.StaFactDiscoverer.CreateTestCase(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! factAttribute) -> Xunit.Sdk.IXunitTestCase!
+override Xunit.Sdk.StaTheoryDiscoverer.CreateTestCasesForDataRow(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute, object![]! dataRow) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
+override Xunit.Sdk.StaTheoryDiscoverer.CreateTestCasesForTheory(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
+override Xunit.Sdk.UIFactDiscoverer.CreateTestCase(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! factAttribute) -> Xunit.Sdk.IXunitTestCase!
+override Xunit.Sdk.UITestCase.Deserialize(Xunit.Abstractions.IXunitSerializationInfo! data) -> void
+override Xunit.Sdk.UITestCase.RunAsync(Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.IMessageBus! messageBus, object![]! constructorArguments, Xunit.Sdk.ExceptionAggregator! aggregator, System.Threading.CancellationTokenSource! cancellationTokenSource) -> System.Threading.Tasks.Task<Xunit.Sdk.RunSummary!>!
+override Xunit.Sdk.UITestCase.Serialize(Xunit.Abstractions.IXunitSerializationInfo! data) -> void
+override Xunit.Sdk.UITheoryDiscoverer.CreateTestCasesForDataRow(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute, object![]! dataRow) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
+override Xunit.Sdk.UITheoryDiscoverer.CreateTestCasesForTheory(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
+override Xunit.Sdk.UITheoryTestCase.Deserialize(Xunit.Abstractions.IXunitSerializationInfo! data) -> void
+override Xunit.Sdk.UITheoryTestCase.RunAsync(Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.IMessageBus! messageBus, object![]! constructorArguments, Xunit.Sdk.ExceptionAggregator! aggregator, System.Threading.CancellationTokenSource! cancellationTokenSource) -> System.Threading.Tasks.Task<Xunit.Sdk.RunSummary!>!
+override Xunit.Sdk.UITheoryTestCase.Serialize(Xunit.Abstractions.IXunitSerializationInfo! data) -> void
+Xunit.Sdk.StaFactDiscoverer
+Xunit.Sdk.StaFactDiscoverer.StaFactDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
+Xunit.Sdk.StaTheoryDiscoverer
+Xunit.Sdk.StaTheoryDiscoverer.StaTheoryDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
+Xunit.Sdk.UIFactDiscoverer
+Xunit.Sdk.UIFactDiscoverer.UIFactDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
+Xunit.Sdk.UITestCase
+Xunit.Sdk.UITestCase.SyncContextType
+Xunit.Sdk.UITestCase.SyncContextType.None = 0 -> Xunit.Sdk.UITestCase.SyncContextType
+Xunit.Sdk.UITestCase.SyncContextType.Portable = 1 -> Xunit.Sdk.UITestCase.SyncContextType
+Xunit.Sdk.UITestCase.UITestCase() -> void
+Xunit.Sdk.UITestCase.UITestCase(Xunit.Sdk.UITestCase.SyncContextType synchronizationContextType, Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.TestMethodDisplay defaultMethodDisplay, Xunit.Abstractions.ITestMethod! testMethod, object?[]? testMethodArguments = null) -> void
+Xunit.Sdk.UITestCaseRunner
+Xunit.Sdk.UITestInvoker
+Xunit.Sdk.UITestInvoker.RunAsync() -> System.Threading.Tasks.Task<decimal>!
+Xunit.Sdk.UITestRunner
+Xunit.Sdk.UITheoryDiscoverer
+Xunit.Sdk.UITheoryDiscoverer.UITheoryDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
+Xunit.Sdk.UITheoryTestCase
+Xunit.Sdk.UITheoryTestCase.UITheoryTestCase() -> void
+Xunit.Sdk.UITheoryTestCase.UITheoryTestCase(Xunit.Sdk.UITestCase.SyncContextType synchronizationContextType, Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.TestMethodDisplay defaultMethodDisplay, Xunit.Sdk.TestMethodDisplayOptions defaultMethodDisplayOptions, Xunit.Abstractions.ITestMethod! testMethod) -> void
+Xunit.Sdk.UITheoryTestCaseRunner
+Xunit.StaFactAttribute
+Xunit.StaFactAttribute.StaFactAttribute() -> void
+Xunit.StaTheoryAttribute
+Xunit.StaTheoryAttribute.StaTheoryAttribute() -> void
+Xunit.UIFactAttribute
+Xunit.UIFactAttribute.UIFactAttribute() -> void
+Xunit.UITheoryAttribute
+Xunit.UITheoryAttribute.UITheoryAttribute() -> void

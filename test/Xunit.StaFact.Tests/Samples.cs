@@ -1,11 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
 public class Samples
 {
@@ -19,7 +15,7 @@ public class Samples
     {
         int initialThread = Environment.CurrentManagedThreadId;
         Assert.NotNull(SynchronizationContext.Current);
-        var expectedApartment = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ApartmentState.STA : ApartmentState.Unknown;
+        ApartmentState expectedApartment = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ApartmentState.STA : ApartmentState.Unknown;
         Assert.Equal(expectedApartment, Thread.CurrentThread.GetApartmentState());
 
         await Task.Yield();
@@ -33,13 +29,13 @@ public class Samples
     [Fact]
     public async Task Fact_OnMTAThread()
     {
-        var expectedApartment = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ApartmentState.MTA : ApartmentState.Unknown;
+        ApartmentState expectedApartment = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ApartmentState.MTA : ApartmentState.Unknown;
         Assert.Equal(expectedApartment, Thread.CurrentThread.GetApartmentState());
         await Task.Yield();
         Assert.Equal(expectedApartment, Thread.CurrentThread.GetApartmentState());
     }
 
-#if (NETFRAMEWORK || NETCOREAPP3_1) && !NON_WINDOWS
+#if NETFRAMEWORK && !NON_WINDOWS
 
     /// <summary>
     /// Demonstrates that <see cref="WpfFactAttribute"/> invokes tests expecting an STA thread
