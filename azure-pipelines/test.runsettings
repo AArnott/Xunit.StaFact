@@ -6,12 +6,9 @@
           <CodeCoverage>
             <ModulePaths>
               <Include>
-                <ModulePath>\.dll$</ModulePath>
-                <ModulePath>\.exe$</ModulePath>
+                <ModulePath>.*xunit\.stafact\.dll$</ModulePath>
+                <ModulePath>.*xunit\.stafact\.tests\.dll$</ModulePath>
               </Include>
-              <Exclude>
-                <ModulePath>xunit\..*</ModulePath>
-              </Exclude>
             </ModulePaths>
             <Attributes>
               <Exclude>
