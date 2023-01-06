@@ -55,6 +55,13 @@ public class UITestCase : XunitTestCase
         /// </summary>
         Portable,
 
+#if MACOS
+        /// <summary>
+        /// Use a <see cref="SynchronizationContext"/> running on <see cref="Foundation.NSRunLoop.Main"/>, which is only available on macOS.
+        /// </summary>
+        Cocoa,
+#endif
+
 #if NETFRAMEWORK || WINDOWS
         /// <summary>
         /// Use the <see cref="System.Windows.Threading.DispatcherSynchronizationContext"/>, which is only available on Desktop.
@@ -115,6 +122,10 @@ public class UITestCase : XunitTestCase
 
             case SyncContextType.Portable:
                 return UISynchronizationContext.Adapter.Default;
+#if MACOS
+            case SyncContextType.Cocoa:
+                return CocoaSynchronizationContextAdapter.Default;
+#endif
 #if NETFRAMEWORK || WINDOWS
             case SyncContextType.WPF:
                 return DispatcherSynchronizationContextAdapter.Default;
