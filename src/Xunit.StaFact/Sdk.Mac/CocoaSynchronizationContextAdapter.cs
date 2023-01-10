@@ -19,7 +19,7 @@ namespace Xunit.Sdk
 
         internal override bool CanCompleteOperations => true;
 
-        internal override SynchronizationContext Create(string name) => new CocoaSynchronizationContext();
+        internal override SynchronizationContext Create(string name) => new CocoaSynchronizationContext(name, this.ShouldSetAsCurrent);
 
         internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext)
         {
