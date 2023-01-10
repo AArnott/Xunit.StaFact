@@ -32,7 +32,7 @@ namespace Xunit.Sdk
 
         internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
         {
-            ((CocoaSynchronizationContext)syncContext).PumpMessages(task);
+            ((CocoaSynchronizationContext)synchronizationContext).PumpMessages(task);
         }
     }
 }
