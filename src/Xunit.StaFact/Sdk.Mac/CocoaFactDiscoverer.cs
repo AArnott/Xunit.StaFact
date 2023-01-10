@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Internal;
 using Xunit.Abstractions;
 
 namespace Xunit.Sdk
@@ -26,8 +27,20 @@ namespace Xunit.Sdk
             this.diagnosticMessageSink = diagnosticMessageSink;
         }
 
+        class MyMessage: IMessageSinkMessage
+        {
+            public string Message { get; set; }
+        }
+
         protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
         {
+            var message = new MyMessage
+            {
+                Message = "Hello"
+            };
+
+            Console.WriteLine("hello!!");
+            diagnosticMessageSink.OnMessage(message);
             if (testMethod.Method.ReturnType.Name == "System.Void" &&
                 testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
             {
