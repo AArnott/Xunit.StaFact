@@ -5,7 +5,6 @@ using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Internal;
 using Xunit.Abstractions;
 
 namespace Xunit.Sdk
