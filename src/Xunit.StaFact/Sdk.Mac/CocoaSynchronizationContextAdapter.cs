@@ -21,10 +21,7 @@ namespace Xunit.Sdk
 
         internal override SynchronizationContext Create(string name) => new CocoaSynchronizationContext(name, this.ShouldSetAsCurrent);
 
-        internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext)
-        {
-            throw new NotSupportedException("Async void test methods are not supported by the WinForms dispatcher. Use Async Task instead.");
-        }
+        internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext) => ((CocoaSynchronizationContext)syncContext).WaitForOperationCompletionAsync();
 
         // internal override void CompleteOperations()
         // {
