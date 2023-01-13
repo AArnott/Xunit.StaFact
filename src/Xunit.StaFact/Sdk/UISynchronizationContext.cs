@@ -87,27 +87,6 @@ internal class UISynchronizationContext : SynchronizationContext
         }
     }
 
-    /// <summary>
-    /// Pump messages until all pending operations have completed
-    /// and the message queue is empty.
-    /// </summary>
-    public void CompleteOperations()
-    {
-        this.VerifyState();
-        this.pumping = true;
-        try
-        {
-            while (this.AnyPendingOperations || this.AnyMessagesInQueue)
-            {
-                this.TryOneWorkItem();
-            }
-        }
-        finally
-        {
-            this.pumping = false;
-        }
-    }
-
     /// <inheritdoc />
     public override void OperationStarted()
     {
