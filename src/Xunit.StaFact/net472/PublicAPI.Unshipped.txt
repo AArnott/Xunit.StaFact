@@ -1,7 +1,0 @@
-override Xunit.Sdk.CocoaFactDiscoverer.CreateTestCase(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! factAttribute) -> Xunit.Sdk.IXunitTestCase!
-override Xunit.Sdk.CocoaTheoryDiscoverer.CreateTestCasesForDataRow(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute, object![]! dataRow) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
-override Xunit.Sdk.CocoaTheoryDiscoverer.CreateTestCasesForTheory(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
-Xunit.Sdk.CocoaFactDiscoverer
-Xunit.Sdk.CocoaFactDiscoverer.CocoaFactDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
-Xunit.Sdk.CocoaTheoryDiscoverer
-Xunit.Sdk.CocoaTheoryDiscoverer.CocoaTheoryDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void

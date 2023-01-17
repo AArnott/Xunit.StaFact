@@ -349,3 +349,6 @@ MigrationBackup/
 
 # dotnet tool local install directory
 .store/
+
+# File built by MacOS
+.DS_Store

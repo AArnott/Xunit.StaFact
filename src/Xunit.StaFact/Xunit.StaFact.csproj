@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net472;netstandard2.0;net6.0;net6.0-windows;net6.0-macos10.15</TargetFrameworks>
-    <SupportedOSPlatformVersion Condition="'$(TargetingMacos)'=='true'">10.15</SupportedOSPlatformVersion>
+    <!-- <SupportedOSPlatformVersion Condition="'$(TargetingMacos)'=='true'">10.15</SupportedOSPlatformVersion> -->
     <RootNamespace>Xunit</RootNamespace>
 
     <Description>Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms SynchronizationContext, or even a cross-platform generic UI thread emulation with a SynchronizationContext that keeps code running on a "main thread" for that test.
@@ -26,11 +26,5 @@ Theory variants of these attributes allow for parameterized testing. Check out t
   <ItemGroup>
     <PackageReference Include="xunit.extensibility.execution" />
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" PrivateAssets="all" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Mac\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mac\" />
   </ItemGroup>
 </Project>

@@ -47,10 +47,6 @@ namespace Xunit.Sdk
             }
 
             return (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.Cocoa, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
-
-            //return RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
-            //    ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.Cocoa, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
-             //    : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "Cocoa only exists on macOS.");
         }
     }
 }

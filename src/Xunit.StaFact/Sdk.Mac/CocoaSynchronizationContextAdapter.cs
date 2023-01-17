@@ -23,10 +23,6 @@ namespace Xunit.Sdk
 
         internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext) => ((CocoaSynchronizationContext)syncContext).WaitForOperationCompletionAsync();
 
-        // internal override void CompleteOperations()
-        // {
-        // }
-
         internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
         {
             ((CocoaSynchronizationContext)synchronizationContext).PumpMessages(task);
