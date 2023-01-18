@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace Xunit.StaFact.Tests.Mac;
 
 [Register("AppDelegate")]
-public partial class AppDelegate : NSApplicationDelegate
+public class AppDelegate : NSApplicationDelegate
 {
     public override void DidFinishLaunching(NSNotification notification)
         => ThreadPool.QueueUserWorkItem(
@@ -18,8 +18,8 @@ public partial class AppDelegate : NSApplicationDelegate
                     "denied",
                 })));
 
-    [LibraryImport(ObjCRuntime.Constants.libcLibrary)]
+    [DllImport(ObjCRuntime.Constants.libcLibrary)]
 #pragma warning disable SA1300 // Element should begin with upper-case letter
-    private static partial void _exit(int exitCode);
+    private static extern void _exit(int exitCode);
 #pragma warning restore SA1300 // Element should begin with upper-case letter
 }
