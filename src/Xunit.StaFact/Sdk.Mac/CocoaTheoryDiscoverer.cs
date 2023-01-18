@@ -1,9 +1,5 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
-
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Xunit.Abstractions;
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 namespace Xunit.Sdk;
 
@@ -23,11 +19,11 @@ public class CocoaTheoryDiscoverer : TheoryDiscoverer
 
     protected override IEnumerable<IXunitTestCase> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute, object[] dataRow)
     {
-        yield return (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.Cocoa, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow);
+        yield return new UITestCase(UITestCase.SyncContextType.Cocoa, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow);
     }
 
     protected override IEnumerable<IXunitTestCase> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
     {
-        yield return (IXunitTestCase)new UITheoryTestCase(UITestCase.SyncContextType.Cocoa, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod);
+        yield return new UITheoryTestCase(UITestCase.SyncContextType.Cocoa, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod);
     }
 }

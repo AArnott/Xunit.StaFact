@@ -1,23 +1,17 @@
-﻿// Copyright (c) Aaron Bockover. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
-
-using System.Threading;
-
-using Foundation;
+﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 namespace Xunit.Sdk;
 
 internal sealed class CocoaSynchronizationContext : SynchronizationContext
 {
-
-    private readonly Queue<KeyValuePair<SendOrPostCallback, object?>> messageQueue = new Queue<KeyValuePair<SendOrPostCallback, object?>>();
+    private readonly Queue<KeyValuePair<SendOrPostCallback, object?>> messageQueue = new();
     private readonly int mainThread = Environment.CurrentManagedThreadId;
-    private readonly AsyncAutoResetEvent workItemDone = new AsyncAutoResetEvent();
+    private readonly AsyncAutoResetEvent workItemDone = new();
     private readonly string name;
     private readonly bool shouldSetAsCurrent;
     private int activeOperations;
     private bool pumping;
-    private bool pumpingEnded;
     private ExceptionAggregator? aggregator;
 
     /// <summary>
@@ -45,12 +39,12 @@ internal sealed class CocoaSynchronizationContext : SynchronizationContext
     private bool AnyPendingOperations => Volatile.Read(ref this.activeOperations) > 0;
 
     public override SynchronizationContext CreateCopy()
-        => new CocoaSynchronizationContext(name, shouldSetAsCurrent);
+        => new CocoaSynchronizationContext(this.name, this.shouldSetAsCurrent);
 
-    public override void Post(SendOrPostCallback d, object state)
+    public override void Post(SendOrPostCallback d, object? state)
         => NSRunLoop.Main.BeginInvokeOnMainThread(() => d(state));
 
-    public override void Send(SendOrPostCallback d, object state)
+    public override void Send(SendOrPostCallback d, object? state)
         => NSRunLoop.Main.InvokeOnMainThread(() => d(state));
 
     /// <summary>
@@ -84,7 +78,6 @@ internal sealed class CocoaSynchronizationContext : SynchronizationContext
         finally
         {
             this.pumping = false;
-            this.pumpingEnded = true;
         }
     }
 
