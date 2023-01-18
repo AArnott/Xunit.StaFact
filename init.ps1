@@ -65,6 +65,8 @@ if (!$NoPrerequisites) {
     if ($env:OS -eq 'Windows_NT') {
         $EnvVars['PROCDUMP_PATH'] = & "$PSScriptRoot\azure-pipelines\Get-ProcDump.ps1"
     }
+
+    dotnet workload install macos
 }
 
 # Workaround nuget credential provider bug that causes very unreliable package restores on Azure Pipelines
