@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0-macos</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.runner.console" />
+    <PackageReference Include="xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Xunit.StaFact\Xunit.StaFact.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="$(XunitConsoleNetCore2AppPath)" />
+  </ItemGroup>  
+
+  <Target Name="Test" DependsOnTargets="Build">
+    <PropertyGroup>
+      <_AppExePath>$(MSBuildThisFileDirectory)..\..\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\Xunit.StaFact.Tests.Mac.app\Contents\MacOS\Xunit.StaFact.Tests.Mac</_AppExePath>
+    </PropertyGroup>
+    <!-- TODO: Verify these paths and use these arguments in AppDelegate.cs -->
+    <Exec Command="&quot;$(_AppExePath)&quot; xunit &quot;$(TargetPath)&quot; -xml &quot;$(ArtifactStagingFolder)test_logs\$(TargetName).xml&quot;" />
+  </Target>
+</Project>
