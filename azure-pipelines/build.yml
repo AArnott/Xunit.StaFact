@@ -38,6 +38,8 @@ jobs:
 
 - job: macOS
   condition: ${{ parameters.includeMacOS }}
+  variables:
+    BuildConfiguration: ReleaseMac
   pool:
     vmImage: macOS-12
   steps:
