@@ -7,25 +7,24 @@ using System.Threading.Tasks;
 
 using Foundation;
 
-namespace Xunit.Sdk
+namespace Xunit.Sdk;
+
+internal class CocoaSynchronizationContextAdapter : SyncContextAdapter
 {
-    internal class CocoaSynchronizationContextAdapter : SyncContextAdapter
+    internal static readonly SyncContextAdapter Default = new CocoaSynchronizationContextAdapter();
+
+    private CocoaSynchronizationContextAdapter()
     {
-        internal static readonly SyncContextAdapter Default = new CocoaSynchronizationContextAdapter();
+    }
 
-        private CocoaSynchronizationContextAdapter()
-        {
-        }
+    internal override bool CanCompleteOperations => true;
 
-        internal override bool CanCompleteOperations => true;
+    internal override SynchronizationContext Create(string name) => new CocoaSynchronizationContext(name, this.ShouldSetAsCurrent);
 
-        internal override SynchronizationContext Create(string name) => new CocoaSynchronizationContext(name, this.ShouldSetAsCurrent);
+    internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext) => ((CocoaSynchronizationContext)syncContext).WaitForOperationCompletionAsync();
 
-        internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext) => ((CocoaSynchronizationContext)syncContext).WaitForOperationCompletionAsync();
-
-        internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
-        {
-            ((CocoaSynchronizationContext)synchronizationContext).PumpMessages(task);
-        }
+    internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
+    {
+        ((CocoaSynchronizationContext)synchronizationContext).PumpMessages(task);
     }
 }

@@ -4,15 +4,14 @@ using System;
 using System.Threading;
 using Xunit.Sdk;
 
-namespace Xunit
+namespace Xunit;
+
+/// <summary>
+/// Identifies an xunit test that starts on with a <see cref="System.Threading.SynchronizationContext"/>
+/// running on <see cref="Foundation.NSRunLoop.Main"/>.
+/// </summary>
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+[XunitTestCaseDiscoverer("Xunit.Sdk.CocoaFactDiscoverer", ThisAssembly.AssemblyName)]
+public class CocoaFactAttribute : FactAttribute
 {
-    /// <summary>
-    /// Identifies an xunit test that starts on with a <see cref="System.Threading.SynchronizationContext"/>
-    /// running on <see cref="Foundation.NSRunLoop.Main"/>.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [XunitTestCaseDiscoverer("Xunit.Sdk.CocoaFactDiscoverer", ThisAssembly.AssemblyName)]
-    public class CocoaFactAttribute : FactAttribute
-    {
-    }
 }

@@ -7,46 +7,45 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Xunit.Abstractions;
 
-namespace Xunit.Sdk
+namespace Xunit.Sdk;
+
+/// <summary>
+/// The discovery class for <see cref="CocoaFactDiscoverer"/>.
+/// </summary>
+public class CocoaFactDiscoverer : FactDiscoverer
 {
+    private readonly IMessageSink diagnosticMessageSink;
+
     /// <summary>
-    /// The discovery class for <see cref="CocoaFactDiscoverer"/>.
+    /// Initializes a new instance of the <see cref="CocoaFactDiscoverer"/> class.
     /// </summary>
-    public class CocoaFactDiscoverer : FactDiscoverer
+    /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
+    public CocoaFactDiscoverer(IMessageSink diagnosticMessageSink)
+        : base(diagnosticMessageSink)
     {
-        private readonly IMessageSink diagnosticMessageSink;
+        this.diagnosticMessageSink = diagnosticMessageSink;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CocoaFactDiscoverer"/> class.
-        /// </summary>
-        /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
-        public CocoaFactDiscoverer(IMessageSink diagnosticMessageSink)
-            : base(diagnosticMessageSink)
+    class MyMessage: IMessageSinkMessage
+    {
+        public string Message { get; set; }
+    }
+
+    protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
+    {
+        var message = new MyMessage
         {
-            this.diagnosticMessageSink = diagnosticMessageSink;
+            Message = "Hello"
+        };
+
+        Console.WriteLine("hello!!");
+        diagnosticMessageSink.OnMessage(message);
+        if (testMethod.Method.ReturnType.Name == "System.Void" &&
+            testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
+        {
+            return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
         }
 
-        class MyMessage: IMessageSinkMessage
-        {
-            public string Message { get; set; }
-        }
-
-        protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
-        {
-            var message = new MyMessage
-            {
-                Message = "Hello"
-            };
-
-            Console.WriteLine("hello!!");
-            diagnosticMessageSink.OnMessage(message);
-            if (testMethod.Method.ReturnType.Name == "System.Void" &&
-                testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
-            {
-                return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
-            }
-
-            return (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.Cocoa, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
-        }
+        return (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.Cocoa, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod);
     }
 }
