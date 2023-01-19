@@ -14,7 +14,7 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <TargetingWindows Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.EndsWith('-windows')) ">true</TargetingWindows>
-    <TargetingMacos Condition=" '$(TargetFramework)' == 'net6.0-macos10.15' or $(TargetFramework.Contains('macos')) ">true</TargetingMacos>
+    <TargetingMacos Condition="$(TargetFramework.Contains('macos'))">true</TargetingMacos>
 
     <!-- https://github.com/dotnet/msbuild/blob/main/documentation/ProjectReference-Protocol.md#setplatform-negotiation -->
     <EnableDynamicPlatformResolution>true</EnableDynamicPlatformResolution>
