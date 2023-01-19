@@ -18,6 +18,14 @@
     <Reference Include="$(XunitConsoleNetCore2AppPath)" />
   </ItemGroup>
 
+  <PropertyGroup Label="Globals">
+    <CustomOutDir>$(MSBuildThisFileDirectory)..\..bin</CustomOutDir>
+    <!-- <CustomOutDir>$(MSBuildThisFileDirectory)bin</CustomOutDir> -->
+    <RootNamespace>Microsoft.VisualStudio.Platform.VSEditor.Interop</RootNamespace>
+    <AssemblyName>$(RootNamespace).DesignTime</AssemblyName>
+    <TargetPath>$(CustomOutDir)\$(AssemblyName).dll</TargetPath>
+  </PropertyGroup>
+
   <Target Name="Test" DependsOnTargets="Build">
     <PropertyGroup>
       <_AppExePath>$(MSBuildThisFileDirectory)..\..\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\Xunit.StaFact.Tests.Mac.app\Contents\MacOS\Xunit.StaFact.Tests.Mac</_AppExePath>
