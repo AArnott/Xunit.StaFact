@@ -1,7 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;netstandard2.0;net6.0;net6.0-windows</TargetFrameworks>
-    <TargetFrameworks Condition="!$([MSBuild]::IsOsPlatform('Linux'))">$(TargetFrameworks);net6.0-macos10.15</TargetFrameworks>
+    <!-- List macOS tfm first to work around bug in VSMac's solution explorer.
+         Exclude for Linux, which does not support building macOS projects
+         (see https://github.com/xamarin/xamarin-macios/issues/17287). -->
+    <TargetFrameworks Condition="!$([MSBuild]::IsOsPlatform('Linux'))">net6.0-macos10.15</TargetFrameworks>
+    <TargetFrameworks>$(TargetFrameworks);net472;netstandard2.0;net6.0;net6.0-windows</TargetFrameworks>
     <RootNamespace>Xunit</RootNamespace>
 
     <Description>Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms SynchronizationContext, or even a cross-platform generic UI thread emulation with a SynchronizationContext that keeps code running on a "main thread" for that test.
