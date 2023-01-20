@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <CustomOutDir>bin\Xunit.StaFact.Tests.Mac\Release\net6.0-macos\os-x64</CustomOutDir>
+    <CustomOutDir>\Users\runner\work\1\s\bin\Xunit.StaFact.Tests.Mac\Release\net6.0-macos\os-x64</CustomOutDir>
     <!-- <CustomOutDir>$(MSBuildThisFileDirectory)bin</CustomOutDir> -->
     <RootNamespace>Xunit.StaFact.Tests.Mac</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
