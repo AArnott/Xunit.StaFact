@@ -19,10 +19,10 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <CustomOutDir>$(MSBuildThisFileDirectory)..\..bin</CustomOutDir>
+    <CustomOutDir>bin\Xunit.StaFact.Tests.Mac\Release\net6.0-macos\os-x64</CustomOutDir>
     <!-- <CustomOutDir>$(MSBuildThisFileDirectory)bin</CustomOutDir> -->
-    <RootNamespace>Microsoft.VisualStudio.Platform.VSEditor.Interop</RootNamespace>
-    <AssemblyName>$(RootNamespace).DesignTime</AssemblyName>
+    <RootNamespace>Xunit.StaFact.Tests.Mac</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
     <TargetPath>$(CustomOutDir)\$(AssemblyName).dll</TargetPath>
   </PropertyGroup>
 
