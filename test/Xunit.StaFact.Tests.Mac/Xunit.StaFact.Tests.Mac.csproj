@@ -6,6 +6,7 @@
     <ImplicitUsings>true</ImplicitUsings>
     <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <HasUnitTests>true</HasUnitTests>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="xunit.runner.console" />
@@ -18,20 +19,16 @@
     <Reference Include="$(XunitConsoleNetCore2AppPath)" />
   </ItemGroup>
 
-  <PropertyGroup Label="Globals">
-    <CustomOutDir>\Users\runner\work\1\s\bin\Xunit.StaFact.Tests.Mac\Release\net6.0-macos\os-x64</CustomOutDir>
-    <!-- <CustomOutDir>$(MSBuildThisFileDirectory)bin</CustomOutDir> -->
-    <RootNamespace>Xunit.StaFact.Tests.Mac</RootNamespace>
-    <AssemblyName>$(RootNamespace)</AssemblyName>
-    <TargetPath>$(CustomOutDir)\$(AssemblyName).dll</TargetPath>
-  </PropertyGroup>
-
-  <Target Name="Test" DependsOnTargets="Build">
+  <Target Name="Test" AfterTargets="Build">
     <PropertyGroup>
-      <_AppExePath>$(MSBuildThisFileDirectory)..\..\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\Xunit.StaFact.Tests.Mac.app\Contents\MacOS\Xunit.StaFact.Tests.Mac</_AppExePath>
+      <_AppExePath>$(MSBuildThisFileDirectory)..\..\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-x64\Xunit.StaFact.Tests.Mac.app\Contents\MacOS\Xunit.StaFact.Tests.Mac</_AppExePath>
     </PropertyGroup>
     <!-- TODO: Verify these paths and use these arguments in AppDelegate.cs -->
     <Exec Command="&quot;$(_AppExePath)&quot; xunit &quot;$(TargetPath)&quot; -xml &quot;$(ArtifactStagingFolder)test_logs\$(TargetName).xml&quot;" />
+  </Target>
+
+  <Target Name="Message" DependsOnTargets="Build">
+    <Message Text="Build test MSBuildThisFileDirectory is $(MSBuildThisFileDirectory)" Importance="High" />
   </Target>
 
   <!-- Prevent extraneous warnings, see https://github.com/xamarin/xamarin-macios/issues/15897 -->

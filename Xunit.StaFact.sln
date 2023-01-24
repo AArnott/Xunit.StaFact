@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xunit.StaFact.Tests", "test\Xunit.StaFact.Tests\Xunit.StaFact.Tests.csproj", "{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact.Tests.Mac", "test\Xunit.StaFact.Tests.Mac\Xunit.StaFact.Tests.Mac.csproj", "{077DFB77-0E63-4399-BD0B-4F9D9AC80495}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B9635B8C-19E8-4D04-ACA4-A391D558D80A}"
 	ProjectSection(SolutionItems) = preProject
 		src\.editorconfig = src\.editorconfig
@@ -34,8 +36,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1E94DC16-5
 		test\Directory.Build.props = test\Directory.Build.props
 		test\Directory.Build.targets = test\Directory.Build.targets
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xunit.StaFact.Tests.Mac", "test\Xunit.StaFact.Tests.Mac\Xunit.StaFact.Tests.Mac.csproj", "{077DFB77-0E63-4399-BD0B-4F9D9AC80495}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
