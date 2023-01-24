@@ -50,7 +50,7 @@ if ($IsLinux) {
 }
 
 $frameworks = @()
-if ($IsMacOS -or) {
+if ($IsMacOS) {
   $frameworks += '-f','net6.0-macos'
 }
 
