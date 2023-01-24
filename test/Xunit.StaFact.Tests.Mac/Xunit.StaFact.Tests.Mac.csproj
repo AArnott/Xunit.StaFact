@@ -21,7 +21,7 @@
 
   <PropertyGroup Label="Globals">
     <PartialTargetPath>$(MSBuildThisFileDirectory)..\..\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-x64</PartialTargetPath>
-    <TargetPath>$(PartialTargetPath)\$(TargetName).dll</TargetPath>
+    <TargetPath>$(PartialTargetPath)\Xunit.StaFact.Tests.Mac.dll</TargetPath>
   </PropertyGroup>
 
   <Target Name="Test" AfterTargets="Build">

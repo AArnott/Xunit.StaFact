@@ -48,8 +48,6 @@ $frameworks = @()
 if ($IsLinux) {
   $frameworks += '-f','net6.0'
 }
-
-$frameworks = @()
 if ($IsMacOS) {
   $frameworks += '-f','net6.0-macos'
 }
