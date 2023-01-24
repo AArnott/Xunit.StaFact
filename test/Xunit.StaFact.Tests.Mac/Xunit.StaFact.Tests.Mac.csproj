@@ -19,13 +19,17 @@
     <Reference Include="$(XunitConsoleNetCore2AppPath)" />
   </ItemGroup>
 
+  <PropertyGroup Label="Globals">
+    <PartialTargetPath>$(MSBuildThisFileDirectory)..\..\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-x64</PartialTargetPath>
+    <TargetPath>$(PartialTargetPath)\$(TargetName).dll</TargetPath>
+  </PropertyGroup>
+
   <Target Name="Test" AfterTargets="Build">
     <PropertyGroup>
-      <_PartalAppExePath>$(MSBuildThisFileDirectory)..\..\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-x64</_PartalAppExePath>
-      <_AppExePath>$(_PartalAppExePath)\Xunit.StaFact.Tests.Mac.app\Contents\MacOS\Xunit.StaFact.Tests.Mac</_AppExePath>
+      <_AppExePath>$(PartialTargetPath)\Xunit.StaFact.Tests.Mac.app\Contents\MacOS\Xunit.StaFact.Tests.Mac</_AppExePath>
     </PropertyGroup>
     <!-- TODO: Verify these paths and use these arguments in AppDelegate.cs -->
-    <Exec Command="&quot;$(_AppExePath)&quot; xunit &quot;$(_PartalAppExePath)&quot; -xml &quot;$(ArtifactStagingFolder)test_logs\$(TargetName).xml&quot;" />
+    <Exec Command="&quot;$(_AppExePath)&quot; xunit &quot;$(TargetPath)&quot; -xml &quot;$(ArtifactStagingFolder)test_logs\$(TargetName).xml&quot;" />
   </Target>
 
   <!-- Prevent extraneous warnings, see https://github.com/xamarin/xamarin-macios/issues/15897 -->
