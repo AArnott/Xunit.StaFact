@@ -7,6 +7,8 @@
     <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <HasUnitTests>true</HasUnitTests>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="xunit.runner.console" />
