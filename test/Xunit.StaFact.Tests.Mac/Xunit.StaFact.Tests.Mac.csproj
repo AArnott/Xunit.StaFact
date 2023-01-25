@@ -7,7 +7,7 @@
     <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <HasUnitTests>true</HasUnitTests>
-    <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
+    <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -24,7 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <None
-      Include="$(RepoRootPath)\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-x64\Xunit.StaFact.Tests.Mac.app\Contents\MonoBundle\libhostpolicy.dylib">
+      Include="$(libPath)">
       <PackagePath>$(PartialTargetPath)</PackagePath>
       <Pack>true</Pack>
     </None>
@@ -33,6 +33,7 @@
   <PropertyGroup Label="Globals">
     <PartialTargetPath>$(RepoRootPath)\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-x64</PartialTargetPath>
     <TargetPath>$(PartialTargetPath)\Xunit.StaFact.Tests.Mac.dll</TargetPath>
+    <libPath>/Users/siyumao/Xunit.StaFact//bin/Xunit.StaFact.Tests.Mac/Debug/net6.0-macos\osx-x64\Xunit.StaFact.Tests.Mac.app\Contents\MonoBundle\libhostpolicy.dylib</libPath>
   </PropertyGroup>
 
   <Target Name="Test" AfterTargets="Build">
@@ -43,9 +44,9 @@
     <Exec Command="&quot;$(_AppExePath)&quot; xunit &quot;$(TargetPath)&quot; -xml &quot;$(ArtifactStagingFolder)test_logs\$(TargetName).xml&quot;" />
   </Target>
 
-  <!-- <Target Name="Message" AfterTargets="Test">
-    <Message Text="!!!!!!!!!!!!!!!!!! $(RepoRootPath) !!!!!!!!!!!!!!!!!!" Importance="High" />
-  </Target> -->
+  <Target Name="Message" AfterTargets="Test">
+    <Message Text="!!!!!!!!!!!!!!!!!! $(libPath) !!!!!!!!!!!!!!!!!!" Importance="High" />
+  </Target>
 
   <!-- Prevent extraneous warnings, see https://github.com/xamarin/xamarin-macios/issues/15897 -->
   <Target Name="_SetPublishFolderTypeNoneOnDocFileItems" BeforeTargets="_ComputePublishLocation">
