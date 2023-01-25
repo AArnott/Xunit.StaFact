@@ -7,7 +7,7 @@
     <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <HasUnitTests>true</HasUnitTests>
-    <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+    <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
