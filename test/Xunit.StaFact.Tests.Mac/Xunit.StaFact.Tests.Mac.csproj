@@ -7,7 +7,7 @@
     <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <HasUnitTests>true</HasUnitTests>
-    <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+    <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -21,6 +21,13 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="$(XunitConsoleNetCore2AppPath)" />
+  </ItemGroup>
+  <ItemGroup>
+    <None
+      Include="$(RepoRootPath)\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-x64\Xunit.StaFact.Tests.Mac.app\Contents\MonoBundle\libhostpolicy.dylib">
+      <PackagePath>$(PartialTargetPath)</PackagePath>
+      <Pack>true</Pack>
+    </None>
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
