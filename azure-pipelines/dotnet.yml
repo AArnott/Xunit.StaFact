@@ -6,9 +6,16 @@ steps:
 - script: dotnet build -t:build,pack --no-restore -c $(BuildConfiguration) /bl:"$(Build.ArtifactStagingDirectory)/build_logs/build.binlog"
   displayName: 🛠 dotnet build
 
+# We might also need to try to make this command not run the Mac unit tests
 - powershell: azure-pipelines/dotnet-test-cloud.ps1 -Configuration $(BuildConfiguration) -Agent $(Agent.JobName) -PublishResults
   displayName: 🧪 dotnet test
-  condition: and(succeeded(), ${{ parameters.RunTests }})
+  condition: and(succeeded(), ${{ parameters.RunTests }}), !eq(variables['BuildConfiguration'], 'ReleaseMac'))
+
+- script:
+    # Somehow get the Artifact Staging Directory
+    dotnet build $(RepoRootPath)/test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test /bl:"$(RepoArtifactsPath)/build_logs/build.binlog" #pass in the artifact stagng directory, so we can output the results in xml
+  displayName: 🧪 Mac-specific tests
+  Condition: eq(variables['BuildConfiguration'], 'ReleaseMac')
 
 - powershell: azure-pipelines/variables/_pipelines.ps1
   failOnStderr: true
