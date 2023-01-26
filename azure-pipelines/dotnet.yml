@@ -9,7 +9,7 @@ steps:
 # We might also need to try to make this command not run the Mac unit tests
 - powershell: azure-pipelines/dotnet-test-cloud.ps1 -Configuration $(BuildConfiguration) -Agent $(Agent.JobName) -PublishResults
   displayName: 🧪 dotnet test
-  condition: and(succeeded(), ${{ parameters.RunTests }}), !eq(variables['BuildConfiguration'], 'ReleaseMac'))
+  condition: and(succeeded(), ${{ parameters.RunTests }})
 
 - script:
     # Somehow get the Artifact Staging Directory
