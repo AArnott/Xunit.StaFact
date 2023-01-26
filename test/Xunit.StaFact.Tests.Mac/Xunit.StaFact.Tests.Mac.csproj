@@ -47,7 +47,7 @@
   </Target>
 
   <Target Name="Message" AfterTargets="Test">
-    <Message Text="!!!!!!!!!!!!!!!!!! $(BuildConfiguration) !!!!!!!!!!!!!!!!!!" Importance="High" />
+    <Message Text="!!!!!!!!!!!!!!!!!! $(RepoRootPath) !!!!!!!!!!!!!!!!!!" Importance="High" />
   </Target>
 
   <!-- Prevent extraneous warnings, see https://github.com/xamarin/xamarin-macios/issues/15897 -->

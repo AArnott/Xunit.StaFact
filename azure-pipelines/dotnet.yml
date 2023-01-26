@@ -10,6 +10,11 @@ steps:
   displayName: 🧪 dotnet test
   condition: and(succeeded(), ${{ parameters.RunTests }})
 
+- script:
+    dotnet build $(RepoRootPath)/test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test
+  displayName: 🧪 Mac-specific tests
+  Condition: eq(variables['BuildConfiguration'], 'ReleaseMac')
+
 - powershell: azure-pipelines/variables/_pipelines.ps1
   failOnStderr: true
   displayName: ⚙ Update pipeline variables based on build outputs
