@@ -16,6 +16,8 @@ public class AppDelegate : NSApplicationDelegate
         for (int i = 1; i < args.Length; i++)
         {
             var arg = args[i];
+            if(arg == "xunit")
+                continue;
 
             unitTestDriverArguments.Add(arg);
         }
