@@ -8,8 +8,7 @@ steps:
 
 - powershell: azure-pipelines/dotnet-test-cloud.ps1 -Configuration $(BuildConfiguration) -Agent $(Agent.JobName) -PublishResults
   displayName: 🧪 dotnet test
-  condition: and(succeeded(), ${{ parameters.RunTests }})
-#  condition: and(and(succeeded(), ${{ parameters.RunTests }}), !eq(variables['BuildConfiguration'], 'ReleaseMac'))
+  condition: and(and(succeeded(), ${{ parameters.RunTests }}), ne(variables['BuildConfiguration'], 'ReleaseMac'))
 
 # - script: dotnet build ./test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test
 # displayName: 🧪 Mac-specific tests
