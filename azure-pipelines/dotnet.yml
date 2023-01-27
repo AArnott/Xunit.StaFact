@@ -11,9 +11,8 @@ steps:
   condition: and(succeeded(), ${{ parameters.RunTests }})
   # condition: and(and(succeeded(), ${{ parameters.RunTests }}), !eq(variables['BuildConfiguration'], 'ReleaseMac'))
 
-- powershell: azure-pipelines/dotnet-test-mac-cloud.ps1 -Configuration $(BuildConfiguration) -Agent $(Agent.JobName) -PublishResults
-  # script: |
-    # dotnet build $(RepoRoot)/test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj -t:Test -bl:"$ArtifactStagingFolder/build_logs/test.binlog" --diag "$ArtifactStagingFolder/test_logs/diag.log;TraceLevel=info"
+# - powershell: azure-pipelines/dotnet-test-mac-cloud.ps1 -Configuration $(BuildConfiguration) -Agent $(Agent.JobName) -PublishResults
+- script: dotnet build $(RepoRoot)/test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test -c $(BuildConfiguration) /bl:"$ArtifactStagingFolder/build_logs/test.binlog"
   displayName: 🧪 Mac-specific tests
   Condition: eq(variables['BuildConfiguration'], 'ReleaseMac')
 
