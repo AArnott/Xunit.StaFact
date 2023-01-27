@@ -10,17 +10,17 @@ steps:
   displayName: 🧪 dotnet test
   condition: and(and(succeeded(), ${{ parameters.RunTests }}), !eq(variables['BuildConfiguration'], 'ReleaseMac'))
 
-- script: dotnet build $(RepoRoot)/test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test
+- script: dotnet build $(RepoRootPath)/test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test
   displayName: 🧪 Mac-specific tests
   Condition: eq(variables['BuildConfiguration'], 'ReleaseMac')
 
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: XUnit
-    testResultsFiles: $(RepoArtifactsPath)test_logs\*.xml
-  displayName: 'Test: Publish Results'
-  condition: and(succeededOrFailed(), eq(variables['BuildConfiguration'], 'ReleaseMac'))
-  continueOnError: true
+# - task: PublishTestResults@2
+#  inputs:
+#    testResultsFormat: XUnit
+#    testResultsFiles: $(RepoArtifactsPath)test_logs\*.xml
+#  displayName: 'Test: Publish Results'
+#  condition: and(succeededOrFailed(), eq(variables['BuildConfiguration'], 'ReleaseMac'))
+#  continueOnError: true
 
 - powershell: azure-pipelines/variables/_pipelines.ps1
   failOnStderr: true

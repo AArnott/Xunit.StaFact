@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
+    <RepoRootPath>$(RepoRootPath)</RepoRootPath>
     <PartialTargetPath>$(RepoRootPath)\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-x64</PartialTargetPath>
     <TargetPath>$(PartialTargetPath)\Xunit.StaFact.Tests.Mac.dll</TargetPath>
     <AzureDevOpsArtifactsStagingDirectory>$(BUILD_ARTIFACTSTAGINGDIRECTORY)</AzureDevOpsArtifactsStagingDirectory>
