@@ -8,13 +8,19 @@ steps:
 
 - powershell: azure-pipelines/dotnet-test-cloud.ps1 -Configuration $(BuildConfiguration) -Agent $(Agent.JobName) -PublishResults
   displayName: 🧪 dotnet test
-  condition: and(succeeded(), ${{ parameters.RunTests }})
-  # condition: and(and(succeeded(), ${{ parameters.RunTests }}), !eq(variables['BuildConfiguration'], 'ReleaseMac'))
+  condition: and(and(succeeded(), ${{ parameters.RunTests }}), !eq(variables['BuildConfiguration'], 'ReleaseMac'))
 
-# - powershell: azure-pipelines/dotnet-test-mac-cloud.ps1 -Configuration $(BuildConfiguration) -Agent $(Agent.JobName) -PublishResults
-- script: dotnet build $(RepoRoot)/test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test -c $(BuildConfiguration) /bl:"$ArtifactStagingFolder/build_logs/test.binlog"
+- script: dotnet build $(RepoRoot)/test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test -c $(BuildConfiguration)
   displayName: 🧪 Mac-specific tests
   Condition: eq(variables['BuildConfiguration'], 'ReleaseMac')
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: XUnit
+    testResultsFiles: $(RepoArtifactsPath)test_logs\*.xml
+  displayName: 'Test: Publish Results'
+  condition: and(succeededOrFailed(), eq(variables['BuildConfiguration'], 'ReleaseMac'))
+  continueOnError: true
 
 - powershell: azure-pipelines/variables/_pipelines.ps1
   failOnStderr: true
