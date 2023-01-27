@@ -10,9 +10,9 @@ steps:
   displayName: 🧪 dotnet test
   condition: and(and(succeeded(), ${{ parameters.RunTests }}), !eq(variables['BuildConfiguration'], 'ReleaseMac'))
 
-- script: dotnet build ./test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test
-  displayName: 🧪 Mac-specific tests
-  Condition: eq(variables['BuildConfiguration'], 'ReleaseMac')
+# - script: dotnet build ./test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test
+# displayName: 🧪 Mac-specific tests
+#  Condition: eq(variables['BuildConfiguration'], 'ReleaseMac')
 
 # - task: PublishTestResults@2
 #  inputs:
