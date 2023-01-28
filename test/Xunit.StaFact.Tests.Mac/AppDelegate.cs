@@ -8,7 +8,7 @@ namespace Xunit.StaFact.Tests.Mac;
 [Register("AppDelegate")]
 public class AppDelegate : NSApplicationDelegate
 {
-    readonly private List<string> unitTestDriverArguments = new List<string>();
+    private readonly List<string> unitTestDriverArguments = new List<string>();
 
     public AppDelegate()
     {
