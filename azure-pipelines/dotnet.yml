@@ -11,8 +11,8 @@ steps:
   condition: and(and(succeeded(), ${{ parameters.RunTests }}), ne(variables['BuildConfiguration'], 'ReleaseMac'))
 
  - script: dotnet build $(MSBuildThisFileDirectory)/test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test
- displayName: 🧪 Mac-specific tests
-  Condition: eq(variables['BuildConfiguration'], 'ReleaseMac')
+  displayName: 🧪 Mac-specific tests
+  condition: eq(variables['BuildConfiguration'], 'ReleaseMac')
 
 # - task: PublishTestResults@2
 #  inputs:
