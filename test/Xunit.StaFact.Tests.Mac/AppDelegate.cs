@@ -1,7 +1,6 @@
 // Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-
 using System.Runtime.InteropServices;
 
 namespace Xunit.StaFact.Tests.Mac;
@@ -9,7 +8,7 @@ namespace Xunit.StaFact.Tests.Mac;
 [Register("AppDelegate")]
 public class AppDelegate : NSApplicationDelegate
 {
-    readonly List<string> unitTestDriverArguments = new List<string>();
+    readonly private List<string> unitTestDriverArguments = new List<string>();
 
     public AppDelegate()
     {
@@ -19,6 +18,7 @@ public class AppDelegate : NSApplicationDelegate
             unitTestDriverArguments.Add(args[i]);
         }
     }
+
     public override void DidFinishLaunching(NSNotification notification)
     {
         // Disable AppDomain support since we need all tests to run
