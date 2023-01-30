@@ -42,7 +42,7 @@
     <PropertyGroup>
       <_AppExePath>$(PartialTargetPath)\Xunit.StaFact.Tests.Mac.app\Contents\MacOS\Xunit.StaFact.Tests.Mac</_AppExePath>
     </PropertyGroup>
-    <Exec Command="&quot;$(_AppExePath)&quot; &quot;$(TargetPath)&quot; -xml &quot;$(PartialTargetPath)test_logs\$(TargetName).xml&quot;" />
+    <Exec Command="&quot;$(_AppExePath)&quot; &quot;$(TargetPath)&quot; -xml &quot;$(RepoRootPath)test_logs\$(TargetName).xml&quot;" />
    </Target>
 
    <Target Name="Message" AfterTargets="Test">
