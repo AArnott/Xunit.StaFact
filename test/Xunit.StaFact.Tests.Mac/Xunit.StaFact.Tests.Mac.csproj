@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
+    <!-- <RuntimeIdentifiers>osx-$(HostArchitecture)</RuntimeIdentifiers> -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <HasUnitTests>true</HasUnitTests>
   </PropertyGroup>
@@ -20,7 +21,9 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <PartialTargetPath>$(RepoRootPath)\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-x64</PartialTargetPath>
+    <HostArchitecture>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)</HostArchitecture>
+    <HostArchitecture>$(HostArchitecture.ToLower())</HostArchitecture>
+    <PartialTargetPath>$(RepoRootPath)\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-$(HostArchitecture)</PartialTargetPath>
     <TargetPath>$(PartialTargetPath)\Xunit.StaFact.Tests.Mac.dll</TargetPath>
   </PropertyGroup>
 
