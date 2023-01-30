@@ -15,7 +15,7 @@ public class AppDelegate : NSApplicationDelegate
         var args = NSProcessInfo.ProcessInfo.Arguments;
         for (int i = 1; i < args.Length; i++)
         {
-            unitTestDriverArguments.Add(args[i]);
+            this.unitTestDriverArguments.Add(args[i]);
         }
     }
 
@@ -24,15 +24,15 @@ public class AppDelegate : NSApplicationDelegate
         // Disable AppDomain support since we need all tests to run
         // in the main app domain to be able to run on or dispatch to
         // the main thread.
-        unitTestDriverArguments.Add("-appdomains");
-        unitTestDriverArguments.Add("denied");
+        this.unitTestDriverArguments.Add("-appdomains");
+        this.unitTestDriverArguments.Add("denied");
 
         // We also cannot run tests in parallel since our tests depend
         // on ordered execution on the main thread.
-        unitTestDriverArguments.Add("-parallel");
-        unitTestDriverArguments.Add("none");
+        this.unitTestDriverArguments.Add("-parallel");
+        this.unitTestDriverArguments.Add("none");
 
-        var args = unitTestDriverArguments.ToArray();
+        var args = this.unitTestDriverArguments.ToArray();
 
         ThreadPool.QueueUserWorkItem(o =>
         {
