@@ -46,7 +46,8 @@
    </Target>
 
    <Target Name="Message" AfterTargets="Test">
-      <Message Text="!!!!!!!!!!!! PartialTargetPath $(PartialTargetPath) !!!!!!!!!!!! TargetName $(TargetName) !!!!!!!!!!!!!" Importance="High" />
+      <Message Text="!!!!!!!!!!!!  RepoRootPath $(RepoRootPath) !!!!!!!!!!!! files under RepoRootPath\test_logs $()!!!!!!!!!!!!!" Importance="High" />
+      <Exec Command="ls $(RepoRootPath)test_logs\" />
    </Target>
 
   <!-- Prevent extraneous warnings, see https://github.com/xamarin/xamarin-macios/issues/15897 -->

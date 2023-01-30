@@ -17,7 +17,7 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: XUnit
-    testResultsFiles: ./test_logs/*.xml
+    testResultsFiles: ./test_logs/Xunit.StaFact.Tests.Mac.xml
   displayName: 'Test: Publish Results'
   condition: and(succeededOrFailed(), eq(variables['BuildConfiguration'], 'ReleaseMac'))
   continueOnError: true
