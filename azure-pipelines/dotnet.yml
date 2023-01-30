@@ -17,7 +17,7 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: XUnit
-    testResultsFiles: $(RepoArtifactsPath)test_logs\*.xml
+    testResultsFiles: ./test_logs/*.xml
   displayName: 'Test: Publish Results'
   condition: and(succeededOrFailed(), eq(variables['BuildConfiguration'], 'ReleaseMac'))
   continueOnError: true
