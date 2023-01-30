@@ -14,13 +14,13 @@ steps:
   displayName: 🧪 Mac-specific tests
   condition: eq(variables['BuildConfiguration'], 'ReleaseMac')
 
-# - task: PublishTestResults@2
-#  inputs:
-#    testResultsFormat: XUnit
-#    testResultsFiles: $(RepoArtifactsPath)test_logs\*.xml
-#  displayName: 'Test: Publish Results'
-#  condition: and(succeededOrFailed(), eq(variables['BuildConfiguration'], 'ReleaseMac'))
-#  continueOnError: true
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: XUnit
+    testResultsFiles: $(RepoArtifactsPath)test_logs\*.xml
+  displayName: 'Test: Publish Results'
+  condition: and(succeededOrFailed(), eq(variables['BuildConfiguration'], 'ReleaseMac'))
+  continueOnError: true
 
 - powershell: azure-pipelines/variables/_pipelines.ps1
   failOnStderr: true
