@@ -18,7 +18,7 @@ steps:
   inputs:
     testResultsFormat: XUnit
     testResultsFiles: ./test_logs/Xunit.StaFact.Tests.Mac.xml
-  displayName: 'Test: Publish Results'
+  displayName: 'Publish Mac-specific tests Results'
   condition: and(succeededOrFailed(), eq(variables['BuildConfiguration'], 'ReleaseMac'))
   continueOnError: true
 
