@@ -5,7 +5,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
-    <!-- <RuntimeIdentifiers>osx-$(HostArchitecture)</RuntimeIdentifiers> -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <HasUnitTests>true</HasUnitTests>
   </PropertyGroup>
