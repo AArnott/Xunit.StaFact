@@ -45,12 +45,9 @@ if ($x86) {
 }
 
 $frameworks = @()
-if ($IsLinux) {
-  $frameworks += '-f','net6.0'
-}
-if ($IsMacOS) {
-  $frameworks += '-f','net6.0-macos'
-}
+ if ($IsMacOS -or $IsLinux) {
+   $frameworks += '-f','net6.0'
+ }
 
 & $dotnet test $RepoRoot `
     --no-build `
