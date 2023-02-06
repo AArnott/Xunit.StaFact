@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xunit.StaFact.Tests", "test\Xunit.StaFact.Tests\Xunit.StaFact.Tests.csproj", "{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xunit.StaFact.Tests.Mac", "test\Xunit.StaFact.Tests.Mac\Xunit.StaFact.Tests.Mac.csproj", "{077DFB77-0E63-4399-BD0B-4F9D9AC80495}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B9635B8C-19E8-4D04-ACA4-A391D558D80A}"
 	ProjectSection(SolutionItems) = preProject
 		src\.editorconfig = src\.editorconfig
@@ -38,17 +40,33 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		DebugMac|Any CPU = DebugMac|Any CPU
 		Release|Any CPU = Release|Any CPU
+		ReleaseMac|Any CPU = ReleaseMac|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}.DebugMac|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}.DebugMac|Any CPU.Build.0 = Debug|Any CPU
 		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}.ReleaseMac|Any CPU.ActiveCfg = Release|Any CPU
+		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6}.ReleaseMac|Any CPU.Build.0 = Release|Any CPU
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.DebugMac|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.DebugMac|Any CPU.Build.0 = Debug|Any CPU
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.ReleaseMac|Any CPU.ActiveCfg = Release|Any CPU
+		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E}.ReleaseMac|Any CPU.Build.0 = Release|Any CPU
+		{077DFB77-0E63-4399-BD0B-4F9D9AC80495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{077DFB77-0E63-4399-BD0B-4F9D9AC80495}.DebugMac|Any CPU.ActiveCfg = Debug|Any CPU
+		{077DFB77-0E63-4399-BD0B-4F9D9AC80495}.DebugMac|Any CPU.Build.0 = Debug|Any CPU
+		{077DFB77-0E63-4399-BD0B-4F9D9AC80495}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{077DFB77-0E63-4399-BD0B-4F9D9AC80495}.ReleaseMac|Any CPU.ActiveCfg = Release|Any CPU
+		{077DFB77-0E63-4399-BD0B-4F9D9AC80495}.ReleaseMac|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +74,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8C500C20-0CD6-4257-A9ED-C571DA6E68D6} = {B9635B8C-19E8-4D04-ACA4-A391D558D80A}
 		{9F99EC1E-7FF7-419D-84F7-3CE96D653C2E} = {1E94DC16-537C-4D14-A201-ED3140A994EB}
+		{077DFB77-0E63-4399-BD0B-4F9D9AC80495} = {1E94DC16-537C-4D14-A201-ED3140A994EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA3510A0-C12F-4470-B8A6-197F0D32CB7C}

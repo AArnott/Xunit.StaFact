@@ -33,6 +33,9 @@ The easiest way to restore packages may be to run `init.ps1` which automatically
 to the feeds that packages for this repo come from, if any.
 `dotnet restore` or `nuget restore` also work but may require extra steps to authenticate to any applicable feeds.
 
+MacOS specific code that was added in #68 requires that `init.ps1` be run in the repo within a terminal *and devenv.exe must be spawned from that same window* in order for Visual Studio for Windows to be able to find the required macos workload.
+Note that `init.ps1 -InstallLocality machine` in broken due to dotnet workloads problems such as https://github.com/dotnet/sdk/issues/30230.
+
 ## Building
 
 Building, testing, and packing this repository can be done by using the standard dotnet CLI commands (e.g. `dotnet build`, `dotnet test`, `dotnet pack`, etc.).

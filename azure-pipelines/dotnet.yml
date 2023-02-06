@@ -1,5 +1,8 @@
 parameters:
-  RunTests:
+- name: RunTests
+- name: RunMacTests
+  type: boolean
+  default: false
 
 steps:
 
@@ -9,6 +12,19 @@ steps:
 - powershell: azure-pipelines/dotnet-test-cloud.ps1 -Configuration $(BuildConfiguration) -Agent $(Agent.JobName) -PublishResults
   displayName: 🧪 dotnet test
   condition: and(succeeded(), ${{ parameters.RunTests }})
+
+- ${{ if parameters.RunMacTests }}:
+  - script: dotnet build --no-restore -c $(BuildConfiguration) ./test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj -t:Test -p:BuildProjectReferences=false
+    displayName: 🧪 Mac-specific tests
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: XUnit
+      testResultsFiles: ./test_logs/Xunit.StaFact.Tests.Mac.xml
+      testRunTitle: Xunit.StaFact.Tests.Mac (net6.0-macos, MacOS)
+    displayName: 📢 Publish Mac-specific tests results
+    condition: succeededOrFailed()
+    continueOnError: true
 
 - powershell: azure-pipelines/variables/_pipelines.ps1
   failOnStderr: true

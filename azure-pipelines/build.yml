@@ -48,6 +48,7 @@ jobs:
   - template: dotnet.yml
     parameters:
       RunTests: ${{ parameters.RunTests }}
+      RunMacTests: true
 
 - job: WrapUp
   dependsOn:

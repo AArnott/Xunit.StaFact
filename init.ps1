@@ -65,6 +65,9 @@ if (!$NoPrerequisites) {
     if ($env:OS -eq 'Windows_NT') {
         $EnvVars['PROCDUMP_PATH'] = & "$PSScriptRoot\azure-pipelines\Get-ProcDump.ps1"
     }
+
+    # Install specific macOS workload version in order to support usage on older .NET and macOS
+    dotnet workload install macos --from-rollback-file $PSScriptRoot/workloads.json
 }
 
 # Workaround nuget credential provider bug that causes very unreliable package restores on Azure Pipelines
@@ -77,7 +80,10 @@ try {
 
     if (!$NoRestore -and $PSCmdlet.ShouldProcess("NuGet packages", "Restore")) {
         Write-Host "Restoring NuGet packages" -ForegroundColor $HeaderColor
-        dotnet restore
+        if ($IsMacOS) {
+            $restoreArgs = "/p:Configuration=DebugMac"
+        }
+        dotnet restore $restoreArgs
         if ($lastexitcode -ne 0) {
             throw "Failure while restoring packages."
         }

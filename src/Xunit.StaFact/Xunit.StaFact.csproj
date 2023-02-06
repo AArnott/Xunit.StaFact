@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;netstandard2.0;net6.0;net6.0-windows</TargetFrameworks>
+    <!-- List macOS tfm first to work around bug in VSMac's solution explorer.
+         Exclude for Linux, which does not support building macOS projects
+         (see https://github.com/xamarin/xamarin-macios/issues/17287). -->
+    <TargetFrameworks Condition="!$([MSBuild]::IsOsPlatform('Linux'))">net6.0-macos10.15</TargetFrameworks>
+    <TargetFrameworks>$(TargetFrameworks);net472;netstandard2.0;net6.0;net6.0-windows</TargetFrameworks>
     <RootNamespace>Xunit</RootNamespace>
 
     <Description>Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms SynchronizationContext, or even a cross-platform generic UI thread emulation with a SynchronizationContext that keeps code running on a "main thread" for that test.
@@ -13,6 +17,10 @@ Theory variants of these attributes allow for parameterized testing. Check out t
   <ItemGroup Condition="'$(TargetingWindows)'!='true'">
     <Compile Remove="Sdk.WindowsDesktop\**" />
     <Compile Remove="WindowsDesktop\**" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetingMacos)'!='true'">
+    <Compile Remove="Sdk.Mac\**" />
+    <Compile Remove="Mac\**" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="$(TargetFramework)\PublicAPI.Shipped.txt" />
