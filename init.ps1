@@ -67,17 +67,7 @@ if (!$NoPrerequisites) {
     }
 
     # Install specific macOS workload version in order to support usage on older .NET and macOS
-    $rollbackFile = Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid())
-    @{
-        "microsoft.net.sdk.macos" = "12.3.2372/7.0.100"
-    } | ConvertTo-Json | Set-Content -Path $rollbackFile
-
-    try {
-        dotnet workload install macos --from-rollback-file $rollbackFile
-    }
-    finally {
-        Remove-Item $rollbackFile
-    }
+    dotnet workload install macos --from-rollback-file $PSScriptRoot/workloads.json
 }
 
 # Workaround nuget credential provider bug that causes very unreliable package restores on Azure Pipelines
