@@ -14,7 +14,7 @@ steps:
   condition: and(succeeded(), ${{ parameters.RunTests }})
 
 - ${{ if parameters.RunMacTests }}:
-  - script: dotnet build --no-restore -c $(BuildConfiguration) ./test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj /t:Test
+  - script: dotnet build --no-restore -c $(BuildConfiguration) ./test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj -t:Test -p:BuildProjectReferences=false
     displayName: 🧪 Mac-specific tests
 
   - task: PublishTestResults@2
