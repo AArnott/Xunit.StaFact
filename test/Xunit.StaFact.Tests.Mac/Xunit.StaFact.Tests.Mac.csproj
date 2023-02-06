@@ -2,11 +2,12 @@
   <PropertyGroup>
     <TargetFramework>net6.0-macos</TargetFramework>
     <OutputType>Exe</OutputType>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>true</ImplicitUsings>
     <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <HasUnitTests>true</HasUnitTests>
+    <HostArchitecture>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)</HostArchitecture>
+    <HostArchitecture>$(HostArchitecture.ToLower())</HostArchitecture>
+    <PartialTargetPath>$(RepoRootPath)\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-$(HostArchitecture)</PartialTargetPath>
+    <TargetPath>$(PartialTargetPath)\Xunit.StaFact.Tests.Mac.dll</TargetPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="xunit.runner.console" />
@@ -18,13 +19,6 @@
   <ItemGroup>
     <Reference Include="$(XunitConsoleNetCore2AppPath)" />
   </ItemGroup>
-
-  <PropertyGroup Label="Globals">
-    <HostArchitecture>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)</HostArchitecture>
-    <HostArchitecture>$(HostArchitecture.ToLower())</HostArchitecture>
-    <PartialTargetPath>$(RepoRootPath)\bin\Xunit.StaFact.Tests.Mac\$(Configuration)\$(TargetFramework)\osx-$(HostArchitecture)</PartialTargetPath>
-    <TargetPath>$(PartialTargetPath)\Xunit.StaFact.Tests.Mac.dll</TargetPath>
-  </PropertyGroup>
 
   <Target Name="Test" DependsOnTargets="Build">
     <PropertyGroup>
