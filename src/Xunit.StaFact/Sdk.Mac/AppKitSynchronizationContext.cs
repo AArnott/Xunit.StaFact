@@ -3,7 +3,7 @@
 
 namespace Xunit.Sdk;
 
-internal sealed class CocoaSynchronizationContext : SynchronizationContext
+internal sealed class AppKitSynchronizationContext : SynchronizationContext
 {
     private readonly Queue<KeyValuePair<SendOrPostCallback, object?>> messageQueue = new();
     private readonly int mainThread = Environment.CurrentManagedThreadId;
@@ -15,9 +15,9 @@ internal sealed class CocoaSynchronizationContext : SynchronizationContext
     private ExceptionAggregator? aggregator;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CocoaSynchronizationContext"/> class.
+    /// Initializes a new instance of the <see cref="AppKitSynchronizationContext"/> class.
     /// </summary>
-    public CocoaSynchronizationContext(string name, bool shouldSetAsCurrent)
+    public AppKitSynchronizationContext(string name, bool shouldSetAsCurrent)
     {
         this.name = name;
         this.shouldSetAsCurrent = shouldSetAsCurrent;
@@ -39,7 +39,7 @@ internal sealed class CocoaSynchronizationContext : SynchronizationContext
     private bool AnyPendingOperations => Volatile.Read(ref this.activeOperations) > 0;
 
     public override SynchronizationContext CreateCopy()
-        => new CocoaSynchronizationContext(this.name, this.shouldSetAsCurrent);
+        => new AppKitSynchronizationContext(this.name, this.shouldSetAsCurrent);
 
     public override void Post(SendOrPostCallback d, object? state)
         => NSRunLoop.Main.BeginInvokeOnMainThread(() => d(state));

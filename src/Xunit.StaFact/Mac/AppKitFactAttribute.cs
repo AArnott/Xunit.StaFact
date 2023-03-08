@@ -6,11 +6,11 @@ using Xunit.Sdk;
 namespace Xunit;
 
 /// <summary>
-/// Identifies an xunit theory that starts on with a <see cref="System.Threading.SynchronizationContext"/>
+/// Identifies an xunit test that starts on with a <see cref="System.Threading.SynchronizationContext"/>
 /// running on <see cref="Foundation.NSRunLoop.Main"/>.
 /// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-[XunitTestCaseDiscoverer("Xunit.Sdk.CocoaTheoryDiscoverer", ThisAssembly.AssemblyName)]
-public class CocoaTheoryAttribute : TheoryAttribute
+[XunitTestCaseDiscoverer("Xunit.Sdk.AppKitFactDiscoverer", ThisAssembly.AssemblyName)]
+public class AppKitFactAttribute : FactAttribute
 {
 }

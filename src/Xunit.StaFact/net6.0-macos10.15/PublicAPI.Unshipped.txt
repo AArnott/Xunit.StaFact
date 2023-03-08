@@ -1,7 +1,7 @@
 #nullable enable
-override Xunit.Sdk.CocoaFactDiscoverer.CreateTestCase(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! factAttribute) -> Xunit.Sdk.IXunitTestCase!
-override Xunit.Sdk.CocoaTheoryDiscoverer.CreateTestCasesForDataRow(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute, object![]! dataRow) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
-override Xunit.Sdk.CocoaTheoryDiscoverer.CreateTestCasesForTheory(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
+override Xunit.Sdk.AppKitFactDiscoverer.CreateTestCase(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! factAttribute) -> Xunit.Sdk.IXunitTestCase!
+override Xunit.Sdk.AppKitTheoryDiscoverer.CreateTestCasesForDataRow(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute, object![]! dataRow) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
+override Xunit.Sdk.AppKitTheoryDiscoverer.CreateTestCasesForTheory(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
 override Xunit.Sdk.StaFactDiscoverer.CreateTestCase(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! factAttribute) -> Xunit.Sdk.IXunitTestCase!
 override Xunit.Sdk.StaTheoryDiscoverer.CreateTestCasesForDataRow(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute, object![]! dataRow) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
 override Xunit.Sdk.StaTheoryDiscoverer.CreateTestCasesForTheory(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
@@ -14,14 +14,14 @@ override Xunit.Sdk.UITheoryDiscoverer.CreateTestCasesForTheory(Xunit.Abstraction
 override Xunit.Sdk.UITheoryTestCase.Deserialize(Xunit.Abstractions.IXunitSerializationInfo! data) -> void
 override Xunit.Sdk.UITheoryTestCase.RunAsync(Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.IMessageBus! messageBus, object![]! constructorArguments, Xunit.Sdk.ExceptionAggregator! aggregator, System.Threading.CancellationTokenSource! cancellationTokenSource) -> System.Threading.Tasks.Task<Xunit.Sdk.RunSummary!>!
 override Xunit.Sdk.UITheoryTestCase.Serialize(Xunit.Abstractions.IXunitSerializationInfo! data) -> void
-Xunit.CocoaFactAttribute
-Xunit.CocoaFactAttribute.CocoaFactAttribute() -> void
-Xunit.CocoaTheoryAttribute
-Xunit.CocoaTheoryAttribute.CocoaTheoryAttribute() -> void
-Xunit.Sdk.CocoaFactDiscoverer
-Xunit.Sdk.CocoaFactDiscoverer.CocoaFactDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
-Xunit.Sdk.CocoaTheoryDiscoverer
-Xunit.Sdk.CocoaTheoryDiscoverer.CocoaTheoryDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
+Xunit.AppKitFactAttribute
+Xunit.AppKitFactAttribute.AppKitFactAttribute() -> void
+Xunit.AppKitTheoryAttribute
+Xunit.AppKitTheoryAttribute.AppKitTheoryAttribute() -> void
+Xunit.Sdk.AppKitFactDiscoverer
+Xunit.Sdk.AppKitFactDiscoverer.AppKitFactDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
+Xunit.Sdk.AppKitTheoryDiscoverer
+Xunit.Sdk.AppKitTheoryDiscoverer.AppKitTheoryDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
 Xunit.Sdk.StaFactDiscoverer
 Xunit.Sdk.StaFactDiscoverer.StaFactDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
 Xunit.Sdk.StaTheoryDiscoverer
@@ -30,7 +30,7 @@ Xunit.Sdk.UIFactDiscoverer
 Xunit.Sdk.UIFactDiscoverer.UIFactDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
 Xunit.Sdk.UITestCase
 Xunit.Sdk.UITestCase.SyncContextType
-Xunit.Sdk.UITestCase.SyncContextType.Cocoa = 2 -> Xunit.Sdk.UITestCase.SyncContextType
+Xunit.Sdk.UITestCase.SyncContextType.AppKit = 2 -> Xunit.Sdk.UITestCase.SyncContextType
 Xunit.Sdk.UITestCase.SyncContextType.None = 0 -> Xunit.Sdk.UITestCase.SyncContextType
 Xunit.Sdk.UITestCase.SyncContextType.Portable = 1 -> Xunit.Sdk.UITestCase.SyncContextType
 Xunit.Sdk.UITestCase.UITestCase() -> void

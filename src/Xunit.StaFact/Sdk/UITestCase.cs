@@ -59,7 +59,7 @@ public class UITestCase : XunitTestCase
         /// <summary>
         /// Use a <see cref="SynchronizationContext"/> running on <see cref="Foundation.NSRunLoop.Main"/>, which is only available on macOS.
         /// </summary>
-        Cocoa,
+        AppKit,
 #endif
 
 #if NETFRAMEWORK || WINDOWS
@@ -123,8 +123,8 @@ public class UITestCase : XunitTestCase
             case SyncContextType.Portable:
                 return UISynchronizationContext.Adapter.Default;
 #if MACOS
-            case SyncContextType.Cocoa:
-                return CocoaSynchronizationContextAdapter.Default;
+            case SyncContextType.AppKit:
+                return AppKitSynchronizationContextAdapter.Default;
 #endif
 #if NETFRAMEWORK || WINDOWS
             case SyncContextType.WPF:

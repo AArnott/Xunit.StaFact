@@ -3,9 +3,9 @@
 
 using Xunit;
 
-public class CocoaFactTests
+public class AppKitFactTests
 {
-    [CocoaFact]
+    [AppKitFact]
     public void AssertMainThreadSync()
         => NSApplication.EnsureUIThread();
 
@@ -13,14 +13,14 @@ public class CocoaFactTests
     public void AssertMainThreadSyncAndFail()
         => Assert.Throws<AppKitThreadAccessException>(NSApplication.EnsureUIThread);
 
-    [CocoaFact]
+    [AppKitFact]
     public Task AssertMainThreadAsyncReturnCompletedTask()
     {
         NSApplication.EnsureUIThread();
         return Task.CompletedTask;
     }
 
-    [CocoaFact]
+    [AppKitFact]
     public async Task AssertMainThreadAsyncWithAwait()
     {
         await Task.Yield();
