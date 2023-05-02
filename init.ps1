@@ -28,8 +28,12 @@
     No effect if -NoPrerequisites is specified.
 .PARAMETER NoRestore
     Skips the package restore step.
+.PARAMETER NoToolRestore
+    Skips the dotnet tool restore step.
 .PARAMETER AccessToken
     An optional access token for authenticating to Azure Artifacts authenticated feeds.
+.PARAMETER Interactive
+    Runs NuGet restore in interactive mode. This can turn authentication failures into authentication challenges.
 #>
 [CmdletBinding(SupportsShouldProcess = $true)]
 Param (
@@ -44,7 +48,11 @@ Param (
     [Parameter()]
     [switch]$NoRestore,
     [Parameter()]
-    [string]$AccessToken
+    [switch]$NoToolRestore,
+    [Parameter()]
+    [string]$AccessToken,
+    [Parameter()]
+    [switch]$Interactive
 )
 
 $EnvVars = @{}
@@ -79,14 +87,27 @@ try {
     $HeaderColor = 'Green'
 
     if (!$NoRestore -and $PSCmdlet.ShouldProcess("NuGet packages", "Restore")) {
+        $RestoreArguments = @()
+        if ($Interactive)
+        {
+            $RestoreArguments += '--interactive'
+        }
+
         Write-Host "Restoring NuGet packages" -ForegroundColor $HeaderColor
         if ($IsMacOS) {
-            $restoreArgs = "/p:Configuration=DebugMac"
+            $RestoreArguments += '/p:Configuration=DebugMac'
         }
-        dotnet restore $restoreArgs
+        dotnet restore $restoreArgs @RestoreArguments
         if ($lastexitcode -ne 0) {
             throw "Failure while restoring packages."
         }
+    }
+
+    if (!$NoToolRestore -and $PSCmdlet.ShouldProcess("dotnet tool", "restore")) {
+      dotnet tool restore @RestoreArguments
+      if ($lastexitcode -ne 0) {
+          throw "Failure while restoring dotnet CLI tools."
+      }
     }
 
     & "$PSScriptRoot/tools/Set-EnvVars.ps1" -Variables $EnvVars -PrependPath $PrependPath | Out-Null
