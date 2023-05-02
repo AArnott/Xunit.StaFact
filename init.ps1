@@ -94,10 +94,11 @@ try {
 
     if (!$NoRestore -and $PSCmdlet.ShouldProcess("NuGet packages", "Restore")) {
         Write-Host "Restoring NuGet packages" -ForegroundColor $HeaderColor
+        $NuGetRestoreArguments = @($RestoreArguments)
         if ($IsMacOS) {
-            $RestoreArguments += '/p:Configuration=DebugMac'
+            $NuGetRestoreArguments += '/p:Configuration=DebugMac'
         }
-        dotnet restore $restoreArgs @RestoreArguments
+        dotnet restore $restoreArgs @NuGetRestoreArguments
         if ($lastexitcode -ne 0) {
             throw "Failure while restoring packages."
         }
