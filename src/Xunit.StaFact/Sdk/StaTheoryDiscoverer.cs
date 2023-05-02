@@ -22,6 +22,11 @@ public class StaTheoryDiscoverer : TheoryDiscoverer
 
     protected override IEnumerable<IXunitTestCase> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute, object[] dataRow)
     {
+        if (testMethod is null)
+        {
+            throw new ArgumentNullException(nameof(testMethod));
+        }
+
         if (testMethod.Method.ReturnType.Name == "System.Void" &&
             testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
         {
@@ -35,6 +40,11 @@ public class StaTheoryDiscoverer : TheoryDiscoverer
 
     protected override IEnumerable<IXunitTestCase> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
     {
+        if (testMethod is null)
+        {
+            throw new ArgumentNullException(nameof(testMethod));
+        }
+
         if (testMethod.Method.ReturnType.Name == "System.Void" && testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
         {
             yield return new ExecutionErrorTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");

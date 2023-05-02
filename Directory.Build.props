@@ -32,10 +32,10 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)strongname.snk</AssemblyOriginatorKeyFile>
 
+    <PackageProjectUrl>https://github.com/AArnott/Xunit.StaFact</PackageProjectUrl>
     <Company>Andrew Arnott</Company>
     <Authors>Andrew Arnott</Authors>
     <Copyright>© Andrew Arnott. All rights reserved.</Copyright>
-    <PackageProjectUrl>https://github.com/AArnott/Xunit.StaFact</PackageProjectUrl>
     <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -58,7 +58,7 @@
 
   <Target Name="PrepareReleaseNotes" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">
     <PropertyGroup>
-      <PackageReleaseNotes>https://github.com/AArnott/Xunit.StaFact/releases/tag/v$(Version)</PackageReleaseNotes>
+      <PackageReleaseNotes Condition="'$(PackageProjectUrl)'!=''">$(PackageProjectUrl)/releases/tag/v$(Version)</PackageReleaseNotes>
     </PropertyGroup>
   </Target>
 
