@@ -24,6 +24,11 @@ public class CocoaFactDiscoverer : FactDiscoverer
 
     protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
     {
+        if (testMethod is null)
+        {
+            throw new ArgumentNullException(nameof(testMethod));
+        }
+
         if (testMethod.Method.ReturnType.Name == "System.Void" &&
             testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
         {

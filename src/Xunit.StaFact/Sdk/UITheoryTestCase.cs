@@ -30,6 +30,11 @@ public class UITheoryTestCase : XunitTheoryTestCase
 
     public override void Deserialize(IXunitSerializationInfo data)
     {
+        if (data is null)
+        {
+            throw new ArgumentNullException(nameof(data));
+        }
+
         base.Deserialize(data);
 
         this.SynchronizationContextType = (UITestCase.SyncContextType)Enum.Parse(typeof(UITestCase.SyncContextType), data.GetValue<string>("SyncContextType"));
@@ -37,6 +42,11 @@ public class UITheoryTestCase : XunitTheoryTestCase
 
     public override void Serialize(IXunitSerializationInfo data)
     {
+        if (data is null)
+        {
+            throw new ArgumentNullException(nameof(data));
+        }
+
         base.Serialize(data);
 
         data.AddValue("SyncContextType", this.SynchronizationContextType.ToString());

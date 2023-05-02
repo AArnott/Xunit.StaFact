@@ -79,12 +79,22 @@ public class UITestCase : XunitTestCase
 
     public override void Serialize(IXunitSerializationInfo data)
     {
+        if (data is null)
+        {
+            throw new ArgumentNullException(nameof(data));
+        }
+
         base.Serialize(data);
         data.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
     }
 
     public override void Deserialize(IXunitSerializationInfo data)
     {
+        if (data is null)
+        {
+            throw new ArgumentNullException(nameof(data));
+        }
+
         base.Deserialize(data);
         this.synchronizationContextType = (SyncContextType)data.GetValue(nameof(this.synchronizationContextType), typeof(SyncContextType));
     }
@@ -97,6 +107,11 @@ public class UITestCase : XunitTestCase
         ExceptionAggregator aggregator,
         CancellationTokenSource cancellationTokenSource)
     {
+        if (cancellationTokenSource is null)
+        {
+            throw new ArgumentNullException(nameof(cancellationTokenSource));
+        }
+
         var task = Task.Run(
             async () =>
             {
