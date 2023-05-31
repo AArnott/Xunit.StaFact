@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!-- The first TFM to be listed is the lucky one that determines which files show up in Solution Explorer. -->
-    <TargetFrameworks>net472;netstandard2.0;net6.0;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net472;netstandard2.0;net6.0;net6.0-windows;net6.0-windows10.0.17763.0</TargetFrameworks>
     <!-- Exclude for Linux, which does not support building macOS projects
          (see https://github.com/xamarin/xamarin-macios/issues/17287). -->
     <TargetFrameworks Condition="!$([MSBuild]::IsOsPlatform('Linux'))">$(TargetFrameworks);net6.0-macos10.15</TargetFrameworks>
@@ -27,6 +27,7 @@ Theory variants of these attributes allow for parameterized testing. Check out t
     <AdditionalFiles Include="$(TargetFramework)\PublicAPI.Unshipped.txt" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Condition="'$(TargetFramework)'=='net6.0-windows10.0.17763.0'" IncludeAssets="compile"/>
     <PackageReference Include="xunit.extensibility.execution" />
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" PrivateAssets="all" />
   </ItemGroup>

@@ -13,7 +13,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
-    <TargetingWindows Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.EndsWith('-windows')) ">true</TargetingWindows>
+    <TargetingWindows Condition=" '$(TargetFramework)' == 'net472' or $(TargetFramework.Contains('-windows')) ">true</TargetingWindows>
     <TargetingMacos Condition="$(TargetFramework.Contains('macos'))">true</TargetingMacos>
 
     <!-- https://github.com/dotnet/msbuild/blob/main/documentation/ProjectReference-Protocol.md#setplatform-negotiation -->
