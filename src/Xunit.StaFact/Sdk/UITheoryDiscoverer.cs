@@ -19,13 +19,13 @@ public class UITheoryDiscoverer : TheoryDiscoverer
 
     protected override IEnumerable<IXunitTestCase> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute, object[] dataRow)
     {
-        UISettingsKey settings = UIFactDiscoverer.GetSettings(testMethod, theoryAttribute);
+        UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
         yield return new UITestCase(UITestCase.SyncContextType.Portable, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow, settings);
     }
 
     protected override IEnumerable<IXunitTestCase> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
     {
-        UISettingsKey settings = UIFactDiscoverer.GetSettings(testMethod, theoryAttribute);
+        UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
         yield return new UITheoryTestCase(UITestCase.SyncContextType.Portable, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, settings);
     }
 }

@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Reflection;
 using System.Windows.Threading;
+using DesktopTheoryAttribute = Xunit.WpfTheoryAttribute;
 
 public class WpfTheoryTests
 {
@@ -66,27 +68,37 @@ public class WpfTheoryTests
     [InlineData(0)]
     public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
 
-    [WpfTheory]
+    [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     [UISettings(MaxAttempts = 2)]
-    public void WpfTheory_AutomaticRetryNeeded(int arg)
+    public void AutomaticRetryNeeded(int arg)
     {
-        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(WpfTheoryTests), $"{nameof(this.WpfTheory_AutomaticRetryNeeded)}_{arg}") != 1)
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), $"{MethodBase.GetCurrentMethod()!.Name}_{arg}") != 1)
         {
             Assert.Fail("The first attempt false, but a second attempt will pass.");
         }
     }
 
-    [WpfTheory]
+    [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     [UISettings(MaxAttempts = 2)]
-    public void WpfTheory_AutomaticRetryNotNeeded(int arg)
+    public void AutomaticRetryNotNeeded(int arg)
     {
-        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(WpfTheoryTests), $"{nameof(this.WpfTheory_AutomaticRetryNeeded)}_{arg}") != 0)
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), $"{MethodBase.GetCurrentMethod()!.Name}_{arg}") != 0)
         {
             Assert.Fail("This test should not have run a second time because the first run was successful.");
         }
+    }
+
+    [DesktopTheory, Trait("TestCategory", "FailureExpected")]
+    [InlineData(0)]
+    [InlineData(1)]
+    [UISettings(MaxAttempts = 2)]
+    public void FailsAllRetries(int arg)
+    {
+        _ = arg;
+        Assert.Fail("Failure expected.");
     }
 }

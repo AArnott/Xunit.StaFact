@@ -1,9 +1,6 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-
 namespace Xunit.Sdk;
 
 /// <summary>
@@ -23,107 +20,39 @@ public class UIFactDiscoverer : FactDiscoverer
         this.diagnosticMessageSink = diagnosticMessageSink;
     }
 
-    internal static UISettingsKey GetSettings(ITestMethod testMethod, IAttributeInfo factAttribute)
+    internal static UISettingsAttribute GetSettings(ITestMethod testMethod)
     {
-        var maxAttempts = GetMaxAttempts(testMethod, factAttribute);
-        return new UISettingsKey(maxAttempts);
+        // Initialize with defaults.
+        UISettingsAttribute settings = UISettingsAttribute.Default;
+
+        // Enumerate through each attribute (each progressively overriding the previous) and apply any explicitly set values to the attribute we'll return.
+        foreach (IAttributeInfo settingsAttribute in GetSettingsAttributes(testMethod))
+        {
+            if (settingsAttribute.GetNamedArgument<int?>(nameof(UISettingsAttribute.MaxAttempts)) is int maxAttempts)
+            {
+                settings.MaxAttempts = maxAttempts;
+            }
+        }
+
+        return settings;
     }
 
     protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo factAttribute)
     {
-        var maxAttempts = GetMaxAttempts(testMethod, factAttribute);
-        var settings = new UISettingsKey(maxAttempts);
+        UISettingsAttribute settings = GetSettings(testMethod);
         return new UITestCase(UITestCase.SyncContextType.Portable, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, testMethodArguments: null, settings);
-    }
-
-    private static int GetMaxAttempts(ITestMethod testMethod, IAttributeInfo factAttribute)
-    {
-        return GetMaxAttempts(factAttribute, GetSettingsAttributes(testMethod).ToArray());
     }
 
     private static IEnumerable<IAttributeInfo> GetSettingsAttributes(ITestMethod testMethod)
     {
-        foreach (IAttributeInfo attributeData in testMethod.Method.GetCustomAttributes(typeof(UISettingsAttribute)))
+        if (testMethod.TestClass.Class.GetCustomAttributes(typeof(UISettingsAttribute)).SingleOrDefault() is IAttributeInfo classLevel)
         {
-            yield return attributeData;
+            yield return classLevel;
         }
 
-        foreach (IAttributeInfo attributeData in testMethod.TestClass.Class.GetCustomAttributes(typeof(UISettingsAttribute)))
+        if (testMethod.Method.GetCustomAttributes(typeof(UISettingsAttribute)).SingleOrDefault() is IAttributeInfo methodLevel)
         {
-            yield return attributeData;
-        }
-    }
-
-    private static int GetMaxAttempts(IAttributeInfo factAttribute, IAttributeInfo[] settingsAttributes)
-    {
-        return GetNamedArgument(
-            factAttribute,
-            settingsAttributes,
-            nameof(UISettingsAttribute.MaxAttempts),
-            static value => value > 0,
-            defaultValue: 1);
-    }
-
-    private static TValue GetNamedArgument<TValue>(IAttributeInfo factAttribute, IAttributeInfo[] settingsAttributes, string argumentName, Func<TValue, bool> isValidValue, TValue defaultValue)
-    {
-        return GetNamedArgument(
-            factAttribute,
-            settingsAttributes,
-            argumentName,
-            isValidValue,
-            merge: null,
-            defaultValue);
-    }
-
-    private static TValue GetNamedArgument<TValue>(IAttributeInfo factAttribute, IAttributeInfo[] settingsAttributes, string argumentName, Func<TValue, bool> isValidValue, Func<TValue, TValue, TValue>? merge, TValue defaultValue)
-    {
-        StrongBox<TValue>? result = null;
-        TValue? value;
-
-#if false // Currently the custom Fact and Theory attributes do not contain settings properties
-        if (TryGetNamedArgument(factAttribute, argumentName, isValidValue, out value))
-        {
-            if (merge is null)
-            {
-                return value;
-            }
-
-            result = new StrongBox<TValue>(value);
-        }
-#endif
-
-        foreach (IAttributeInfo attribute in settingsAttributes)
-        {
-            if (TryGetNamedArgument(attribute, argumentName, isValidValue, out value))
-            {
-                if (merge is null)
-                {
-                    return value;
-                }
-                else if (result is null)
-                {
-                    result = new StrongBox<TValue>(value);
-                }
-                else
-                {
-                    result.Value = merge(value, result.Value!);
-                }
-
-                return value;
-            }
-        }
-
-        if (result is not null)
-        {
-            return result.Value!;
-        }
-
-        return defaultValue;
-
-        static bool TryGetNamedArgument(IAttributeInfo attribute, string argumentName, Func<TValue, bool> isValidValue, [MaybeNullWhen(false)] out TValue value)
-        {
-            value = attribute.GetNamedArgument<TValue>(argumentName);
-            return isValidValue(value);
+            yield return methodLevel;
         }
     }
 }

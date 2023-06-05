@@ -35,7 +35,7 @@ public class CocoaFactDiscoverer : FactDiscoverer
             return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
         }
 
-        UISettingsKey settings = UIFactDiscoverer.GetSettings(testMethod, factAttribute);
+        UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
         return new UITestCase(UITestCase.SyncContextType.Cocoa, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, testMethodArguments: null, settings);
     }
 }

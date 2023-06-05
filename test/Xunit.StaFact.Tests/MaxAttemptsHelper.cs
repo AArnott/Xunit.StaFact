@@ -12,7 +12,7 @@ internal static class MaxAttemptsHelper
     /// </summary>
     /// <param name="testClass">The class defining the test.</param>
     /// <param name="testMethod">The unique name of the test method within <paramref name="testClass"/>.</param>
-    /// <returns>The 0-based attempt number.</returns>
+    /// <returns>The 0-based attempt number (the value before it was incremented).</returns>
     public static int GetAndIncrementAttemptNumber(Type testClass, string testMethod)
     {
         StrongBox<int>? attemptNumber;

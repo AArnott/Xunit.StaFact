@@ -37,7 +37,7 @@ public class StaFactDiscoverer : FactDiscoverer
             return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
         }
 
-        UISettingsKey settings = UIFactDiscoverer.GetSettings(testMethod, factAttribute);
+        UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
         return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
             ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.None, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, testMethodArguments: null, settings)
             : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "STA threads only exist on Windows.");

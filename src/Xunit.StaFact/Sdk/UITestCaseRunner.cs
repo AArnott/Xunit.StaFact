@@ -5,7 +5,7 @@ namespace Xunit.Sdk;
 
 public class UITestCaseRunner : XunitTestCaseRunner
 {
-    private UISettingsKey settings;
+    private UISettingsAttribute settings;
     private ThreadRental threadRental;
 
     /// <summary>
@@ -30,7 +30,7 @@ public class UITestCaseRunner : XunitTestCaseRunner
         IMessageBus messageBus,
         ExceptionAggregator aggregator,
         CancellationTokenSource cancellationTokenSource,
-        UISettingsKey settings,
+        UISettingsAttribute settings,
         ThreadRental threadRental)
         : base(testCase, displayName, skipReason, constructorArguments, testMethodArguments, messageBus, aggregator, cancellationTokenSource)
     {
@@ -40,16 +40,14 @@ public class UITestCaseRunner : XunitTestCaseRunner
 
     protected override async Task<RunSummary> RunTestAsync()
     {
-        var result = new RunSummary();
+        RunSummary result = new();
         for (int i = 0; i < this.settings.MaxAttempts; i++)
         {
             bool finalAttempt = i == this.settings.MaxAttempts - 1;
             RunSummary summary = await new UITestRunner(new XunitTest(this.TestCase, this.DisplayName), this.MessageBus, finalAttempt, this.TestClass, this.ConstructorArguments, this.TestMethod, this.TestMethodArguments, this.SkipReason, this.BeforeAfterAttributes, this.Aggregator, this.CancellationTokenSource, this.threadRental).RunAsync();
             result.Aggregate(summary);
-            if (summary.Skipped == 0)
+            if (summary.Failed == 0)
             {
-                // Failed tests prior to the final attempt are reported as skipped. If the current execution did not
-                // contain any skipped results, we know the summary is valid for the test as a whole.
                 break;
             }
         }

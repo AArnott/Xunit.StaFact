@@ -13,14 +13,14 @@ public class UITheoryTestCase : XunitTheoryTestCase
     {
     }
 
-    internal UITheoryTestCase(UITestCase.SyncContextType synchronizationContextType, IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod, UISettingsKey settings)
+    internal UITheoryTestCase(UITestCase.SyncContextType synchronizationContextType, IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod, UISettingsAttribute settings)
         : base(diagnosticMessageSink, defaultMethodDisplay, defaultMethodDisplayOptions, testMethod)
     {
         this.Settings = settings;
         this.SynchronizationContextType = synchronizationContextType;
     }
 
-    internal UISettingsKey Settings { get; private set; }
+    internal UISettingsAttribute Settings { get; private set; } = UISettingsAttribute.Default;
 
     internal UITestCase.SyncContextType SynchronizationContextType { get; private set; }
 
@@ -42,7 +42,7 @@ public class UITheoryTestCase : XunitTheoryTestCase
 
         base.Deserialize(data);
 
-        this.Settings = new UISettingsKey(data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)));
+        this.Settings = new UISettingsAttribute() { MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)) };
         this.SynchronizationContextType = (UITestCase.SyncContextType)Enum.Parse(typeof(UITestCase.SyncContextType), data.GetValue<string>("SyncContextType"));
     }
 

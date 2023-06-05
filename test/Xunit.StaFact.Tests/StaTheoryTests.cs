@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Reflection;
+using DesktopTheoryAttribute = Xunit.StaTheoryAttribute;
+
 public partial class StaTheoryTests
 {
     public static object[][] MemberDataSource => new object[][]
@@ -70,27 +73,37 @@ public partial class StaTheoryTests
     [InlineData(0)]
     public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
 
-    [StaTheory]
+    [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     [UISettings(MaxAttempts = 2)]
-    public void StaTheory_AutomaticRetryNeeded(int arg)
+    public void AutomaticRetryNeeded(int arg)
     {
-        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(StaTheoryTests), $"{nameof(this.StaTheory_AutomaticRetryNeeded)}_{arg}") != 1)
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), $"{MethodBase.GetCurrentMethod()!.Name}_{arg}") != 1)
         {
             Assert.Fail("The first attempt false, but a second attempt will pass.");
         }
     }
 
-    [StaTheory]
+    [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     [UISettings(MaxAttempts = 2)]
-    public void StaTheory_AutomaticRetryNotNeeded(int arg)
+    public void AutomaticRetryNotNeeded(int arg)
     {
-        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(StaTheoryTests), $"{nameof(this.StaTheory_AutomaticRetryNeeded)}_{arg}") != 0)
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), $"{MethodBase.GetCurrentMethod()!.Name}_{arg}") != 0)
         {
             Assert.Fail("This test should not have run a second time because the first run was successful.");
         }
+    }
+
+    [DesktopTheory, Trait("TestCategory", "FailureExpected")]
+    [InlineData(0)]
+    [InlineData(1)]
+    [UISettings(MaxAttempts = 2)]
+    public void FailsAllRetries(int arg)
+    {
+        _ = arg;
+        Assert.Fail("Failure expected.");
     }
 }

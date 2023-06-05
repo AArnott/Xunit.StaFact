@@ -14,7 +14,6 @@ override Xunit.Sdk.UITheoryDiscoverer.CreateTestCasesForTheory(Xunit.Abstraction
 override Xunit.Sdk.UITheoryTestCase.Deserialize(Xunit.Abstractions.IXunitSerializationInfo! data) -> void
 override Xunit.Sdk.UITheoryTestCase.RunAsync(Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.IMessageBus! messageBus, object![]! constructorArguments, Xunit.Sdk.ExceptionAggregator! aggregator, System.Threading.CancellationTokenSource! cancellationTokenSource) -> System.Threading.Tasks.Task<Xunit.Sdk.RunSummary!>!
 override Xunit.Sdk.UITheoryTestCase.Serialize(Xunit.Abstractions.IXunitSerializationInfo! data) -> void
-static Xunit.UISettingsKey.Default.get -> Xunit.UISettingsKey
 Xunit.CocoaFactAttribute
 Xunit.CocoaFactAttribute.CocoaFactAttribute() -> void
 Xunit.CocoaTheoryAttribute
@@ -54,10 +53,5 @@ Xunit.UISettingsAttribute
 Xunit.UISettingsAttribute.MaxAttempts.get -> int
 Xunit.UISettingsAttribute.MaxAttempts.set -> void
 Xunit.UISettingsAttribute.UISettingsAttribute() -> void
-Xunit.UISettingsKey
-Xunit.UISettingsKey.MaxAttempts.get -> int
-Xunit.UISettingsKey.MaxAttempts.set -> void
-Xunit.UISettingsKey.UISettingsKey() -> void
-Xunit.UISettingsKey.UISettingsKey(int MaxAttempts) -> void
 Xunit.UITheoryAttribute
 Xunit.UITheoryAttribute.UITheoryAttribute() -> void

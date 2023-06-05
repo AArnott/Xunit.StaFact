@@ -12,7 +12,7 @@ namespace Xunit.Sdk;
 [DebuggerDisplay(@"\{ class = {TestMethod.TestClass.Class.Name}, method = {TestMethod.Method.Name}, display = {DisplayName}, skip = {SkipReason} \}")]
 public class UITestCase : XunitTestCase
 {
-    private UISettingsKey settings;
+    private UISettingsAttribute settings = UISettingsAttribute.Default;
     private SyncContextType synchronizationContextType;
 
     /// <summary>
@@ -40,7 +40,7 @@ public class UITestCase : XunitTestCase
         TestMethodDisplay defaultMethodDisplay,
         ITestMethod testMethod,
         object?[]? testMethodArguments,
-        UISettingsKey settings)
+        UISettingsAttribute settings)
         : base(diagnosticMessageSink, defaultMethodDisplay, TestMethodDisplayOptions.None, testMethod, testMethodArguments)
     {
         this.settings = settings;
@@ -101,7 +101,10 @@ public class UITestCase : XunitTestCase
         }
 
         base.Deserialize(data);
-        this.settings = new UISettingsKey(data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)));
+        this.settings = new()
+        {
+            MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)),
+        };
         this.synchronizationContextType = (SyncContextType)data.GetValue(nameof(this.synchronizationContextType), typeof(SyncContextType));
     }
 

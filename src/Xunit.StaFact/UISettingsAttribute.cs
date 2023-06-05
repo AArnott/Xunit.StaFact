@@ -11,10 +11,12 @@ public sealed class UISettingsAttribute : Attribute
     /// </summary>
     /// <value>
     /// <list type="bullet">
-    /// <item><description><c>0</c> to inherit the value from an attribute applied to a containing type or member, or use the default value when no other value is specified (equivalent to <c>1</c>; tests will not be automatically retried on failure)</description></item>
+    /// <item><description>Leave unset to inherit the value from an attribute applied to a containing type (the ultimate default being <c>1</c>)</description></item>
     /// <item><description><c>1</c> to not retry the test on failure</description></item>
     /// <item><description>An explicit value greater than <c>1</c> to retry the test up to a total of this many attempts on failure</description></item>
     /// </list>
     /// </value>
     public int MaxAttempts { get; set; }
+
+    internal static UISettingsAttribute Default => new() { MaxAttempts = 1 };
 }

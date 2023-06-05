@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Reflection;
 using System.Windows;
 using DesktopFactAttribute = Xunit.WpfFactAttribute;
 using DesktopSyncContext = System.Windows.Threading.DispatcherSynchronizationContext;
@@ -81,9 +82,9 @@ public class WpfFactTests
 
     [DesktopFact]
     [UISettings(MaxAttempts = 2)]
-    public void WpfFact_AutomaticRetryNeeded()
+    public void AutomaticRetryNeeded()
     {
-        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(WpfFactTests), nameof(this.WpfFact_AutomaticRetryNeeded)) != 1)
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 1)
         {
             Assert.Fail("The first attempt false, but a second attempt will pass.");
         }
@@ -91,12 +92,19 @@ public class WpfFactTests
 
     [DesktopFact]
     [UISettings(MaxAttempts = 2)]
-    public void WpfFact_AutomaticRetryNotNeeded()
+    public void AutomaticRetryNotNeeded()
     {
-        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(WpfFactTests), nameof(this.WpfFact_AutomaticRetryNeeded)) != 0)
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 0)
         {
             Assert.Fail("This test should not have run a second time because the first run was successful.");
         }
+    }
+
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
+    [UISettings(MaxAttempts = 2)]
+    public void FailsAllRetries()
+    {
+        Assert.Fail("Failure expected.");
     }
 
     private void AssertThreadCharacteristics()
