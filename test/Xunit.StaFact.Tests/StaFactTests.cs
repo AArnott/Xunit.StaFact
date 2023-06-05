@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Reflection;
+using DesktopFactAttribute = Xunit.StaFactAttribute;
+
 public class StaFactTests
 {
     public StaFactTests()
@@ -38,4 +41,31 @@ public class StaFactTests
 
     [StaFact, Trait("TestCategory", "FailureExpected")]
     public void JustFailVoid() => throw new InvalidOperationException("Expected failure.");
+
+    [DesktopFact]
+    [UISettings(MaxAttempts = 2)]
+    public void AutomaticRetryNeeded()
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 1)
+        {
+            Assert.Fail("The first attempt false, but a second attempt will pass.");
+        }
+    }
+
+    [DesktopFact]
+    [UISettings(MaxAttempts = 2)]
+    public void AutomaticRetryNotNeeded()
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 0)
+        {
+            Assert.Fail("This test should not have run a second time because the first run was successful.");
+        }
+    }
+
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
+    [UISettings(MaxAttempts = 2)]
+    public void FailsAllRetries()
+    {
+        Assert.Fail("Failure expected.");
+    }
 }

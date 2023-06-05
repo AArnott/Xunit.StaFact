@@ -2,8 +2,17 @@
   <PropertyGroup>
     <TargetFrameworks>net472;net6.0;net6.0-windows</TargetFrameworks>
   </PropertyGroup>
+  <ItemGroup>
+    <ExcludedCompileItems Include="@(Compile)"/>
+  </ItemGroup>
   <ItemGroup Condition="'$(TargetingWindows)'!='true'">
     <Compile Remove="WindowsDesktop\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Remove all remaining Compile items so we know which ones were filtered out from the targeting condition. -->
+    <ExcludedCompileItems Remove="@(Compile)"/>
+    <!-- Add the filtered Compile items as None items so they are visible in IDE tooling. -->
+    <None Include="@(ExcludedCompileItems)"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />

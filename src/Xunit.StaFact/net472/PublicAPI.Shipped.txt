@@ -30,7 +30,6 @@ Xunit.Sdk.UITestCase.SyncContextType.Portable = 1 -> Xunit.Sdk.UITestCase.SyncCo
 Xunit.Sdk.UITestCase.SyncContextType.WinForms = 3 -> Xunit.Sdk.UITestCase.SyncContextType
 Xunit.Sdk.UITestCase.SyncContextType.WPF = 2 -> Xunit.Sdk.UITestCase.SyncContextType
 Xunit.Sdk.UITestCase.UITestCase() -> void
-Xunit.Sdk.UITestCase.UITestCase(Xunit.Sdk.UITestCase.SyncContextType synchronizationContextType, Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.TestMethodDisplay defaultMethodDisplay, Xunit.Abstractions.ITestMethod! testMethod, object?[]? testMethodArguments = null) -> void
 Xunit.Sdk.UITestCaseRunner
 Xunit.Sdk.UITestInvoker
 Xunit.Sdk.UITestInvoker.RunAsync() -> System.Threading.Tasks.Task<decimal>!
@@ -39,7 +38,6 @@ Xunit.Sdk.UITheoryDiscoverer
 Xunit.Sdk.UITheoryDiscoverer.UITheoryDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
 Xunit.Sdk.UITheoryTestCase
 Xunit.Sdk.UITheoryTestCase.UITheoryTestCase() -> void
-Xunit.Sdk.UITheoryTestCase.UITheoryTestCase(Xunit.Sdk.UITestCase.SyncContextType synchronizationContextType, Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.TestMethodDisplay defaultMethodDisplay, Xunit.Sdk.TestMethodDisplayOptions defaultMethodDisplayOptions, Xunit.Abstractions.ITestMethod! testMethod) -> void
 Xunit.Sdk.UITheoryTestCaseRunner
 Xunit.Sdk.WinFormsFactDiscoverer
 Xunit.Sdk.WinFormsFactDiscoverer.WinFormsFactDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void

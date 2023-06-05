@@ -11,7 +11,7 @@ Theory variants of these attributes allow for parameterized testing. Check out t
 
 ## Features
 
-The following attributes are supported:
+The following test attributes are supported:
 
 Xunit test attributes            | Supported OS's   | SynchronizationContext               | STA thread?     |
 |--------------------------------|------------------|--------------------------------------| --------------- |
@@ -19,12 +19,16 @@ Xunit test attributes            | Supported OS's   | SynchronizationContext    
 `[WpfFact, WpfTheory]`           | Windows only³    | `DispatcherSynchronizationContext`   | yes             |
 `[WinFormsFact, WinFormsTheory]` | Windows only³    | `WindowsFormsSynchronizationContext` | yes             |
 `[StaFact, StaTheory]`           | Windows only³    | No                                   | yes             |
+`[CocoaFact, CocoaTheory]`       | Mac OSX only³    | Yes¹                                 | no              |
 
 ¹ This is a private `SynchronizationContext` that works cross-platform and effectively keeps code running on the test's starting thread the way a GUI application's main thread would do.
 
 ² STA thread only applies on Windows. On other operating systems, an MTA thread is used.
 
 ³ Windows-only attributes result in the test to result in "Skipped" on other operating systems.
+
+We also offer a `[UISettingsAttribute]` that can be applied to individual test methods or test classes to control the behavior of the various UI test attributes.
+This attribute offers a means to add automated retries to a test's execution for unstable tests.
 
 ## Samples
 

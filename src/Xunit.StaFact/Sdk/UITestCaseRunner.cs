@@ -5,6 +5,7 @@ namespace Xunit.Sdk;
 
 public class UITestCaseRunner : XunitTestCaseRunner
 {
+    private UISettingsAttribute settings;
     private ThreadRental threadRental;
 
     /// <summary>
@@ -18,6 +19,7 @@ public class UITestCaseRunner : XunitTestCaseRunner
     /// <param name="messageBus">The message bus to report run status to.</param>
     /// <param name="aggregator">The exception aggregator used to run code and collect exceptions.</param>
     /// <param name="cancellationTokenSource">The task cancellation token source, used to cancel the test run.</param>
+    /// <param name="settings">The settings to use for this test case.</param>
     /// <param name="threadRental">The <see cref="ThreadRental"/> instance to use.</param>
     internal UITestCaseRunner(
         IXunitTestCase testCase,
@@ -28,14 +30,28 @@ public class UITestCaseRunner : XunitTestCaseRunner
         IMessageBus messageBus,
         ExceptionAggregator aggregator,
         CancellationTokenSource cancellationTokenSource,
+        UISettingsAttribute settings,
         ThreadRental threadRental)
         : base(testCase, displayName, skipReason, constructorArguments, testMethodArguments, messageBus, aggregator, cancellationTokenSource)
     {
+        this.settings = settings;
         this.threadRental = threadRental;
     }
 
-    protected override Task<RunSummary> RunTestAsync()
+    protected override async Task<RunSummary> RunTestAsync()
     {
-        return new UITestRunner(new XunitTest(this.TestCase, this.DisplayName), this.MessageBus, this.TestClass, this.ConstructorArguments, this.TestMethod, this.TestMethodArguments, this.SkipReason, this.BeforeAfterAttributes, this.Aggregator, this.CancellationTokenSource, this.threadRental).RunAsync();
+        RunSummary result = new();
+        for (int i = 0; i < this.settings.MaxAttempts; i++)
+        {
+            bool finalAttempt = i == this.settings.MaxAttempts - 1;
+            RunSummary summary = await new UITestRunner(new XunitTest(this.TestCase, this.DisplayName), this.MessageBus, finalAttempt, this.TestClass, this.ConstructorArguments, this.TestMethod, this.TestMethodArguments, this.SkipReason, this.BeforeAfterAttributes, this.Aggregator, this.CancellationTokenSource, this.threadRental).RunAsync();
+            result.Aggregate(summary);
+            if (summary.Failed == 0)
+            {
+                break;
+            }
+        }
+
+        return result;
     }
 }

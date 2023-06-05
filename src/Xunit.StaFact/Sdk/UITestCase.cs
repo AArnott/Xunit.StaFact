@@ -12,26 +12,8 @@ namespace Xunit.Sdk;
 [DebuggerDisplay(@"\{ class = {TestMethod.TestClass.Class.Name}, method = {TestMethod.Method.Name}, display = {DisplayName}, skip = {SkipReason} \}")]
 public class UITestCase : XunitTestCase
 {
+    private UISettingsAttribute settings = UISettingsAttribute.Default;
     private SyncContextType synchronizationContextType;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="UITestCase"/> class.
-    /// </summary>
-    /// <param name="synchronizationContextType">The type of <see cref="SynchronizationContext"/> to use.</param>
-    /// <param name="diagnosticMessageSink">The message sink used to send diagnostic messages.</param>
-    /// <param name="defaultMethodDisplay">Default method display to use (when not customized).</param>
-    /// <param name="testMethod">The test method this test case belongs to.</param>
-    /// <param name="testMethodArguments">The arguments for the test method.</param>
-    public UITestCase(
-        SyncContextType synchronizationContextType,
-        IMessageSink diagnosticMessageSink,
-        TestMethodDisplay defaultMethodDisplay,
-        ITestMethod testMethod,
-        object?[]? testMethodArguments = null)
-        : base(diagnosticMessageSink, defaultMethodDisplay, TestMethodDisplayOptions.None, testMethod, testMethodArguments)
-    {
-        this.synchronizationContextType = synchronizationContextType;
-    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UITestCase"/> class
@@ -41,6 +23,28 @@ public class UITestCase : XunitTestCase
     [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
     public UITestCase()
     {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UITestCase"/> class.
+    /// </summary>
+    /// <param name="synchronizationContextType">The type of <see cref="SynchronizationContext"/> to use.</param>
+    /// <param name="diagnosticMessageSink">The message sink used to send diagnostic messages.</param>
+    /// <param name="defaultMethodDisplay">Default method display to use (when not customized).</param>
+    /// <param name="testMethod">The test method this test case belongs to.</param>
+    /// <param name="settings">The test settings to apply.</param>
+    /// <param name="testMethodArguments">The arguments for the test method.</param>
+    internal UITestCase(
+        SyncContextType synchronizationContextType,
+        IMessageSink diagnosticMessageSink,
+        TestMethodDisplay defaultMethodDisplay,
+        ITestMethod testMethod,
+        object?[]? testMethodArguments,
+        UISettingsAttribute settings)
+        : base(diagnosticMessageSink, defaultMethodDisplay, TestMethodDisplayOptions.None, testMethod, testMethodArguments)
+    {
+        this.settings = settings;
+        this.synchronizationContextType = synchronizationContextType;
     }
 
     public enum SyncContextType
@@ -85,6 +89,7 @@ public class UITestCase : XunitTestCase
         }
 
         base.Serialize(data);
+        data.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.settings.MaxAttempts);
         data.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
     }
 
@@ -96,6 +101,10 @@ public class UITestCase : XunitTestCase
         }
 
         base.Deserialize(data);
+        this.settings = new()
+        {
+            MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)),
+        };
         this.synchronizationContextType = (SyncContextType)data.GetValue(nameof(this.synchronizationContextType), typeof(SyncContextType));
     }
 
@@ -117,7 +126,7 @@ public class UITestCase : XunitTestCase
             {
                 using ThreadRental threadRental = await ThreadRental.CreateAsync(this.Adapter, this.TestMethod);
                 await threadRental.SynchronizationContext;
-                var runner = new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, threadRental);
+                var runner = new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, this.TestMethodArguments, messageBus, aggregator, cancellationTokenSource, this.settings, threadRental);
                 return await runner.RunAsync();
             },
             cancellationTokenSource.Token);

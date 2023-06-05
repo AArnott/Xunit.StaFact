@@ -13,11 +13,14 @@ public class UITheoryTestCase : XunitTheoryTestCase
     {
     }
 
-    public UITheoryTestCase(UITestCase.SyncContextType synchronizationContextType, IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod)
+    internal UITheoryTestCase(UITestCase.SyncContextType synchronizationContextType, IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod, UISettingsAttribute settings)
         : base(diagnosticMessageSink, defaultMethodDisplay, defaultMethodDisplayOptions, testMethod)
     {
+        this.Settings = settings;
         this.SynchronizationContextType = synchronizationContextType;
     }
+
+    internal UISettingsAttribute Settings { get; private set; } = UISettingsAttribute.Default;
 
     internal UITestCase.SyncContextType SynchronizationContextType { get; private set; }
 
@@ -25,6 +28,8 @@ public class UITheoryTestCase : XunitTheoryTestCase
     {
         using ThreadRental threadRental = await ThreadRental.CreateAsync(UITestCase.GetAdapter(this.SynchronizationContextType), this.TestMethod);
         await threadRental.SynchronizationContext;
+
+        // TODO: retry here if any test cases failed
         return await new UITheoryTestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, diagnosticMessageSink, messageBus, aggregator, cancellationTokenSource, threadRental).RunAsync();
     }
 
@@ -37,6 +42,7 @@ public class UITheoryTestCase : XunitTheoryTestCase
 
         base.Deserialize(data);
 
+        this.Settings = new UISettingsAttribute() { MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)) };
         this.SynchronizationContextType = (UITestCase.SyncContextType)Enum.Parse(typeof(UITestCase.SyncContextType), data.GetValue<string>("SyncContextType"));
     }
 
@@ -49,6 +55,7 @@ public class UITheoryTestCase : XunitTheoryTestCase
 
         base.Serialize(data);
 
+        data.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.Settings.MaxAttempts);
         data.AddValue("SyncContextType", this.SynchronizationContextType.ToString());
     }
 }

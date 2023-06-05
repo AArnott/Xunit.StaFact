@@ -18,5 +18,5 @@ public class UITheoryTestCaseRunner : XunitTheoryTestCaseRunner
     internal new UITheoryTestCase TestCase => (UITheoryTestCase)base.TestCase;
 
     protected override XunitTestRunner CreateTestRunner(ITest test, IMessageBus messageBus, Type testClass, object[] constructorArguments, MethodInfo testMethod, object[] testMethodArguments, string skipReason, IReadOnlyList<BeforeAfterTestAttribute> beforeAfterAttributes, ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource)
-        => new UITestRunner(test, messageBus, testClass, constructorArguments, testMethod, testMethodArguments, skipReason, beforeAfterAttributes, aggregator, cancellationTokenSource, this.threadRental);
+        => new UITestRunner(test, messageBus, finalAttempt: true, testClass, constructorArguments, testMethod, testMethodArguments, skipReason, beforeAfterAttributes, aggregator, cancellationTokenSource, this.threadRental);
 }

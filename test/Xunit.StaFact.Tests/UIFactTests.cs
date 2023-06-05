@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Reflection;
+using DesktopFactAttribute = Xunit.UIFactAttribute;
+
 public partial class UIFactTests : IDisposable, IAsyncLifetime
 {
     private readonly SynchronizationContext? ctorSyncContext;
@@ -141,4 +144,60 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
 
     [UIFact, Trait("TestCategory", "FailureExpected")]
     public void JustFailVoid() => throw new InvalidOperationException("Expected failure.");
+
+    [DesktopFact]
+    [UISettings(MaxAttempts = 2)]
+    public void AutomaticRetryNeeded()
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 1)
+        {
+            Assert.Fail("The first attempt false, but a second attempt will pass.");
+        }
+    }
+
+    [DesktopFact]
+    [UISettings(MaxAttempts = 2)]
+    public void AutomaticRetryNotNeeded()
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 0)
+        {
+            Assert.Fail("This test should not have run a second time because the first run was successful.");
+        }
+    }
+
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
+    [UISettings(MaxAttempts = 2)]
+    public void FailsAllRetries()
+    {
+        Assert.Fail("Failure expected.");
+    }
+
+    [UISettings(MaxAttempts = 2)]
+    public class ClassWithDefaultRetryPolicy
+    {
+        [DesktopFact]
+        public void AutomaticRetryNeeded()
+        {
+            if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 1)
+            {
+                Assert.Fail("The first attempt false, but a second attempt will pass.");
+            }
+        }
+
+        [DesktopFact, Trait("TestCategory", "FailureExpected")]
+        public void FailsAllRetries()
+        {
+            Assert.Fail("Failure expected.");
+        }
+
+        [DesktopFact]
+        [UISettings(MaxAttempts = 3)]
+        public void SucceedOn3rdAttempt()
+        {
+            if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 2)
+            {
+                Assert.Fail("This attempt should fail except for the 3rd attempt.");
+            }
+        }
+    }
 }

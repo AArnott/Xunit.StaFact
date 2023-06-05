@@ -21,15 +21,17 @@ public class WpfTheoryDiscoverer : TheoryDiscoverer
 
     protected override IEnumerable<IXunitTestCase> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute, object[] dataRow)
     {
+        UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
         yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WPF, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow)
+            ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WPF, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow, settings)
             : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WPF only exists on Windows.");
     }
 
     protected override IEnumerable<IXunitTestCase> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
     {
+        UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
         yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? (IXunitTestCase)new UITheoryTestCase(UITestCase.SyncContextType.WPF, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod)
+            ? (IXunitTestCase)new UITheoryTestCase(UITestCase.SyncContextType.WPF, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, settings)
             : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WPF only exists on Windows.");
     }
 }
