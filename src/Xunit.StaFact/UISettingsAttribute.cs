@@ -4,7 +4,7 @@
 namespace Xunit;
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-internal class UISettingsAttribute : Attribute
+public sealed class UISettingsAttribute : Attribute
 {
     /// <summary>
     /// Gets or sets the maximum number of retry attempts for a test.

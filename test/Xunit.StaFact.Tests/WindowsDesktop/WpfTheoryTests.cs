@@ -65,4 +65,28 @@ public class WpfTheoryTests
     [WpfTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
+
+    [WpfTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [UISettings(MaxAttempts = 2)]
+    public void WpfTheory_AutomaticRetryNeeded(int arg)
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(WpfTheoryTests), $"{nameof(this.WpfTheory_AutomaticRetryNeeded)}_{arg}") != 1)
+        {
+            Assert.Fail("The first attempt false, but a second attempt will pass.");
+        }
+    }
+
+    [WpfTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [UISettings(MaxAttempts = 2)]
+    public void WpfTheory_AutomaticRetryNotNeeded(int arg)
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(WpfTheoryTests), $"{nameof(this.WpfTheory_AutomaticRetryNeeded)}_{arg}") != 0)
+        {
+            Assert.Fail("This test should not have run a second time because the first run was successful.");
+        }
+    }
 }

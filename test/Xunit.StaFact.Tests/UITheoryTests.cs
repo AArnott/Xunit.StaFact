@@ -143,4 +143,28 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
     [UITheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
+
+    [UITheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [UISettings(MaxAttempts = 2)]
+    public void UITheory_AutomaticRetryNeeded(int arg)
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(UITheoryTests), $"{nameof(this.UITheory_AutomaticRetryNeeded)}_{arg}") != 1)
+        {
+            Assert.Fail("The first attempt false, but a second attempt will pass.");
+        }
+    }
+
+    [UITheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [UISettings(MaxAttempts = 2)]
+    public void UITheory_AutomaticRetryNotNeeded(int arg)
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(UITheoryTests), $"{nameof(this.UITheory_AutomaticRetryNeeded)}_{arg}") != 0)
+        {
+            Assert.Fail("This test should not have run a second time because the first run was successful.");
+        }
+    }
 }

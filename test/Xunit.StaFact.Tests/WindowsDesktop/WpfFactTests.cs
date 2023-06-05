@@ -79,6 +79,26 @@ public class WpfFactTests
     [DesktopFact, Trait("TestCategory", "FailureExpected")]
     public void JustFailVoid() => throw new InvalidOperationException("Expected failure.");
 
+    [DesktopFact]
+    [UISettings(MaxAttempts = 2)]
+    public void WpfFact_AutomaticRetryNeeded()
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(WpfFactTests), nameof(this.WpfFact_AutomaticRetryNeeded)) != 1)
+        {
+            Assert.Fail("The first attempt false, but a second attempt will pass.");
+        }
+    }
+
+    [DesktopFact]
+    [UISettings(MaxAttempts = 2)]
+    public void WpfFact_AutomaticRetryNotNeeded()
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(WpfFactTests), nameof(this.WpfFact_AutomaticRetryNeeded)) != 0)
+        {
+            Assert.Fail("This test should not have run a second time because the first run was successful.");
+        }
+    }
+
     private void AssertThreadCharacteristics()
     {
         Assert.IsType<DesktopSyncContext>(SynchronizationContext.Current);

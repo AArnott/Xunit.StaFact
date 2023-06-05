@@ -141,4 +141,24 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
 
     [UIFact, Trait("TestCategory", "FailureExpected")]
     public void JustFailVoid() => throw new InvalidOperationException("Expected failure.");
+
+    [UIFact]
+    [UISettings(MaxAttempts = 2)]
+    public void UIFact_AutomaticRetryNeeded()
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(UIFactTests), nameof(this.UIFact_AutomaticRetryNeeded)) != 1)
+        {
+            Assert.Fail("The first attempt false, but a second attempt will pass.");
+        }
+    }
+
+    [UIFact]
+    [UISettings(MaxAttempts = 2)]
+    public void UIFact_AutomaticRetryNotNeeded()
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(UIFactTests), nameof(this.UIFact_AutomaticRetryNeeded)) != 0)
+        {
+            Assert.Fail("This test should not have run a second time because the first run was successful.");
+        }
+    }
 }

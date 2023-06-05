@@ -38,4 +38,24 @@ public class StaFactTests
 
     [StaFact, Trait("TestCategory", "FailureExpected")]
     public void JustFailVoid() => throw new InvalidOperationException("Expected failure.");
+
+    [StaFact]
+    [UISettings(MaxAttempts = 2)]
+    public void StaFact_AutomaticRetryNeeded()
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(StaFactTests), nameof(this.StaFact_AutomaticRetryNeeded)) != 1)
+        {
+            Assert.Fail("The first attempt false, but a second attempt will pass.");
+        }
+    }
+
+    [StaFact]
+    [UISettings(MaxAttempts = 2)]
+    public void StaFact_AutomaticRetryNotNeeded()
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(StaFactTests), nameof(this.StaFact_AutomaticRetryNeeded)) != 0)
+        {
+            Assert.Fail("This test should not have run a second time because the first run was successful.");
+        }
+    }
 }

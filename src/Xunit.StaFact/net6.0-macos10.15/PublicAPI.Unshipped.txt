@@ -51,6 +51,10 @@ Xunit.StaTheoryAttribute
 Xunit.StaTheoryAttribute.StaTheoryAttribute() -> void
 Xunit.UIFactAttribute
 Xunit.UIFactAttribute.UIFactAttribute() -> void
+Xunit.UISettingsAttribute
+Xunit.UISettingsAttribute.MaxAttempts.get -> int
+Xunit.UISettingsAttribute.MaxAttempts.set -> void
+Xunit.UISettingsAttribute.UISettingsAttribute() -> void
 Xunit.UISettingsKey
 Xunit.UISettingsKey.MaxAttempts.get -> int
 Xunit.UISettingsKey.MaxAttempts.set -> void

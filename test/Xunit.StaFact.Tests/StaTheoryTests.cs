@@ -69,4 +69,28 @@ public partial class StaTheoryTests
     [StaTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
+
+    [StaTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [UISettings(MaxAttempts = 2)]
+    public void StaTheory_AutomaticRetryNeeded(int arg)
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(StaTheoryTests), $"{nameof(this.StaTheory_AutomaticRetryNeeded)}_{arg}") != 1)
+        {
+            Assert.Fail("The first attempt false, but a second attempt will pass.");
+        }
+    }
+
+    [StaTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [UISettings(MaxAttempts = 2)]
+    public void StaTheory_AutomaticRetryNotNeeded(int arg)
+    {
+        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(typeof(StaTheoryTests), $"{nameof(this.StaTheory_AutomaticRetryNeeded)}_{arg}") != 0)
+        {
+            Assert.Fail("This test should not have run a second time because the first run was successful.");
+        }
+    }
 }

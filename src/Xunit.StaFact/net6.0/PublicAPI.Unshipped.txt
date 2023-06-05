@@ -1,4 +1,8 @@
 static Xunit.UISettingsKey.Default.get -> Xunit.UISettingsKey
+Xunit.UISettingsAttribute
+Xunit.UISettingsAttribute.MaxAttempts.get -> int
+Xunit.UISettingsAttribute.MaxAttempts.set -> void
+Xunit.UISettingsAttribute.UISettingsAttribute() -> void
 Xunit.UISettingsKey
 Xunit.UISettingsKey.MaxAttempts.get -> int
 Xunit.UISettingsKey.MaxAttempts.set -> void
