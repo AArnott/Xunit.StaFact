@@ -33,8 +33,9 @@ public class StaTheoryDiscoverer : TheoryDiscoverer
             yield return new ExecutionErrorTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
         }
 
+        UISettingsKey settings = UIFactDiscoverer.GetSettings(testMethod, theoryAttribute);
         yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow)
+            ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow, settings)
             : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "STA threads only exist on Windows.");
     }
 
@@ -51,7 +52,7 @@ public class StaTheoryDiscoverer : TheoryDiscoverer
         }
 
         yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? (IXunitTestCase)new UITheoryTestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod)
+            ? (IXunitTestCase)new UITheoryTestCase(UITestCase.SyncContextType.None, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, theoryAttribute)
             : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "STA threads only exist on Windows.");
     }
 }

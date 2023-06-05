@@ -31,7 +31,6 @@ Xunit.Sdk.UITheoryDiscoverer
 Xunit.Sdk.UITheoryDiscoverer.UITheoryDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
 Xunit.Sdk.UITheoryTestCase
 Xunit.Sdk.UITheoryTestCase.UITheoryTestCase() -> void
-Xunit.Sdk.UITheoryTestCase.UITheoryTestCase(Xunit.Sdk.UITestCase.SyncContextType synchronizationContextType, Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.TestMethodDisplay defaultMethodDisplay, Xunit.Sdk.TestMethodDisplayOptions defaultMethodDisplayOptions, Xunit.Abstractions.ITestMethod! testMethod) -> void
 Xunit.Sdk.UITheoryTestCaseRunner
 Xunit.StaFactAttribute
 Xunit.StaFactAttribute.StaFactAttribute() -> void

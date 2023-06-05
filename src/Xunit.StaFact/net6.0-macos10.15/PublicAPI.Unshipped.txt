@@ -14,6 +14,7 @@ override Xunit.Sdk.UITheoryDiscoverer.CreateTestCasesForTheory(Xunit.Abstraction
 override Xunit.Sdk.UITheoryTestCase.Deserialize(Xunit.Abstractions.IXunitSerializationInfo! data) -> void
 override Xunit.Sdk.UITheoryTestCase.RunAsync(Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.IMessageBus! messageBus, object![]! constructorArguments, Xunit.Sdk.ExceptionAggregator! aggregator, System.Threading.CancellationTokenSource! cancellationTokenSource) -> System.Threading.Tasks.Task<Xunit.Sdk.RunSummary!>!
 override Xunit.Sdk.UITheoryTestCase.Serialize(Xunit.Abstractions.IXunitSerializationInfo! data) -> void
+static Xunit.UISettingsKey.Default.get -> Xunit.UISettingsKey
 Xunit.CocoaFactAttribute
 Xunit.CocoaFactAttribute.CocoaFactAttribute() -> void
 Xunit.CocoaTheoryAttribute
@@ -43,7 +44,6 @@ Xunit.Sdk.UITheoryDiscoverer
 Xunit.Sdk.UITheoryDiscoverer.UITheoryDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
 Xunit.Sdk.UITheoryTestCase
 Xunit.Sdk.UITheoryTestCase.UITheoryTestCase() -> void
-Xunit.Sdk.UITheoryTestCase.UITheoryTestCase(Xunit.Sdk.UITestCase.SyncContextType synchronizationContextType, Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.TestMethodDisplay defaultMethodDisplay, Xunit.Sdk.TestMethodDisplayOptions defaultMethodDisplayOptions, Xunit.Abstractions.ITestMethod! testMethod) -> void
 Xunit.Sdk.UITheoryTestCaseRunner
 Xunit.StaFactAttribute
 Xunit.StaFactAttribute.StaFactAttribute() -> void
@@ -51,5 +51,10 @@ Xunit.StaTheoryAttribute
 Xunit.StaTheoryAttribute.StaTheoryAttribute() -> void
 Xunit.UIFactAttribute
 Xunit.UIFactAttribute.UIFactAttribute() -> void
+Xunit.UISettingsKey
+Xunit.UISettingsKey.MaxAttempts.get -> int
+Xunit.UISettingsKey.MaxAttempts.set -> void
+Xunit.UISettingsKey.UISettingsKey() -> void
+Xunit.UISettingsKey.UISettingsKey(int MaxAttempts) -> void
 Xunit.UITheoryAttribute
 Xunit.UITheoryAttribute.UITheoryAttribute() -> void

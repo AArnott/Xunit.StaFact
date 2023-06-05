@@ -36,8 +36,9 @@ public class WpfFactDiscoverer : FactDiscoverer
             return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
         }
 
+        UISettingsKey settings = UIFactDiscoverer.GetSettings(testMethod, factAttribute);
         return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WPF, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod)
+            ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WPF, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, testMethodArguments: null, settings)
             : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WPF only exists on Windows.");
     }
 }

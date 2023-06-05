@@ -13,11 +13,14 @@ public class UITheoryTestCase : XunitTheoryTestCase
     {
     }
 
-    public UITheoryTestCase(UITestCase.SyncContextType synchronizationContextType, IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod)
+    internal UITheoryTestCase(UITestCase.SyncContextType synchronizationContextType, IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
         : base(diagnosticMessageSink, defaultMethodDisplay, defaultMethodDisplayOptions, testMethod)
     {
+        this.Settings = UIFactDiscoverer.GetSettings(testMethod, theoryAttribute);
         this.SynchronizationContextType = synchronizationContextType;
     }
+
+    internal UISettingsKey Settings { get; private set; }
 
     internal UITestCase.SyncContextType SynchronizationContextType { get; private set; }
 
@@ -25,7 +28,7 @@ public class UITheoryTestCase : XunitTheoryTestCase
     {
         using ThreadRental threadRental = await ThreadRental.CreateAsync(UITestCase.GetAdapter(this.SynchronizationContextType), this.TestMethod);
         await threadRental.SynchronizationContext;
-        return await new UITheoryTestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, diagnosticMessageSink, messageBus, aggregator, cancellationTokenSource, threadRental).RunAsync();
+        return await new UITheoryTestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, diagnosticMessageSink, messageBus, aggregator, cancellationTokenSource, this.Settings, threadRental).RunAsync();
     }
 
     public override void Deserialize(IXunitSerializationInfo data)
@@ -37,6 +40,7 @@ public class UITheoryTestCase : XunitTheoryTestCase
 
         base.Deserialize(data);
 
+        this.Settings = new UISettingsKey(data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)));
         this.SynchronizationContextType = (UITestCase.SyncContextType)Enum.Parse(typeof(UITestCase.SyncContextType), data.GetValue<string>("SyncContextType"));
     }
 
@@ -49,6 +53,7 @@ public class UITheoryTestCase : XunitTheoryTestCase
 
         base.Serialize(data);
 
+        data.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.Settings.MaxAttempts);
         data.AddValue("SyncContextType", this.SynchronizationContextType.ToString());
     }
 }

@@ -21,15 +21,16 @@ public class WinFormsTheoryDiscoverer : TheoryDiscoverer
 
     protected override IEnumerable<IXunitTestCase> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute, object[] dataRow)
     {
+        UISettingsKey settings = UIFactDiscoverer.GetSettings(testMethod, theoryAttribute);
         yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WinForms, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow)
+            ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WinForms, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow, settings)
             : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WinForms only exists on Windows.");
     }
 
     protected override IEnumerable<IXunitTestCase> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
     {
         yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? (IXunitTestCase)new UITheoryTestCase(UITestCase.SyncContextType.WinForms, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod)
+            ? (IXunitTestCase)new UITheoryTestCase(UITestCase.SyncContextType.WinForms, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, theoryAttribute)
             : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WinForms only exists on Windows.");
     }
 }
