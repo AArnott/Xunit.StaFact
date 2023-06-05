@@ -13,10 +13,10 @@ public class UITheoryTestCase : XunitTheoryTestCase
     {
     }
 
-    internal UITheoryTestCase(UITestCase.SyncContextType synchronizationContextType, IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
+    internal UITheoryTestCase(UITestCase.SyncContextType synchronizationContextType, IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod, UISettingsKey settings)
         : base(diagnosticMessageSink, defaultMethodDisplay, defaultMethodDisplayOptions, testMethod)
     {
-        this.Settings = UIFactDiscoverer.GetSettings(testMethod, theoryAttribute);
+        this.Settings = settings;
         this.SynchronizationContextType = synchronizationContextType;
     }
 
@@ -28,7 +28,9 @@ public class UITheoryTestCase : XunitTheoryTestCase
     {
         using ThreadRental threadRental = await ThreadRental.CreateAsync(UITestCase.GetAdapter(this.SynchronizationContextType), this.TestMethod);
         await threadRental.SynchronizationContext;
-        return await new UITheoryTestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, diagnosticMessageSink, messageBus, aggregator, cancellationTokenSource, this.Settings, threadRental).RunAsync();
+
+        // TODO: retry here if any test cases failed
+        return await new UITheoryTestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, diagnosticMessageSink, messageBus, aggregator, cancellationTokenSource, threadRental).RunAsync();
     }
 
     public override void Deserialize(IXunitSerializationInfo data)

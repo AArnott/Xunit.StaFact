@@ -16,25 +16,6 @@ public class UITestCase : XunitTestCase
     private SyncContextType synchronizationContextType;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="UITestCase"/> class.
-    /// </summary>
-    /// <param name="synchronizationContextType">The type of <see cref="SynchronizationContext"/> to use.</param>
-    /// <param name="diagnosticMessageSink">The message sink used to send diagnostic messages.</param>
-    /// <param name="defaultMethodDisplay">Default method display to use (when not customized).</param>
-    /// <param name="testMethod">The test method this test case belongs to.</param>
-    /// <param name="testMethodArguments">The arguments for the test method.</param>
-    [Obsolete("Call the constructor which provides UISettingsKey.")]
-    public UITestCase(
-        SyncContextType synchronizationContextType,
-        IMessageSink diagnosticMessageSink,
-        TestMethodDisplay defaultMethodDisplay,
-        ITestMethod testMethod,
-        object?[]? testMethodArguments = null)
-        : this(synchronizationContextType, diagnosticMessageSink, defaultMethodDisplay, testMethod, testMethodArguments, UISettingsKey.Default)
-    {
-    }
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="UITestCase"/> class
     /// for deserialization.
     /// </summary>

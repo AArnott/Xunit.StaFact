@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Xunit.Sdk;
@@ -77,7 +78,10 @@ public class UIFactDiscoverer : FactDiscoverer
     private static TValue GetNamedArgument<TValue>(IAttributeInfo factAttribute, IAttributeInfo[] settingsAttributes, string argumentName, Func<TValue, bool> isValidValue, Func<TValue, TValue, TValue>? merge, TValue defaultValue)
     {
         StrongBox<TValue>? result = null;
-        if (TryGetNamedArgument(factAttribute, argumentName, isValidValue, out TValue? value))
+        TValue? value;
+
+#if false // Currently the custom Fact and Theory attributes do not contain settings properties
+        if (TryGetNamedArgument(factAttribute, argumentName, isValidValue, out value))
         {
             if (merge is null)
             {
@@ -86,6 +90,7 @@ public class UIFactDiscoverer : FactDiscoverer
 
             result = new StrongBox<TValue>(value);
         }
+#endif
 
         foreach (IAttributeInfo attribute in settingsAttributes)
         {
@@ -115,7 +120,7 @@ public class UIFactDiscoverer : FactDiscoverer
 
         return defaultValue;
 
-        static bool TryGetNamedArgument(IAttributeInfo attribute, string argumentName, Func<TValue, bool> isValidValue, out TValue value)
+        static bool TryGetNamedArgument(IAttributeInfo attribute, string argumentName, Func<TValue, bool> isValidValue, [MaybeNullWhen(false)] out TValue value)
         {
             value = attribute.GetNamedArgument<TValue>(argumentName);
             return isValidValue(value);

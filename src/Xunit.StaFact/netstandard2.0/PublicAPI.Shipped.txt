@@ -22,7 +22,6 @@ Xunit.Sdk.UITestCase.SyncContextType
 Xunit.Sdk.UITestCase.SyncContextType.None = 0 -> Xunit.Sdk.UITestCase.SyncContextType
 Xunit.Sdk.UITestCase.SyncContextType.Portable = 1 -> Xunit.Sdk.UITestCase.SyncContextType
 Xunit.Sdk.UITestCase.UITestCase() -> void
-Xunit.Sdk.UITestCase.UITestCase(Xunit.Sdk.UITestCase.SyncContextType synchronizationContextType, Xunit.Abstractions.IMessageSink! diagnosticMessageSink, Xunit.Sdk.TestMethodDisplay defaultMethodDisplay, Xunit.Abstractions.ITestMethod! testMethod, object?[]? testMethodArguments = null) -> void
 Xunit.Sdk.UITestCaseRunner
 Xunit.Sdk.UITestInvoker
 Xunit.Sdk.UITestInvoker.RunAsync() -> System.Threading.Tasks.Task<decimal>!

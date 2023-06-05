@@ -25,6 +25,7 @@ public class UITheoryDiscoverer : TheoryDiscoverer
 
     protected override IEnumerable<IXunitTestCase> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
     {
-        yield return new UITheoryTestCase(UITestCase.SyncContextType.Portable, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, theoryAttribute);
+        UISettingsKey settings = UIFactDiscoverer.GetSettings(testMethod, theoryAttribute);
+        yield return new UITheoryTestCase(UITestCase.SyncContextType.Portable, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, settings);
     }
 }
