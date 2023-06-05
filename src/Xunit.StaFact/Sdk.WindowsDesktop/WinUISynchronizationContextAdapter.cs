@@ -5,6 +5,7 @@
 
 using System.Windows.Threading;
 using Microsoft.UI.Dispatching;
+using Microsoft.UI.Xaml;
 
 namespace Xunit.Sdk;
 
@@ -18,11 +19,11 @@ internal class WinUISynchronizationContextAdapter : SyncContextAdapter
 
     internal override bool CanCompleteOperations => false;
 
-    internal override SynchronizationContext Create(string name) => new DispatcherQueueSynchronizationContext(dispatcherQueue: null);
+    internal override SynchronizationContext Create(string name) => new DispatcherQueueSynchronizationContext(dispatcherQueue: new TestWindow().DispatcherQueue);
 
     internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext)
     {
-        throw new NotSupportedException("Async void test methods are not supported by the WPF dispatcher. Use Async Task instead.");
+        throw new NotSupportedException("Async void test methods are not supported by the WinUI dispatcher. Use Async Task instead.");
     }
 
     internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
@@ -39,6 +40,10 @@ internal class WinUISynchronizationContextAdapter : SyncContextAdapter
     {
         Dispatcher.CurrentDispatcher.InvokeShutdown();
         base.Cleanup();
+    }
+
+    private class TestWindow : Window
+    {
     }
 }
 

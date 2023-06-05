@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Xunit.Sdk;
 
 /// <summary>
-/// Wraps test cases for FactAttribute and TheoryAttribute so the test case runs on the WPF STA thread.
+/// Wraps test cases for FactAttribute and TheoryAttribute so the test case runs on the appropriate thread for a given UI stack.
 /// </summary>
 [DebuggerDisplay(@"\{ class = {TestMethod.TestClass.Class.Name}, method = {TestMethod.Method.Name}, display = {DisplayName}, skip = {SkipReason} \}")]
 public class UITestCase : XunitTestCase
@@ -72,6 +72,14 @@ public class UITestCase : XunitTestCase
         /// Use the <see cref="System.Windows.Forms.WindowsFormsSynchronizationContext"/>, which is only available on Desktop.
         /// </summary>
         WinForms,
+#if NET6_0_OR_GREATER
+#if WINDOWS10_0_17763_0_OR_GREATER
+        /// <summary>
+        /// Use the <see cref="Microsoft.UI.Dispatching.DispatcherQueueSynchronizationContext"/>, which is only available on Windows.
+        /// </summary>
+#endif
+        WinUI,
+#endif
 #endif
     }
 
@@ -147,6 +155,10 @@ public class UITestCase : XunitTestCase
 
             case SyncContextType.WinForms:
                 return WinFormsSynchronizationContextAdapter.Default;
+#endif
+#if WINDOWS10_0_17763_0_OR_GREATER
+            case SyncContextType.WinUI:
+                return WinUISynchronizationContextAdapter.Default;
 #endif
             default:
                 throw new NotSupportedException("Unsupported type of SynchronizationContext.");

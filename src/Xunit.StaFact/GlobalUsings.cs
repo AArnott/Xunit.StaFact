@@ -2,3 +2,4 @@
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 global using Xunit.Abstractions;
+global using Xunit.Sdk;

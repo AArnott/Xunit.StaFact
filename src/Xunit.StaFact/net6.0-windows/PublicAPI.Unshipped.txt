@@ -1,0 +1,12 @@
+override Xunit.Sdk.WinUIFactDiscoverer.CreateTestCase(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! factAttribute) -> Xunit.Sdk.IXunitTestCase!
+override Xunit.Sdk.WinUITheoryDiscoverer.CreateTestCasesForDataRow(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute, object![]! dataRow) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
+override Xunit.Sdk.WinUITheoryDiscoverer.CreateTestCasesForTheory(Xunit.Abstractions.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.Abstractions.ITestMethod! testMethod, Xunit.Abstractions.IAttributeInfo! theoryAttribute) -> System.Collections.Generic.IEnumerable<Xunit.Sdk.IXunitTestCase!>!
+Xunit.Sdk.UITestCase.SyncContextType.WinUI = 4 -> Xunit.Sdk.UITestCase.SyncContextType
+Xunit.Sdk.WinUIFactDiscoverer
+Xunit.Sdk.WinUIFactDiscoverer.WinUIFactDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
+Xunit.Sdk.WinUITheoryDiscoverer
+Xunit.Sdk.WinUITheoryDiscoverer.WinUITheoryDiscoverer(Xunit.Abstractions.IMessageSink! diagnosticMessageSink) -> void
+Xunit.WinUIFactAttribute
+Xunit.WinUIFactAttribute.WinUIFactAttribute() -> void
+Xunit.WinUITheoryAttribute
+Xunit.WinUITheoryAttribute.WinUITheoryAttribute() -> void
