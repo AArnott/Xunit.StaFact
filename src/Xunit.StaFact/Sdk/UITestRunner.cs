@@ -2,6 +2,7 @@
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.Reflection;
+using System.Text;
 
 namespace Xunit.Sdk;
 
@@ -38,18 +39,30 @@ public class UITestRunner : XunitTestRunner
         {
             if (message is ITestFailed testFailed)
             {
-                // This test will run again; report it as skipped instead of failed
-                // TODO: What kind of additional logs should we include?
-                message = new TestSkipped(testFailed.Test, "Test will automatically retry.");
+                message = ReportFailure("Test", testFailed);
             }
             else if (message is ITestCleanupFailure testCleanupFailure)
             {
-                // This test will run again; report it as skipped instead of failed
-                // TODO: What kind of additional logs should we include?
-                message = new TestSkipped(testCleanupFailure.Test, "Test will automatically retry.");
+                message = ReportFailure("Test cleanup", testCleanupFailure);
             }
 
             return this.messageBus.QueueMessage(message);
+
+            static IMessageSinkMessage ReportFailure<T>(string header, T message)
+                where T : ITestMessage, IFailureInformation
+            {
+                // This test will run again; report it as skipped instead of failed.
+                StringBuilder failures = new();
+                failures.AppendLine($"{header} failed and will automatically retry. Failure details follow:");
+
+                for (int i = 0; i < message.Messages.Length; i++)
+                {
+                    failures.AppendLine(message.Messages[i]);
+                    failures.AppendLine(message.StackTraces[i]);
+                }
+
+                return new TestSkipped(message.Test, failures.ToString());
+            }
         }
     }
 }
