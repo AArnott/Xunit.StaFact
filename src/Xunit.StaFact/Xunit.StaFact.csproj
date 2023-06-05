@@ -14,6 +14,9 @@ Simply use [WpfFact], [WinFormsFact], [StaFact] or the cross-platform [UIFact] o
 Theory variants of these attributes allow for parameterized testing. Check out the xunit.combinatorial nuget package for pairwise or combinatorial testing with theories.</Description>
     <PackageTags>STA xunit testing unit WPF WinForms testing</PackageTags>
   </PropertyGroup>
+  <ItemGroup>
+    <ExcludedCompileItems Include="@(Compile)"/>
+  </ItemGroup>
   <ItemGroup Condition="'$(TargetingWindows)'!='true'">
     <Compile Remove="Sdk.WindowsDesktop\**" />
     <Compile Remove="WindowsDesktop\**" />
@@ -21,6 +24,12 @@ Theory variants of these attributes allow for parameterized testing. Check out t
   <ItemGroup Condition="'$(TargetingMacos)'!='true'">
     <Compile Remove="Sdk.Mac\**" />
     <Compile Remove="Mac\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Remove all remaining Compile items so we know which ones were filtered out from the targeting condition. -->
+    <ExcludedCompileItems Remove="@(Compile)"/>
+    <!-- Add the filtered Compile items as None items so they are visible in IDE tooling. -->
+    <None Include="@(ExcludedCompileItems)"/>
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="$(TargetFramework)\PublicAPI.Shipped.txt" />
