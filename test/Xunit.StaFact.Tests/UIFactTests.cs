@@ -147,23 +147,11 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
 
     [DesktopFact]
     [UISettings(MaxAttempts = 2)]
-    public void AutomaticRetryNeeded()
-    {
-        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 1)
-        {
-            Assert.Fail("The first attempt false, but a second attempt will pass.");
-        }
-    }
+    public void AutomaticRetryNeeded() => MaxAttemptsHelper.ThrowUnlessAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name, 2);
 
     [DesktopFact]
     [UISettings(MaxAttempts = 2)]
-    public void AutomaticRetryNotNeeded()
-    {
-        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 0)
-        {
-            Assert.Fail("This test should not have run a second time because the first run was successful.");
-        }
-    }
+    public void AutomaticRetryNotNeeded() => MaxAttemptsHelper.ThrowUnlessAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name, 1);
 
     [DesktopFact, Trait("TestCategory", "FailureExpected")]
     [UISettings(MaxAttempts = 2)]
@@ -176,13 +164,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
     public class ClassWithDefaultRetryPolicy
     {
         [DesktopFact]
-        public void AutomaticRetryNeeded()
-        {
-            if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 1)
-            {
-                Assert.Fail("The first attempt false, but a second attempt will pass.");
-            }
-        }
+        public void AutomaticRetryNeeded() => MaxAttemptsHelper.ThrowUnlessAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name, 2);
 
         [DesktopFact, Trait("TestCategory", "FailureExpected")]
         public void FailsAllRetries()
@@ -192,12 +174,6 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
 
         [DesktopFact]
         [UISettings(MaxAttempts = 3)]
-        public void SucceedOn3rdAttempt()
-        {
-            if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name) != 2)
-            {
-                Assert.Fail("This attempt should fail except for the 3rd attempt.");
-            }
-        }
+        public void SucceedOn3rdAttempt() => MaxAttemptsHelper.ThrowUnlessAttemptNumber(this.GetType(), MethodBase.GetCurrentMethod()!.Name, 3);
     }
 }

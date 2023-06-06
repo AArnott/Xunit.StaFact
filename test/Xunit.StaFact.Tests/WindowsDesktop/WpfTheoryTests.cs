@@ -72,25 +72,13 @@ public class WpfTheoryTests
     [InlineData(0)]
     [InlineData(1)]
     [UISettings(MaxAttempts = 2)]
-    public void AutomaticRetryNeeded(int arg)
-    {
-        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), $"{MethodBase.GetCurrentMethod()!.Name}_{arg}") != 1)
-        {
-            Assert.Fail("The first attempt false, but a second attempt will pass.");
-        }
-    }
+    public void AutomaticRetryNeeded(int arg) => MaxAttemptsHelper.ThrowUnlessAttemptNumber(this.GetType(), $"{MethodBase.GetCurrentMethod()!.Name}_{arg}", 2);
 
     [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     [UISettings(MaxAttempts = 2)]
-    public void AutomaticRetryNotNeeded(int arg)
-    {
-        if (MaxAttemptsHelper.GetAndIncrementAttemptNumber(this.GetType(), $"{MethodBase.GetCurrentMethod()!.Name}_{arg}") != 0)
-        {
-            Assert.Fail("This test should not have run a second time because the first run was successful.");
-        }
-    }
+    public void AutomaticRetryNotNeeded(int arg) => MaxAttemptsHelper.ThrowUnlessAttemptNumber(this.GetType(), $"{MethodBase.GetCurrentMethod()!.Name}_{arg}", 1);
 
     [DesktopTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
