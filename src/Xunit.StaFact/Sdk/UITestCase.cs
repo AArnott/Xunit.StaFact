@@ -44,6 +44,7 @@ public class UITestCase : XunitTestCase
         : base(diagnosticMessageSink, defaultMethodDisplay, TestMethodDisplayOptions.None, testMethod, testMethodArguments)
     {
         this.settings = settings;
+        settings.ApplyTraits(this);
         this.synchronizationContextType = synchronizationContextType;
     }
 
