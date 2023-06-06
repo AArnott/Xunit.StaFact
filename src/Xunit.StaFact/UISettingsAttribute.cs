@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using Xunit.Sdk;
+
 namespace Xunit;
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
@@ -19,4 +21,19 @@ public sealed class UISettingsAttribute : Attribute
     public int MaxAttempts { get; set; }
 
     internal static UISettingsAttribute Default => new() { MaxAttempts = 1 };
+
+    /// <summary>
+    /// Applies traits to a test case based on the settings in this attribute.
+    /// </summary>
+    /// <param name="testCase">The test case to add traits to.</param>
+    internal void ApplyTraits(XunitTestCase testCase)
+    {
+        if (this.MaxAttempts > 1)
+        {
+            if (!testCase.Traits.ContainsKey("MaxAttempts"))
+            {
+                testCase.Traits.Add("MaxAttempts", new() { this.MaxAttempts.ToString() });
+            }
+        }
+    }
 }

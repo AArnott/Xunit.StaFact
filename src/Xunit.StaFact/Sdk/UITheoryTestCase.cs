@@ -17,6 +17,7 @@ public class UITheoryTestCase : XunitTheoryTestCase
         : base(diagnosticMessageSink, defaultMethodDisplay, defaultMethodDisplayOptions, testMethod)
     {
         this.Settings = settings;
+        settings.ApplyTraits(this);
         this.SynchronizationContextType = synchronizationContextType;
     }
 
