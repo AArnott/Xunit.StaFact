@@ -38,7 +38,7 @@ public class WpfFactDiscoverer : FactDiscoverer
 
         UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
         return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? (IXunitTestCase)new UITestCase(UITestCase.SyncContextType.WPF, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, testMethodArguments: null, settings)
+            ? new UITestCase(UITestCase.SyncContextType.WPF, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, testMethodArguments: null, settings)
             : new XunitSkippedDataRowTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WPF only exists on Windows.");
     }
 }
