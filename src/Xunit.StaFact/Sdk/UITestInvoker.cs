@@ -44,7 +44,7 @@ public class UITestInvoker : XunitTestInvoker
                     if (!this.CancellationTokenSource.IsCancellationRequested)
                     {
                         await this.threadRental.SynchronizationContext;
-                        await this.BeforeTestMethodInvokedAsync();
+                        await this.Aggregator.RunAsync(this.BeforeTestMethodInvokedAsync);
 
                         if (!this.CancellationTokenSource.IsCancellationRequested && !this.Aggregator.HasExceptions)
                         {
@@ -62,10 +62,19 @@ public class UITestInvoker : XunitTestInvoker
                                     else
                                     {
                                         await this.threadRental.SynchronizationContext;
-                                        var result = this.CallTestMethod(testClassInstance);
+                                        object? result = null;
+                                        try
+                                        {
+                                            result = this.CallTestMethod(testClassInstance);
+                                        }
+                                        catch (TargetInvocationException ex)
+                                        {
+                                            this.Aggregator.Add(ex.InnerException);
+                                        }
+
                                         if (result is Task task)
                                         {
-                                            await task;
+                                            await task.NoThrowAwaitable();
                                             if (task.IsFaulted)
                                             {
                                                 this.Aggregator.Add(task.Exception!.Flatten().InnerException ?? task.Exception);
