@@ -46,63 +46,66 @@ public class UITestInvoker : XunitTestInvoker
                         await this.threadRental.SynchronizationContext;
                         await this.Aggregator.RunAsync(this.BeforeTestMethodInvokedAsync);
 
-                        if (!this.CancellationTokenSource.IsCancellationRequested && !this.Aggregator.HasExceptions)
+                        if (!this.Aggregator.HasExceptions)
                         {
-                            await this.Timer.AggregateAsync(
-                                async () =>
-                                {
-                                    var parameterCount = this.TestMethod.GetParameters().Length;
-                                    var valueCount = this.TestMethodArguments == null ? 0 : this.TestMethodArguments.Length;
-                                    if (parameterCount != valueCount)
+                            if (!this.CancellationTokenSource.IsCancellationRequested)
+                            {
+                                await this.Timer.AggregateAsync(
+                                    async () =>
                                     {
-                                        this.Aggregator.Add(
-                                            new InvalidOperationException(
-                                                $"The test method expected {parameterCount} parameter value{(parameterCount == 1 ? string.Empty : "s")}, but {valueCount} parameter value{(valueCount == 1 ? string.Empty : "s")} {(valueCount == 1 ? "was" : "were")} provided."));
-                                    }
-                                    else
-                                    {
-                                        await this.threadRental.SynchronizationContext;
-                                        object? result = null;
-                                        try
+                                        var parameterCount = this.TestMethod.GetParameters().Length;
+                                        var valueCount = this.TestMethodArguments == null ? 0 : this.TestMethodArguments.Length;
+                                        if (parameterCount != valueCount)
                                         {
-                                            result = this.CallTestMethod(testClassInstance);
+                                            this.Aggregator.Add(
+                                                new InvalidOperationException(
+                                                    $"The test method expected {parameterCount} parameter value{(parameterCount == 1 ? string.Empty : "s")}, but {valueCount} parameter value{(valueCount == 1 ? string.Empty : "s")} {(valueCount == 1 ? "was" : "were")} provided."));
                                         }
-                                        catch (TargetInvocationException ex)
+                                        else
                                         {
-                                            this.Aggregator.Add(ex.InnerException);
-                                        }
+                                            await this.threadRental.SynchronizationContext;
+                                            object? result = null;
+                                            try
+                                            {
+                                                result = this.CallTestMethod(testClassInstance);
+                                            }
+                                            catch (TargetInvocationException ex)
+                                            {
+                                                this.Aggregator.Add(ex.InnerException);
+                                            }
 
-                                        if (result is Task task)
-                                        {
-                                            await task.NoThrowAwaitable();
-                                            if (task.IsFaulted)
+                                            if (result is Task task)
                                             {
-                                                this.Aggregator.Add(task.Exception!.Flatten().InnerException ?? task.Exception);
+                                                await task.NoThrowAwaitable();
+                                                if (task.IsFaulted)
+                                                {
+                                                    this.Aggregator.Add(task.Exception!.Flatten().InnerException ?? task.Exception);
+                                                }
+                                                else if (task.IsCanceled)
+                                                {
+                                                    try
+                                                    {
+                                                        // In order to get the original exception, in order to preserve the callstack,
+                                                        // we must "rethrow" the exception.
+                                                        task.GetAwaiter().GetResult();
+                                                    }
+                                                    catch (OperationCanceledException ex)
+                                                    {
+                                                        this.Aggregator.Add(ex);
+                                                    }
+                                                }
                                             }
-                                            else if (task.IsCanceled)
+                                            else if (this.threadRental.SyncContextAdapter.CanCompleteOperations)
                                             {
-                                                try
-                                                {
-                                                    // In order to get the original exception, in order to preserve the callstack,
-                                                    // we must "rethrow" the exception.
-                                                    task.GetAwaiter().GetResult();
-                                                }
-                                                catch (OperationCanceledException ex)
-                                                {
-                                                    this.Aggregator.Add(ex);
-                                                }
+                                                await this.threadRental.SyncContextAdapter.WaitForOperationCompletionAsync(this.threadRental.SynchronizationContext).ConfigureAwait(false);
                                             }
                                         }
-                                        else if (this.threadRental.SyncContextAdapter.CanCompleteOperations)
-                                        {
-                                            await this.threadRental.SyncContextAdapter.WaitForOperationCompletionAsync(this.threadRental.SynchronizationContext).ConfigureAwait(false);
-                                        }
-                                    }
-                                });
+                                    });
+                            }
+
+                            await this.threadRental.SynchronizationContext;
+                            await this.Aggregator.RunAsync(this.AfterTestMethodInvokedAsync);
                         }
-
-                        await this.threadRental.SynchronizationContext;
-                        await this.Aggregator.RunAsync(this.AfterTestMethodInvokedAsync);
                     }
 
                     if (asyncLifetime is object)
