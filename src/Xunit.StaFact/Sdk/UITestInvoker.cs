@@ -44,56 +44,68 @@ public class UITestInvoker : XunitTestInvoker
                     if (!this.CancellationTokenSource.IsCancellationRequested)
                     {
                         await this.threadRental.SynchronizationContext;
-                        await this.BeforeTestMethodInvokedAsync();
+                        await this.Aggregator.RunAsync(this.BeforeTestMethodInvokedAsync);
 
-                        if (!this.CancellationTokenSource.IsCancellationRequested && !this.Aggregator.HasExceptions)
+                        if (!this.Aggregator.HasExceptions)
                         {
-                            await this.Timer.AggregateAsync(
-                                async () =>
-                                {
-                                    var parameterCount = this.TestMethod.GetParameters().Length;
-                                    var valueCount = this.TestMethodArguments == null ? 0 : this.TestMethodArguments.Length;
-                                    if (parameterCount != valueCount)
+                            if (!this.CancellationTokenSource.IsCancellationRequested)
+                            {
+                                await this.Timer.AggregateAsync(
+                                    async () =>
                                     {
-                                        this.Aggregator.Add(
-                                            new InvalidOperationException(
-                                                $"The test method expected {parameterCount} parameter value{(parameterCount == 1 ? string.Empty : "s")}, but {valueCount} parameter value{(valueCount == 1 ? string.Empty : "s")} {(valueCount == 1 ? "was" : "were")} provided."));
-                                    }
-                                    else
-                                    {
-                                        await this.threadRental.SynchronizationContext;
-                                        var result = this.CallTestMethod(testClassInstance);
-                                        if (result is Task task)
+                                        var parameterCount = this.TestMethod.GetParameters().Length;
+                                        var valueCount = this.TestMethodArguments == null ? 0 : this.TestMethodArguments.Length;
+                                        if (parameterCount != valueCount)
                                         {
-                                            await task;
-                                            if (task.IsFaulted)
-                                            {
-                                                this.Aggregator.Add(task.Exception!.Flatten().InnerException ?? task.Exception);
-                                            }
-                                            else if (task.IsCanceled)
-                                            {
-                                                try
-                                                {
-                                                    // In order to get the original exception, in order to preserve the callstack,
-                                                    // we must "rethrow" the exception.
-                                                    task.GetAwaiter().GetResult();
-                                                }
-                                                catch (OperationCanceledException ex)
-                                                {
-                                                    this.Aggregator.Add(ex);
-                                                }
-                                            }
+                                            this.Aggregator.Add(
+                                                new InvalidOperationException(
+                                                    $"The test method expected {parameterCount} parameter value{(parameterCount == 1 ? string.Empty : "s")}, but {valueCount} parameter value{(valueCount == 1 ? string.Empty : "s")} {(valueCount == 1 ? "was" : "were")} provided."));
                                         }
-                                        else if (this.threadRental.SyncContextAdapter.CanCompleteOperations)
+                                        else
                                         {
-                                            await this.threadRental.SyncContextAdapter.WaitForOperationCompletionAsync(this.threadRental.SynchronizationContext).ConfigureAwait(false);
-                                        }
-                                    }
-                                });
-                        }
+                                            await this.threadRental.SynchronizationContext;
+                                            object? result = null;
+                                            try
+                                            {
+                                                result = this.CallTestMethod(testClassInstance);
+                                            }
+                                            catch (TargetInvocationException ex)
+                                            {
+                                                this.Aggregator.Add(ex.InnerException);
+                                            }
 
-                        await this.threadRental.SynchronizationContext;
-                        await this.Aggregator.RunAsync(this.AfterTestMethodInvokedAsync);
+                                            if (result is Task task)
+                                            {
+                                                await task.NoThrowAwaitable();
+                                                if (task.IsFaulted)
+                                                {
+                                                    this.Aggregator.Add(task.Exception!.Flatten().InnerException ?? task.Exception);
+                                                }
+                                                else if (task.IsCanceled)
+                                                {
+                                                    try
+                                                    {
+                                                        // In order to get the original exception, in order to preserve the callstack,
+                                                        // we must "rethrow" the exception.
+                                                        task.GetAwaiter().GetResult();
+                                                    }
+                                                    catch (OperationCanceledException ex)
+                                                    {
+                                                        this.Aggregator.Add(ex);
+                                                    }
+                                                }
+                                            }
+                                            else if (this.threadRental.SyncContextAdapter.CanCompleteOperations)
+                                            {
+                                                await this.threadRental.SyncContextAdapter.WaitForOperationCompletionAsync(this.threadRental.SynchronizationContext).ConfigureAwait(false);
+                                            }
+                                        }
+                                    });
+                            }
+
+                            await this.threadRental.SynchronizationContext;
+                            await this.Aggregator.RunAsync(this.AfterTestMethodInvokedAsync);
+                        }
                     }
 
                     if (asyncLifetime is object)
