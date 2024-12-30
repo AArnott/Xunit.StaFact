@@ -11,16 +11,11 @@ namespace Xunit.Sdk;
 /// </summary>
 public class StaFactDiscoverer : FactDiscoverer
 {
-    private readonly IMessageSink diagnosticMessageSink;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="StaFactDiscoverer"/> class.
     /// </summary>
-    /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
-    public StaFactDiscoverer(IMessageSink diagnosticMessageSink)
-        : base(diagnosticMessageSink)
+    public StaFactDiscoverer()
     {
-        this.diagnosticMessageSink = diagnosticMessageSink;
     }
 
     /// <inheritdoc/>
@@ -29,12 +24,6 @@ public class StaFactDiscoverer : FactDiscoverer
         if (testMethod is null)
         {
             throw new ArgumentNullException(nameof(testMethod));
-        }
-
-        if (testMethod.Method.ReturnType.Name == "System.Void" &&
-            testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
-        {
-            return new ExecutionErrorTestCase(this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
         }
 
         UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);

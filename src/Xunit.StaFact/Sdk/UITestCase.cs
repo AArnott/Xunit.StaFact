@@ -35,13 +35,22 @@ public class UITestCase : XunitTestCase
     /// <param name="settings">The test settings to apply.</param>
     /// <param name="testMethodArguments">The arguments for the test method.</param>
     internal UITestCase(
+        UISettingsAttribute settings,
         SyncContextType synchronizationContextType,
-        IMessageSink diagnosticMessageSink,
-        TestMethodDisplay defaultMethodDisplay,
-        ITestMethod testMethod,
-        object?[]? testMethodArguments,
-        UISettingsAttribute settings)
-        : base(diagnosticMessageSink, defaultMethodDisplay, TestMethodDisplayOptions.None, testMethod, testMethodArguments)
+        IXunitTestMethod testMethod,
+        string testCaseDisplayName,
+        string uniqueID,
+        bool @explicit,
+        string? skipReason = null,
+        Type? skipType = null,
+        string? skipUnless = null,
+        string? skipWhen = null,
+        Dictionary<string, HashSet<string>>? traits = null,
+        object?[]? testMethodArguments = null,
+        string? sourceFilePath = null,
+        int? sourceLineNumber = null,
+        int? timeout = null)
+        : base(testMethod, testCaseDisplayName, uniqueID, @explicit, skipReason, skipType, skipUnless, skipWhen, traits, testMethodArguments, sourceFilePath, sourceLineNumber, timeout)
     {
         this.settings = settings;
         settings.ApplyTraits(this);
@@ -82,7 +91,7 @@ public class UITestCase : XunitTestCase
 
     private SyncContextAdapter Adapter => GetAdapter(this.synchronizationContextType);
 
-    public override void Serialize(IXunitSerializationInfo data)
+    protected override void Serialize(IXunitSerializationInfo data)
     {
         if (data is null)
         {
@@ -94,7 +103,7 @@ public class UITestCase : XunitTestCase
         data.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
     }
 
-    public override void Deserialize(IXunitSerializationInfo data)
+    protected override void Deserialize(IXunitSerializationInfo data)
     {
         if (data is null)
         {
