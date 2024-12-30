@@ -14,9 +14,7 @@ public class StaTheoryDiscoverer : TheoryDiscoverer
     /// <summary>
     /// Initializes a new instance of the <see cref="StaTheoryDiscoverer"/> class.
     /// </summary>
-    /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
-    public StaTheoryDiscoverer(IMessageSink diagnosticMessageSink)
-        : base(diagnosticMessageSink)
+    public StaTheoryDiscoverer()
     {
     }
 
@@ -25,12 +23,6 @@ public class StaTheoryDiscoverer : TheoryDiscoverer
         if (testMethod is null)
         {
             throw new ArgumentNullException(nameof(testMethod));
-        }
-
-        if (testMethod.Method.ReturnType.Name == "System.Void" &&
-            testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
-        {
-            yield return new ExecutionErrorTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
         }
 
         UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
@@ -44,11 +36,6 @@ public class StaTheoryDiscoverer : TheoryDiscoverer
         if (testMethod is null)
         {
             throw new ArgumentNullException(nameof(testMethod));
-        }
-
-        if (testMethod.Method.ReturnType.Name == "System.Void" && testMethod.Method.GetCustomAttributes(typeof(AsyncStateMachineAttribute)).Any())
-        {
-            yield return new ExecutionErrorTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, "Async void methods are not supported.");
         }
 
         UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);

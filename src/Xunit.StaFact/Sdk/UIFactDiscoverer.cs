@@ -43,14 +43,14 @@ public class UIFactDiscoverer : FactDiscoverer
         return new UITestCase(UITestCase.SyncContextType.Portable, this.diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, testMethodArguments: null, settings);
     }
 
-    private static IEnumerable<IAttributeInfo> GetSettingsAttributes(ITestMethod testMethod)
+    private static IEnumerable<UISettingsAttribute> GetSettingsAttributes(IXunitTestMethod testMethod)
     {
-        if (testMethod.TestClass.Class.GetCustomAttributes(typeof(UISettingsAttribute)).SingleOrDefault() is IAttributeInfo classLevel)
+        if (testMethod.TestClass.Class.GetCustomAttributes(typeof(UISettingsAttribute), true).SingleOrDefault() is UISettingsAttribute classLevel)
         {
             yield return classLevel;
         }
 
-        if (testMethod.Method.GetCustomAttributes(typeof(UISettingsAttribute)).SingleOrDefault() is IAttributeInfo methodLevel)
+        if (testMethod.Method.GetCustomAttributes(typeof(UISettingsAttribute), true).SingleOrDefault() is UISettingsAttribute methodLevel)
         {
             yield return methodLevel;
         }

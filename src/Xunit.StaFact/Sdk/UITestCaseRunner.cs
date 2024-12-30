@@ -11,36 +11,19 @@ public class UITestCaseRunner : XunitTestCaseRunner
     /// <summary>
     /// Initializes a new instance of the <see cref="UITestCaseRunner"/> class.
     /// </summary>
-    /// <param name="testCase">The test case to be run.</param>
-    /// <param name="displayName">The display name of the test case.</param>
-    /// <param name="skipReason">The skip reason, if the test is to be skipped.</param>
-    /// <param name="constructorArguments">The arguments to be passed to the test class constructor.</param>
-    /// <param name="testMethodArguments">The arguments to be passed to the test method.</param>
-    /// <param name="messageBus">The message bus to report run status to.</param>
-    /// <param name="aggregator">The exception aggregator used to run code and collect exceptions.</param>
-    /// <param name="cancellationTokenSource">The task cancellation token source, used to cancel the test run.</param>
     /// <param name="settings">The settings to use for this test case.</param>
     /// <param name="threadRental">The <see cref="ThreadRental"/> instance to use.</param>
     internal UITestCaseRunner(
-        IXunitTestCase testCase,
-        string displayName,
-        string skipReason,
-        object[] constructorArguments,
-        object[] testMethodArguments,
-        IMessageBus messageBus,
-        ExceptionAggregator aggregator,
-        CancellationTokenSource cancellationTokenSource,
         UISettingsAttribute settings,
         ThreadRental threadRental)
-        : base(testCase, displayName, skipReason, constructorArguments, testMethodArguments, messageBus, aggregator, cancellationTokenSource)
     {
         this.settings = settings;
         this.threadRental = threadRental;
     }
 
-    protected override async Task<RunSummary> RunTestAsync()
+    protected override async ValueTask<RunSummary> RunTest(XunitTestCaseRunnerContext ctxt, IXunitTest test)
     {
-        RunSummary result = new();
+        RunSummary result = default;
         for (int i = 0; i < this.settings.MaxAttempts; i++)
         {
             bool finalAttempt = i == this.settings.MaxAttempts - 1;
