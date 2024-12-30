@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!-- The first TFM to be listed is the lucky one that determines which files show up in Solution Explorer. -->
-    <TargetFrameworks>net472;netstandard2.0;net6.0;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net472;netstandard2.0;net8.0;net8.0-windows</TargetFrameworks>
     <!-- Exclude for Linux, which does not support building macOS projects
          (see https://github.com/xamarin/xamarin-macios/issues/17287). -->
-    <TargetFrameworks Condition="!$([MSBuild]::IsOsPlatform('Linux'))">$(TargetFrameworks);net6.0-macos10.15</TargetFrameworks>
+    <TargetFrameworks Condition="!$([MSBuild]::IsOsPlatform('Linux'))">$(TargetFrameworks);net8.0-macos14.0</TargetFrameworks>
     <RootNamespace>Xunit</RootNamespace>
 
     <Description>Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms SynchronizationContext, or even a cross-platform generic UI thread emulation with a SynchronizationContext that keeps code running on a "main thread" for that test.
@@ -15,7 +15,7 @@ Theory variants of these attributes allow for parameterized testing. Check out t
     <PackageTags>STA xunit testing unit WPF WinForms testing</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <ExcludedCompileItems Include="@(Compile)"/>
+    <ExcludedCompileItems Include="@(Compile)" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetingWindows)'!='true'">
     <Compile Remove="Sdk.WindowsDesktop\**" />
@@ -27,16 +27,16 @@ Theory variants of these attributes allow for parameterized testing. Check out t
   </ItemGroup>
   <ItemGroup>
     <!-- Remove all remaining Compile items so we know which ones were filtered out from the targeting condition. -->
-    <ExcludedCompileItems Remove="@(Compile)"/>
+    <ExcludedCompileItems Remove="@(Compile)" />
     <!-- Add the filtered Compile items as None items so they are visible in IDE tooling. -->
-    <None Include="@(ExcludedCompileItems)"/>
+    <None Include="@(ExcludedCompileItems)" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="$(TargetFramework)\PublicAPI.Shipped.txt" />
     <AdditionalFiles Include="$(TargetFramework)\PublicAPI.Unshipped.txt" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="xunit.extensibility.execution" />
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" PrivateAssets="all" />
+    <PackageReference Include="xunit.extensibility.execution" />
   </ItemGroup>
 </Project>
