@@ -101,7 +101,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
     public async Task UIFact_OnSingleThreadedSyncContext()
     {
         int initialThread = Environment.CurrentManagedThreadId;
-        var syncContext = SynchronizationContext.Current;
+        SynchronizationContext? syncContext = SynchronizationContext.Current;
         await Task.Yield();
         Assert.Equal(initialThread, Environment.CurrentManagedThreadId);
         Assert.Same(syncContext, SynchronizationContext.Current);
@@ -110,7 +110,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
     [UIFact]
     public async Task SendBackFromOtherThread()
     {
-        var sc = SynchronizationContext.Current ?? throw new InvalidOperationException("No SynchronizationContext");
+        SynchronizationContext sc = SynchronizationContext.Current ?? throw new InvalidOperationException("No SynchronizationContext");
         bool delegateComplete = false;
         await Task.Run(delegate
         {
@@ -129,7 +129,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
     [UIFact]
     public async Task SendBackFromOtherThread_Throws()
     {
-        var sc = SynchronizationContext.Current ?? throw new InvalidOperationException("No SynchronizationContext");
+        SynchronizationContext sc = SynchronizationContext.Current ?? throw new InvalidOperationException("No SynchronizationContext");
         await Task.Run(delegate
         {
             Assert.Throws<System.IO.IOException>(() =>

@@ -1,18 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;net6.0;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net472</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <ExcludedCompileItems Include="@(Compile)"/>
+    <ExcludedCompileItems Include="@(Compile)" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetingWindows)'!='true'">
     <Compile Remove="WindowsDesktop\**" />
   </ItemGroup>
   <ItemGroup>
     <!-- Remove all remaining Compile items so we know which ones were filtered out from the targeting condition. -->
-    <ExcludedCompileItems Remove="@(Compile)"/>
+    <ExcludedCompileItems Remove="@(Compile)" />
     <!-- Add the filtered Compile items as None items so they are visible in IDE tooling. -->
-    <None Include="@(ExcludedCompileItems)"/>
+    <None Include="@(ExcludedCompileItems)" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />

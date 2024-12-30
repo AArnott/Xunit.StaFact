@@ -9,7 +9,7 @@ public static class Counter
 
     public static void Increment()
     {
-        var count = Interlocked.Increment(ref counter);
+        long count = Interlocked.Increment(ref counter);
         if (count > MaxCount)
         {
             throw new InvalidOperationException(

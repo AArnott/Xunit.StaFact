@@ -71,11 +71,10 @@ if (!$NoPrerequisites) {
     # The procdump tool and env var is required for dotnet test to collect hang/crash dumps of tests.
     # But it only works on Windows.
     if ($env:OS -eq 'Windows_NT') {
-        $EnvVars['PROCDUMP_PATH'] = & "$PSScriptRoot\azure-pipelines\Get-ProcDump.ps1"
+        $EnvVars['PROCDUMP_PATH'] = & "$PSScriptRoot\tools\Get-ProcDump.ps1"
     }
 
-    # Install specific macOS workload version in order to support usage on older .NET and macOS
-    dotnet workload install macos --from-rollback-file $PSScriptRoot/workloads.json
+    dotnet workload restore
 }
 
 # Workaround nuget credential provider bug that causes very unreliable package restores on Azure Pipelines
@@ -87,8 +86,7 @@ try {
     $HeaderColor = 'Green'
 
     $RestoreArguments = @()
-    if ($Interactive)
-    {
+    if ($Interactive) {
         $RestoreArguments += '--interactive'
     }
 
@@ -105,10 +103,10 @@ try {
     }
 
     if (!$NoToolRestore -and $PSCmdlet.ShouldProcess("dotnet tool", "restore")) {
-      dotnet tool restore @RestoreArguments
-      if ($lastexitcode -ne 0) {
-          throw "Failure while restoring dotnet CLI tools."
-      }
+        dotnet tool restore @RestoreArguments
+        if ($lastexitcode -ne 0) {
+            throw "Failure while restoring dotnet CLI tools."
+        }
     }
 
     & "$PSScriptRoot/tools/Set-EnvVars.ps1" -Variables $EnvVars -PrependPath $PrependPath | Out-Null
