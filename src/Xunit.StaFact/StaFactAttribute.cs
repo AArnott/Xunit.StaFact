@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using Xunit.Sdk;
@@ -15,7 +15,7 @@ namespace Xunit;
 /// To get an STA thread even after awaiting expressions, use <see cref="UIFactAttribute" />.
 /// </remarks>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-[XunitTestCaseDiscoverer("Xunit.Sdk.StaFactDiscoverer", ThisAssembly.AssemblyName)]
+[XunitTestCaseDiscoverer(typeof(StaFactDiscoverer))]
 public class StaFactAttribute : FactAttribute
 {
 }

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using Xunit.Sdk;
@@ -11,7 +11,7 @@ namespace Xunit;
 /// On Windows, the test runs on an STA thread.
 /// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-[XunitTestCaseDiscoverer("Xunit.Sdk.UITheoryDiscoverer", ThisAssembly.AssemblyName)]
+[XunitTestCaseDiscoverer(typeof(UITheoryDiscoverer))]
 public class UITheoryAttribute : TheoryAttribute
 {
 }

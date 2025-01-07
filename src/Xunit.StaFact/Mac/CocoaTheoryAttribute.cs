@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using Xunit.Sdk;
@@ -10,7 +10,7 @@ namespace Xunit;
 /// running on <see cref="Foundation.NSRunLoop.Main"/>.
 /// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-[XunitTestCaseDiscoverer("Xunit.Sdk.CocoaTheoryDiscoverer", ThisAssembly.AssemblyName)]
+[XunitTestCaseDiscoverer(typeof(CocoaTheoryDiscoverer))]
 public class CocoaTheoryAttribute : TheoryAttribute
 {
 }
