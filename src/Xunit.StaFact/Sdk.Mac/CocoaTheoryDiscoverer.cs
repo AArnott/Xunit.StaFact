@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 namespace Xunit.Sdk;
@@ -8,24 +8,17 @@ namespace Xunit.Sdk;
 /// </summary>
 public class CocoaTheoryDiscoverer : TheoryDiscoverer
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CocoaTheoryDiscoverer"/> class.
-    /// </summary>
-    /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
-    public CocoaTheoryDiscoverer(IMessageSink diagnosticMessageSink)
-        : base(diagnosticMessageSink)
-    {
-    }
-
-    protected override IEnumerable<IXunitTestCase> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute, object[] dataRow)
+    /// <inheritdoc/>
+    protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments)
     {
         UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
-        yield return new UITestCase(UITestCase.SyncContextType.Cocoa, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow, settings);
+        return new([new UITestCase(UITestCase.SyncContextType.Cocoa, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow, settings)]);
     }
 
-    protected override IEnumerable<IXunitTestCase> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
+    /// <inheritdoc/>
+    protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute)
     {
         UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
-        yield return new UITheoryTestCase(UITestCase.SyncContextType.Cocoa, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, settings);
+        return new([new UITheoryTestCase(UITestCase.SyncContextType.Cocoa, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, settings)]);
     }
 }

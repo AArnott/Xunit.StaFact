@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.ComponentModel;
@@ -13,8 +13,8 @@ public class UITheoryTestCase : XunitTheoryTestCase
     {
     }
 
-    internal UITheoryTestCase(UITestCase.SyncContextType synchronizationContextType, IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod, UISettingsAttribute settings)
-        : base(diagnosticMessageSink, defaultMethodDisplay, defaultMethodDisplayOptions, testMethod)
+    internal UITheoryTestCase(UITestCase.SyncContextType synchronizationContextType, TestMethodDisplay defaultMethodDisplay, TestMethodDisplayOptions defaultMethodDisplayOptions, ITestMethod testMethod, UISettingsAttribute settings)
+        : base(defaultMethodDisplay, defaultMethodDisplayOptions, testMethod)
     {
         this.Settings = settings;
         settings.ApplyTraits(this);
