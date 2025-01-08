@@ -11,16 +11,24 @@ public class UITheoryDiscoverer : TheoryDiscoverer
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments)
     {
-        UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
-        IXunitTestCase testCase = new UITestCase(UITestCase.SyncContextType.Portable, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow, settings);
+        IXunitTestCase testCase = UIUtilities.CreateTestCase(
+            TestCaseKind.DataRow,
+            discoveryOptions,
+            testMethod,
+            theoryAttribute,
+            testMethodArguments);
         return new([testCase]);
     }
 
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute)
     {
-        UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
-        IXunitTestCase testCase = new UITheoryTestCase(UITestCase.SyncContextType.Portable, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, settings);
+        IXunitTestCase testCase = UIUtilities.CreateTestCase(
+            TestCaseKind.DelayEnumerated,
+            discoveryOptions,
+            testMethod,
+            theoryAttribute,
+            null);
         return new([testCase]);
     }
 }

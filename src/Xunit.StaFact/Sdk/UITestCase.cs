@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.ComponentModel;
@@ -28,12 +28,21 @@ public class UITestCase : XunitTestCase
     /// <summary>
     /// Initializes a new instance of the <see cref="UITestCase"/> class.
     /// </summary>
-    /// <param name="synchronizationContextType">The type of <see cref="SynchronizationContext"/> to use.</param>
-    /// <param name="diagnosticMessageSink">The message sink used to send diagnostic messages.</param>
-    /// <param name="defaultMethodDisplay">Default method display to use (when not customized).</param>
-    /// <param name="testMethod">The test method this test case belongs to.</param>
     /// <param name="settings">The test settings to apply.</param>
-    /// <param name="testMethodArguments">The arguments for the test method.</param>
+    /// <param name="synchronizationContextType">The type of <see cref="SynchronizationContext"/> to use.</param>
+    /// <param name="testMethod">The test method this test case belongs to.</param>
+    /// <param name="testCaseDisplayName">The display name for the test case.</param>
+    /// <param name="uniqueID">The unique ID for the test case.</param>
+    /// <param name="explicit">Indicates whether the test case was marked as explicit.</param>
+    /// <param name="skipReason">The value obtained from <see cref="IFactAttribute.Skip"/>.</param>
+    /// <param name="skipType">The value obtained from <see cref="IFactAttribute.SkipType"/>.</param>
+    /// <param name="skipUnless">The value obtained from <see cref="IFactAttribute.SkipUnless"/>.</param>
+    /// <param name="skipWhen">The value obtained from <see cref="IFactAttribute.SkipWhen"/>.</param>
+    /// <param name="traits">The optional traits list.</param>
+    /// <param name="testMethodArguments">The optional arguments for the test method.</param>
+    /// <param name="sourceFilePath">The optional source file in where this test case originated.</param>
+    /// <param name="sourceLineNumber">The optional source line number where this test case originated.</param>
+    /// <param name="timeout">The optional timeout for the test case (in milliseconds).</param>
     internal UITestCase(
         UISettingsAttribute settings,
         SyncContextType synchronizationContextType,
@@ -115,7 +124,11 @@ public class UITestCase : XunitTestCase
         {
             MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)),
         };
-        this.synchronizationContextType = (SyncContextType)data.GetValue(nameof(this.synchronizationContextType), typeof(SyncContextType));
+        string? syncContextTypeName = data.GetValue<string>(nameof(this.synchronizationContextType));
+        if (syncContextTypeName is not null)
+        {
+            this.synchronizationContextType = (SyncContextType)Enum.Parse(typeof(SyncContextType), syncContextTypeName);
+        }
     }
 
     /// <inheritdoc/>
