@@ -51,6 +51,9 @@ if ($IsMacOS -or $IsLinux) {
   $frameworks += '-f', 'net8.0'
 }
 
+$testBinLog = Join-Path $ArtifactStagingFolder (Join-Path build_logs test.binlog)
+$testDiagLog = Join-Path $ArtifactStagingFolder (Join-Path test_logs diag.log)
+
 & $dotnet test $RepoRoot `
   --no-build `
   -c $Configuration `
@@ -59,8 +62,8 @@ if ($IsMacOS -or $IsLinux) {
   --settings "$PSScriptRoot/test.runsettings" `
   --blame-hang-timeout 60s `
   --blame-crash `
-  -bl:"$ArtifactStagingFolder/build_logs/test.binlog" `
-  --diag "$ArtifactStagingFolder/test_logs/diag.log;TraceLevel=info" `
+  -bl:"$testBinLog" `
+  --diag "$testDiagLog;TraceLevel=info" `
   --logger trx `
   @frameworks `
 
@@ -72,8 +75,8 @@ Get-ChildItem -Recurse -Path $RepoRoot\test\*.trx | % {
     $x = [xml](Get-Content -LiteralPath $_)
     $runTitle = $null
     if ($x.TestRun.TestDefinitions -and $x.TestRun.TestDefinitions.GetElementsByTagName('UnitTest')) {
-      $storage = $x.TestRun.TestDefinitions.GetElementsByTagName('UnitTest')[0].storage -replace '\\', '/'
-      if ($storage -match '/(?<tfm>net[^/]+)/(?:(?<rid>[^/]+)/)?(?<lib>[^/]+)\.dll$') {
+      $storage = $x.TestRun.TestDefinitions.GetElementsByTagName('UnitTest')[0].storage -replace '\\','/'
+      if ($storage -match '/(?<tfm>net[^/]+)/(?:(?<rid>[^/]+)/)?(?<lib>[^/]+)\.(dll|exe)$') {
         if ($matches.rid) {
           $runTitle = "$($matches.lib) ($($matches.tfm), $($matches.rid), $Agent)"
         }
