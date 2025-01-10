@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.Runtime.InteropServices;
@@ -44,7 +44,7 @@ internal class ThreadRental : IDisposable
     {
         var disposalTaskSource = new TaskCompletionSource<object?>();
         var syncContextSource = new TaskCompletionSource<SynchronizationContext>();
-        var threadName = $"{testMethod.TestClass.Class.Name}.{testMethod.Method.Name}";
+        var threadName = $"{testMethod.TestClass.TestClassName}.{testMethod.MethodName}";
         var thread = new Thread(() =>
         {
             SynchronizationContext uiSyncContext = syncContextAdapter.Create(threadName);

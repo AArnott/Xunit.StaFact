@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.Runtime.ExceptionServices;
@@ -199,9 +199,9 @@ internal class UISynchronizationContext : SynchronizationContext
 
         try
         {
-            if (this.aggregator is object)
+            if (this.aggregator.HasValue)
             {
-                this.aggregator.Run(() => work.Key(work.Value));
+                this.aggregator.Value.Run(() => work.Key(work.Value));
             }
             else
             {

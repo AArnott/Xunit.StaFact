@@ -5,8 +5,11 @@ using System.ComponentModel;
 
 namespace Xunit.Sdk;
 
-public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase
+public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase, ISelfExecutingXunitTestCase
 {
+    private UISettingsAttribute settings = UISettingsAttribute.Default;
+    private UITestCase.SyncContextType synchronizationContextType;
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
     public UIDelayEnumeratedTestCase()
@@ -31,39 +34,31 @@ public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase
         int? timeout = null)
         : base(testMethod, testCaseDisplayName, uniqueID, @explicit, skipTestWithoutData, skipReason, skipType, skipUnless, skipWhen, traits, sourceFilePath, sourceLineNumber, timeout)
     {
-        this.Settings = settings;
-        this.SynchronizationContextType = synchronizationContextType;
+        this.settings = settings;
+        this.synchronizationContextType = synchronizationContextType;
     }
 
-    internal UISettingsAttribute Settings { get; private set; } = UISettingsAttribute.Default;
-
-    internal UITestCase.SyncContextType SynchronizationContextType { get; private set; }
-
-    public Task<RunSummary> RunAsync(IMessageSink diagnosticMessageSink, IMessageBus messageBus, object[] constructorArguments, ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource)
+    public ValueTask<RunSummary> Run(
+       ExplicitOption explicitOption,
+       IMessageBus messageBus,
+       object?[] constructorArguments,
+       ExceptionAggregator aggregator,
+       CancellationTokenSource cancellationTokenSource)
     {
-        using ThreadRental threadRental = await ThreadRental.CreateAsync(UITestCase.GetAdapter(this.SynchronizationContextType), this.TestMethod);
-        await threadRental.SynchronizationContext;
-
-        // TODO: retry here if any test cases failed
-        return await new UITestCaseRunner(this, this.DisplayName, this.SkipReason, constructorArguments, diagnosticMessageSink, messageBus, aggregator, cancellationTokenSource, threadRental).RunAsync();
-    }
-
-    protected override void Deserialize(IXunitSerializationInfo data)
-    {
-        if (data is null)
+        if (cancellationTokenSource is null)
         {
-            throw new ArgumentNullException(nameof(data));
+            throw new ArgumentNullException(nameof(cancellationTokenSource));
         }
 
-        base.Deserialize(data);
-
-        this.Settings = new UISettingsAttribute() { MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)) };
-
-        string? syncContextTypeName = data.GetValue<string>("SyncContextType");
-        if (syncContextTypeName is not null)
-        {
-            this.SynchronizationContextType = (UITestCase.SyncContextType)Enum.Parse(typeof(UITestCase.SyncContextType), syncContextTypeName);
-        }
+        return UITestCaseRunner.Run(
+            this,
+            UITestCase.GetAdapter(this.synchronizationContextType),
+            this.settings,
+            explicitOption,
+            messageBus,
+            constructorArguments,
+            aggregator,
+            cancellationTokenSource);
     }
 
     protected override void Serialize(IXunitSerializationInfo data)
@@ -74,8 +69,26 @@ public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase
         }
 
         base.Serialize(data);
+        data.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.settings.MaxAttempts);
+        data.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
+    }
 
-        data.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.Settings.MaxAttempts);
-        data.AddValue("SyncContextType", this.SynchronizationContextType.ToString());
+    protected override void Deserialize(IXunitSerializationInfo data)
+    {
+        if (data is null)
+        {
+            throw new ArgumentNullException(nameof(data));
+        }
+
+        base.Deserialize(data);
+        this.settings = new()
+        {
+            MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)),
+        };
+        string? syncContextTypeName = data.GetValue<string>(nameof(this.synchronizationContextType));
+        if (syncContextTypeName is not null)
+        {
+            this.synchronizationContextType = (UITestCase.SyncContextType)Enum.Parse(typeof(UITestCase.SyncContextType), syncContextTypeName);
+        }
     }
 }
