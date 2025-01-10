@@ -76,6 +76,8 @@ internal static class Utilities
             timeout: details.Timeout);
     }
 
+    internal static SyncContextAwaiter GetAwaiter(this SynchronizationContext synchronizationContext) => new SyncContextAwaiter(synchronizationContext);
+
     private static UISettingsAttribute GetSettings(IXunitTestMethod testMethod)
     {
         // Initialize with defaults.
@@ -102,8 +104,6 @@ internal static class Utilities
             yield return methodLevel;
         }
     }
-
-    internal static SyncContextAwaiter GetAwaiter(this SynchronizationContext synchronizationContext) => new SyncContextAwaiter(synchronizationContext);
 
     internal struct SyncContextAwaiter : ICriticalNotifyCompletion
     {
