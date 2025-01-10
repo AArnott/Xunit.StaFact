@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.Reflection;
@@ -22,7 +22,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
     }
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
@@ -31,7 +31,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
