@@ -79,36 +79,6 @@ internal class UISynchronizationContext : SynchronizationContext
         }
     }
 
-    public async Task WaitForOperationCompletionAsync()
-    {
-        while (this.AnyPendingOperations || this.AnyMessagesInQueue)
-        {
-            await this.workItemDone.WaitAsync().ConfigureAwait(false);
-        }
-    }
-
-    /// <inheritdoc />
-    public override void OperationStarted()
-    {
-        Interlocked.Increment(ref this.activeOperations);
-    }
-
-    /// <inheritdoc />
-    public override void OperationCompleted()
-    {
-        int result = Interlocked.Decrement(ref this.activeOperations);
-        if (result == 0)
-        {
-            // Give any message waiter a heads up that the operation count has reached zero,
-            // in case the queue is empty at the same time the operation count is, which
-            // is usually a sign to return to its caller.
-            lock (this.messageQueue)
-            {
-                Monitor.Pulse(this.messageQueue);
-            }
-        }
-    }
-
     /// <inheritdoc />
     public override void Post(SendOrPostCallback d, object? state)
     {
@@ -225,8 +195,6 @@ internal class UISynchronizationContext : SynchronizationContext
         }
 
         internal override SynchronizationContext Create(string name) => new UISynchronizationContext(name, this.ShouldSetAsCurrent);
-
-        internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext) => ((UISynchronizationContext)syncContext).WaitForOperationCompletionAsync();
 
         internal override void PumpTill(SynchronizationContext syncContext, Task task)
         {

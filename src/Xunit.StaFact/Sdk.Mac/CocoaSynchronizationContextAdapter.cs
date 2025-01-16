@@ -11,11 +11,7 @@ internal class CocoaSynchronizationContextAdapter : SyncContextAdapter
     {
     }
 
-    internal override bool CanCompleteOperations => true;
-
     internal override SynchronizationContext Create(string name) => new CocoaSynchronizationContext(name, this.ShouldSetAsCurrent);
-
-    internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext) => ((CocoaSynchronizationContext)syncContext).WaitForOperationCompletionAsync();
 
     internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
     {

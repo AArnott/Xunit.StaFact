@@ -20,14 +20,7 @@ internal class WinFormsSynchronizationContextAdapter : SyncContextAdapter
     {
     }
 
-    internal override bool CanCompleteOperations => false;
-
     internal override SynchronizationContext Create(string name) => new WindowsFormsSynchronizationContext();
-
-    internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext)
-    {
-        throw new NotSupportedException("Async void test methods are not supported by the WinForms dispatcher. Use Async Task instead.");
-    }
 
     internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
     {

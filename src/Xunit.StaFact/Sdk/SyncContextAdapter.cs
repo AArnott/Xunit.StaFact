@@ -9,12 +9,6 @@ namespace Xunit.Sdk;
 /// </summary>
 internal abstract class SyncContextAdapter
 {
-    /// <summary>
-    /// Gets a value indicating whether async void methods are supported.
-    /// </summary>
-    /// <value><see langword="true"/> if <see cref="WaitForOperationCompletionAsync(SynchronizationContext)"/> can be invoked.</value>
-    internal virtual bool CanCompleteOperations => true;
-
     internal virtual bool ShouldSetAsCurrent => true;
 
     /// <summary>
@@ -37,12 +31,6 @@ internal abstract class SyncContextAdapter
     /// <param name="syncContext">The <see cref="SynchronizationContext"/> returned from <see cref="Create"/>.</param>
     /// <param name="task">The task to wait on.</param>
     internal abstract void PumpTill(SynchronizationContext syncContext, Task task);
-
-    /// <summary>
-    /// Returns a <see cref="Task"/> that completes when all pending operations have completed.
-    /// </summary>
-    /// <returns>A <see cref="Task"/> that completes when all pending operations have completed.</returns>
-    internal abstract Task WaitForOperationCompletionAsync(SynchronizationContext syncContext);
 
     /// <summary>
     /// Clean up this instance.

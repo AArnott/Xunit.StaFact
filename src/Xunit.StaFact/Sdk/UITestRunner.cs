@@ -97,15 +97,6 @@ public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
                                 {
                                     await ctxt.ThreadRental.SynchronizationContext;
                                     TimeSpan invokeTime = await this.InvokeTest(ctxt, testClassInstance);
-
-                                    if (ctxt.ThreadRental.SyncContextAdapter.CanCompleteOperations)
-                                    {
-                                        invokeTime += await ExecutionTimer.MeasureAsync(async () =>
-                                        {
-                                            await ctxt.ThreadRental.SyncContextAdapter.WaitForOperationCompletionAsync(ctxt.ThreadRental.SynchronizationContext).ConfigureAwait(false);
-                                        });
-                                    }
-
                                     return invokeTime;
                                 },
                                 TimeSpan.Zero);
