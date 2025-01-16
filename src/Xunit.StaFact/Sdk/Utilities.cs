@@ -72,7 +72,7 @@ internal static class Utilities
             details.SkipUnless,
             details.SkipWhen,
             traits,
-            null,
+            testMethodArguments,
             timeout: details.Timeout);
     }
 
