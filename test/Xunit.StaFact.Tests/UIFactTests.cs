@@ -56,28 +56,28 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
     }
 
     [UIFact]
-    public async void PassAfterYield()
+    public async Task PassAfterYield()
     {
         // This will post to the SynchronizationContext before yielding.
         await Task.Yield();
     }
 
     [UIFact]
-    public async void PassAfterDelay()
+    public async Task PassAfterDelay()
     {
         // This won't post to the SynchronizationContext till after the delay.
         await Task.Delay(10);
     }
 
     [UIFact, Trait("TestCategory", "FailureExpected")]
-    public async void FailAfterYield()
+    public async Task FailAfterYield()
     {
         await Task.Yield();
         Assert.False(true);
     }
 
     [UIFact, Trait("TestCategory", "FailureExpected")]
-    public async void FailAfterDelay()
+    public async Task FailAfterDelay()
     {
         await Task.Delay(10);
         Assert.False(true);

@@ -61,7 +61,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
 
     [UITheory]
     [InlineData(0)]
-    public async void PassAfterYield(int arg)
+    public async Task PassAfterYield(int arg)
     {
         // This will post to the SynchronizationContext before yielding.
         await Task.Yield();
@@ -70,7 +70,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
 
     [UITheory]
     [InlineData(0)]
-    public async void PassAfterDelay(int arg)
+    public async Task PassAfterDelay(int arg)
     {
         // This won't post to the SynchronizationContext till after the delay.
         await Task.Delay(10);
@@ -79,7 +79,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
 
     [UITheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
-    public async void FailAfterYield(int arg)
+    public async Task FailAfterYield(int arg)
     {
         await Task.Yield();
         Assert.Equal(1, arg);
@@ -87,7 +87,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
 
     [UITheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
-    public async void FailAfterDelay(int arg)
+    public async Task FailAfterDelay(int arg)
     {
         await Task.Delay(10);
         Assert.Equal(1, arg);
