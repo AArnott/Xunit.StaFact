@@ -75,9 +75,7 @@ public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
 
             async void RunTest(object? state)
             {
-                // At this point, xUnit would set the synchronization context to
-                // the one that was used when creating the test class. We have
-                // our synchronization context that we use, so we don't do that.
+                SynchronizationContext.SetSynchronizationContext(syncContext);
                 this.UpdateTestContext(testClassInstance);
 
                 try
