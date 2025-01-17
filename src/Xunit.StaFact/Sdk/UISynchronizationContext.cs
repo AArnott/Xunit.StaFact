@@ -15,7 +15,6 @@ internal class UISynchronizationContext : SynchronizationContext
     private readonly AsyncAutoResetEvent workItemDone = new AsyncAutoResetEvent();
     private readonly string name;
     private readonly bool shouldSetAsCurrent;
-    private int activeOperations;
     private bool pumping;
     private bool pumpingEnded;
     private ExceptionAggregator? aggregator;
