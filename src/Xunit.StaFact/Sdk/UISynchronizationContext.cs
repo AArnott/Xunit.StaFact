@@ -31,19 +31,6 @@ internal class UISynchronizationContext : SynchronizationContext
 
     internal bool IsInContext => this.mainThread == Environment.CurrentManagedThreadId;
 
-    private bool AnyMessagesInQueue
-    {
-        get
-        {
-            lock (this.messageQueue)
-            {
-                return this.messageQueue.Count > 0;
-            }
-        }
-    }
-
-    private bool AnyPendingOperations => Volatile.Read(ref this.activeOperations) > 0;
-
     /// <summary>
     /// Blocks the calling thread to pump messages until a task has completed.
     /// </summary>
