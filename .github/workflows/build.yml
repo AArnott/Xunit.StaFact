@@ -51,7 +51,7 @@ jobs:
       run: tools/dotnet-test-cloud.ps1 -Configuration ${{ env.BUILDCONFIGURATION }} -Agent ${{ runner.os }}
       shell: pwsh
     - name: 🧪 mac-specific test
-      run: dotnet build -c ${{ env.BUILDCONFIGURATION }} -t:Test -p:BuildProjectReferences=false
+      run: dotnet build -c ${{ env.BUILDCONFIGURATION }} -t:Test -p:BuildProjectReferences=false -p:TestLogs="${{ runner.temp }}/_artifacts/test_logs/" -bl:"${{ runner.temp }}/_artifacts/build_logs/macos-test.binlog"
       working-directory: test/Xunit.StaFact.Tests.Mac
       if: success() && runner.os == 'macos'
     - name: 💅🏻 Verify formatted code
