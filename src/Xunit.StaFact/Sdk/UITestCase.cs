@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using static Xunit.Sdk.UISynchronizationContext;
 
 namespace Xunit.Sdk;
 
@@ -157,7 +156,7 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
 
         base.Serialize(data);
         data.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.settings.MaxAttempts);
-        data.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
+        data.AddValue(nameof(this.synchronizationContextType), (int)this.synchronizationContextType);
     }
 
     protected override void Deserialize(IXunitSerializationInfo data)
@@ -172,11 +171,7 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
         {
             MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)),
         };
-        string? syncContextTypeName = data.GetValue<string>(nameof(this.synchronizationContextType));
-        if (syncContextTypeName is not null)
-        {
-            this.synchronizationContextType = (SyncContextType)Enum.Parse(typeof(SyncContextType), syncContextTypeName);
-        }
+        this.synchronizationContextType = (SyncContextType)data.GetValue<int>(nameof(this.synchronizationContextType));
     }
 
     private class NullAdapter : UISynchronizationContext.Adapter
