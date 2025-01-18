@@ -1,7 +1,5 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
-
-using System.Runtime.InteropServices;
 
 namespace Xunit.Sdk;
 
@@ -10,28 +8,25 @@ namespace Xunit.Sdk;
 /// </summary>
 public class WinFormsTheoryDiscoverer : TheoryDiscoverer
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="WinFormsTheoryDiscoverer"/> class.
-    /// </summary>
-    /// <param name="diagnosticMessageSink">The diagnostic message sink.</param>
-    public WinFormsTheoryDiscoverer(IMessageSink diagnosticMessageSink)
-        : base(diagnosticMessageSink)
+    /// <inheritdoc/>
+    protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments)
     {
+        IXunitTestCase testCase = WinFormsUtilities.CreateTestCaseForDataRow(
+            discoveryOptions,
+            testMethod,
+            theoryAttribute,
+            dataRow,
+            testMethodArguments);
+        return new([testCase]);
     }
 
-    protected override IEnumerable<IXunitTestCase> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute, object[] dataRow)
+    /// <inheritdoc/>
+    protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute)
     {
-        UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
-        yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? new UITestCase(UITestCase.SyncContextType.WinForms, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), testMethod, dataRow, settings)
-            : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WinForms only exists on Windows.");
-    }
-
-    protected override IEnumerable<IXunitTestCase> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod, IAttributeInfo theoryAttribute)
-    {
-        UISettingsAttribute settings = UIFactDiscoverer.GetSettings(testMethod);
-        yield return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? new UITheoryTestCase(UITestCase.SyncContextType.WinForms, this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), TestMethodDisplayOptions.None, testMethod, settings)
-            : new XunitSkippedDataRowTestCase(this.DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod, "WinForms only exists on Windows.");
+        IXunitTestCase testCase = WinFormsUtilities.CreateTestCaseForTheory(
+            discoveryOptions,
+            testMethod,
+            theoryAttribute);
+        return new([testCase]);
     }
 }

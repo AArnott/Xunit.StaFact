@@ -9,8 +9,8 @@
 			"groupName": "nbgv and nerdbank.gitversioning updates"
 		},
 		{
-			"matchPackageNames": ["xunit.extensibility.execution", "xunit"],
-			"allowedVersions": "<=2.4.2"
+			"matchPackageNames": ["xunit*"],
+			"groupName": "xunit"
 		},
 		{
 			"matchDatasources": ["dotnet-version", "docker"],

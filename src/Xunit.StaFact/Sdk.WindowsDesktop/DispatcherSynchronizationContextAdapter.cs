@@ -13,14 +13,7 @@ internal class DispatcherSynchronizationContextAdapter : SyncContextAdapter
     {
     }
 
-    internal override bool CanCompleteOperations => false;
-
     internal override SynchronizationContext Create(string name) => new DispatcherSynchronizationContext();
-
-    internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext)
-    {
-        throw new NotSupportedException("Async void test methods are not supported by the WPF dispatcher. Use Async Task instead.");
-    }
 
     internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
     {

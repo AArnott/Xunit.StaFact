@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.Windows.Threading;
@@ -12,7 +12,7 @@ namespace Xunit;
 /// Tests will be Skipped on non-Windows operating systems.
 /// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-[XunitTestCaseDiscoverer("Xunit.Sdk.WpfFactDiscoverer", ThisAssembly.AssemblyName)]
+[XunitTestCaseDiscoverer(typeof(WpfFactDiscoverer))]
 public class WpfFactAttribute : FactAttribute
 {
 }

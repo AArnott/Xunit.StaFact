@@ -37,6 +37,6 @@ Theory variants of these attributes allow for parameterized testing. Check out t
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" PrivateAssets="all" />
-    <PackageReference Include="xunit.extensibility.execution" />
+    <PackageReference Include="xunit.v3.extensibility.core" />
   </ItemGroup>
 </Project>

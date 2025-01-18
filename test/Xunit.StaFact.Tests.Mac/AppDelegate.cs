@@ -2,6 +2,7 @@
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.Runtime.InteropServices;
+using Xunit.Runner.InProc.SystemConsole;
 
 namespace Xunit.StaFact.Tests.Mac;
 
@@ -21,13 +22,7 @@ public class AppDelegate : NSApplicationDelegate
 
     public override void DidFinishLaunching(NSNotification notification)
     {
-        // Disable AppDomain support since we need all tests to run
-        // in the main app domain to be able to run on or dispatch to
-        // the main thread.
-        this.unitTestDriverArguments.Add("-appdomains");
-        this.unitTestDriverArguments.Add("denied");
-
-        // We also cannot run tests in parallel since our tests depend
+        // We cannot run tests in parallel since our tests depend
         // on ordered execution on the main thread.
         this.unitTestDriverArguments.Add("-parallel");
         this.unitTestDriverArguments.Add("none");
@@ -36,7 +31,7 @@ public class AppDelegate : NSApplicationDelegate
 
         ThreadPool.QueueUserWorkItem(o =>
         {
-            var exitCode = Xunit.ConsoleClient.Program.Main(args);
+            var exitCode = ConsoleRunner.Run(args).GetAwaiter().GetResult();
             _exit(exitCode);
         });
     }

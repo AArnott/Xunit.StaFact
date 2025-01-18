@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.Runtime.ExceptionServices;
@@ -15,7 +15,6 @@ internal class UISynchronizationContext : SynchronizationContext
     private readonly AsyncAutoResetEvent workItemDone = new AsyncAutoResetEvent();
     private readonly string name;
     private readonly bool shouldSetAsCurrent;
-    private int activeOperations;
     private bool pumping;
     private bool pumpingEnded;
     private ExceptionAggregator? aggregator;
@@ -30,19 +29,6 @@ internal class UISynchronizationContext : SynchronizationContext
     }
 
     internal bool IsInContext => this.mainThread == Environment.CurrentManagedThreadId;
-
-    private bool AnyMessagesInQueue
-    {
-        get
-        {
-            lock (this.messageQueue)
-            {
-                return this.messageQueue.Count > 0;
-            }
-        }
-    }
-
-    private bool AnyPendingOperations => Volatile.Read(ref this.activeOperations) > 0;
 
     /// <summary>
     /// Blocks the calling thread to pump messages until a task has completed.
@@ -76,36 +62,6 @@ internal class UISynchronizationContext : SynchronizationContext
         {
             this.pumping = false;
             this.pumpingEnded = true;
-        }
-    }
-
-    public async Task WaitForOperationCompletionAsync()
-    {
-        while (this.AnyPendingOperations || this.AnyMessagesInQueue)
-        {
-            await this.workItemDone.WaitAsync().ConfigureAwait(false);
-        }
-    }
-
-    /// <inheritdoc />
-    public override void OperationStarted()
-    {
-        Interlocked.Increment(ref this.activeOperations);
-    }
-
-    /// <inheritdoc />
-    public override void OperationCompleted()
-    {
-        int result = Interlocked.Decrement(ref this.activeOperations);
-        if (result == 0)
-        {
-            // Give any message waiter a heads up that the operation count has reached zero,
-            // in case the queue is empty at the same time the operation count is, which
-            // is usually a sign to return to its caller.
-            lock (this.messageQueue)
-            {
-                Monitor.Pulse(this.messageQueue);
-            }
         }
     }
 
@@ -199,9 +155,9 @@ internal class UISynchronizationContext : SynchronizationContext
 
         try
         {
-            if (this.aggregator is object)
+            if (this.aggregator.HasValue)
             {
-                this.aggregator.Run(() => work.Key(work.Value));
+                this.aggregator.Value.Run(() => work.Key(work.Value));
             }
             else
             {
@@ -225,8 +181,6 @@ internal class UISynchronizationContext : SynchronizationContext
         }
 
         internal override SynchronizationContext Create(string name) => new UISynchronizationContext(name, this.ShouldSetAsCurrent);
-
-        internal override Task WaitForOperationCompletionAsync(SynchronizationContext syncContext) => ((UISynchronizationContext)syncContext).WaitForOperationCompletionAsync();
 
         internal override void PumpTill(SynchronizationContext syncContext, Task task)
         {

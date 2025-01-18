@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove($(MSBuildThisFile), $(MSBuildThisFileDirectory)..))" />
+
+  <!--
+  The `xUnit` package has a transitive dependency on `Microsoft.Testing.Platform.MSBuild`.
+  That package adds build files that cause a `Test` target to be defined. If we define our
+  own `Test` target in the project file, then it will be overridden by the one from
+  `Microsoft.Testing.Platform.MSBuild` because the build files from that package are
+  automatically included at the end of our project file. To ensure that our `Test` target
+  is used, we need to define it in this file because this file will be automatically
+  included _after_ the build files from `Microsoft.Testing.Platform.MSBuild`.
+  -->
+  <Target Name="Test" DependsOnTargets="Build">
+    <PropertyGroup>
+      <_AppExePath>$(PartialTargetPath)/Xunit.StaFact.Tests.Mac.app/Contents/MacOS/Xunit.StaFact.Tests.Mac</_AppExePath>
+      <_TestLogs>$(TestLogs)</_TestLogs>
+      <_TestLogs Condition="'$(_TestLogs)'==''">$(RepoRootPath)test_logs/</_TestLogs>
+    </PropertyGroup>
+    <Exec Command="&quot;$(_AppExePath)&quot; -xml &quot;$(_TestLogs)$(TargetName).xml&quot;" />
+  </Target>
+</Project>

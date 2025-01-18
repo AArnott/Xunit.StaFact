@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.Reflection;
@@ -22,7 +22,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
     }
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
@@ -31,7 +31,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
@@ -56,28 +56,28 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
     }
 
     [UIFact]
-    public async void PassAfterYield()
+    public async Task PassAfterYield()
     {
         // This will post to the SynchronizationContext before yielding.
         await Task.Yield();
     }
 
     [UIFact]
-    public async void PassAfterDelay()
+    public async Task PassAfterDelay()
     {
         // This won't post to the SynchronizationContext till after the delay.
         await Task.Delay(10);
     }
 
     [UIFact, Trait("TestCategory", "FailureExpected")]
-    public async void FailAfterYield()
+    public async Task FailAfterYield()
     {
         await Task.Yield();
         Assert.False(true);
     }
 
     [UIFact, Trait("TestCategory", "FailureExpected")]
-    public async void FailAfterDelay()
+    public async Task FailAfterDelay()
     {
         await Task.Delay(10);
         Assert.False(true);

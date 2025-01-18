@@ -1,68 +1,141 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
-
-using System.Reflection;
-using System.Text;
 
 namespace Xunit.Sdk;
 
-public class UITestRunner : XunitTestRunner
+public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
 {
-    private readonly ThreadRental threadRental;
+    public static UITestRunner Instance { get; } = new();
 
-    internal UITestRunner(ITest test, IMessageBus messageBus, bool finalAttempt, Type testClass, object[] constructorArguments, MethodInfo testMethod, object[] testMethodArguments, string skipReason, IReadOnlyList<BeforeAfterTestAttribute> beforeAfterAttributes, ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource, ThreadRental threadRental)
-        : base(test, finalAttempt ? messageBus : new FilteringMessageBus(messageBus), testClass, constructorArguments, testMethod, testMethodArguments, skipReason, beforeAfterAttributes, aggregator, cancellationTokenSource)
+    internal async ValueTask<RunSummary> Run(
+        UISettingsAttribute settings,
+        ThreadRental threadRental,
+        IXunitTest test,
+        IMessageBus messageBus,
+        object?[] constructorArguments,
+        ExplicitOption explicitOption,
+        ExceptionAggregator aggregator,
+        CancellationTokenSource cancellationTokenSource,
+        IReadOnlyCollection<IBeforeAfterTestAttribute> beforeAfterAttributes)
     {
-        this.threadRental = threadRental;
+        await using UITestRunnerContext ctxt = new(
+            settings,
+            threadRental,
+            test,
+            messageBus,
+            explicitOption,
+            aggregator,
+            cancellationTokenSource,
+            beforeAfterAttributes,
+            constructorArguments);
+
+        await ctxt.InitializeAsync();
+
+        return await this.Run(ctxt);
     }
 
-    protected override Task<decimal> InvokeTestMethodAsync(ExceptionAggregator aggregator)
+    protected async override ValueTask<TimeSpan> RunTest(UITestRunnerContext ctxt)
     {
-        return new UITestInvoker(this.Test, this.MessageBus, this.TestClass, this.ConstructorArguments, this.TestMethod, this.TestMethodArguments, this.BeforeAfterAttributes, aggregator, this.CancellationTokenSource, this.threadRental).RunAsync();
-    }
-
-    private sealed class FilteringMessageBus : IMessageBus
-    {
-        private readonly IMessageBus messageBus;
-
-        public FilteringMessageBus(IMessageBus messageBus)
+        if (ctxt is null)
         {
-            this.messageBus = messageBus;
+            throw new ArgumentNullException(nameof(ctxt));
         }
 
-        public void Dispose()
+        if (ctxt.ThreadRental.SynchronizationContext is UISynchronizationContext uiSyncContext)
         {
-            this.messageBus.Dispose();
+            uiSyncContext.SetExceptionAggregator(ctxt.Aggregator);
         }
 
-        public bool QueueMessage(IMessageSinkMessage message)
+        object? testClassInstance = null;
+        TimeSpan elapsedTime = TimeSpan.Zero;
+
+        if (!ctxt.Aggregator.HasExceptions)
         {
-            if (message is ITestFailed testFailed)
+            SynchronizationContext? syncContext = null;
+            ExecutionContext? executionContext = null;
+
+            elapsedTime += await ExecutionTimer.MeasureAsync(() => ctxt.Aggregator.RunAsync(async () =>
             {
-                message = ReportFailure("Test", testFailed);
+                await ctxt.ThreadRental.SynchronizationContext;
+                (testClassInstance, syncContext, executionContext) = await this.CreateTestClassInstance(ctxt);
+            }));
+
+            TaskCompletionSource<object?> finished = new();
+
+            if (executionContext is not null)
+            {
+                ExecutionContext.Run(executionContext, RunTest, null);
             }
-            else if (message is ITestCleanupFailure testCleanupFailure)
+            else
             {
-                message = ReportFailure("Test cleanup", testCleanupFailure);
+                RunTest(null);
             }
 
-            return this.messageBus.QueueMessage(message);
+            await finished.Task;
 
-            static IMessageSinkMessage ReportFailure<T>(string header, T message)
-                where T : ITestMessage, IFailureInformation
+            async void RunTest(object? state)
             {
-                // This test will run again; report it as skipped instead of failed.
-                StringBuilder failures = new();
-                failures.AppendLine($"{header} failed and will automatically retry. Failure details follow:");
+                SynchronizationContext.SetSynchronizationContext(syncContext);
+                this.UpdateTestContext(testClassInstance);
 
-                for (int i = 0; i < message.Messages.Length; i++)
+                try
                 {
-                    failures.AppendLine(message.Messages[i]);
-                    failures.AppendLine(message.StackTraces[i]);
-                }
+                    if (!ctxt.Aggregator.HasExceptions)
+                    {
+                        elapsedTime += await ExecutionTimer.MeasureAsync(async () =>
+                        {
+                            await ctxt.ThreadRental.SynchronizationContext;
+                            ctxt.Aggregator.Run(() => this.PreInvoke(ctxt));
+                        });
 
-                return new TestSkipped(message.Test, failures.ToString());
+                        if (!ctxt.Aggregator.HasExceptions)
+                        {
+                            elapsedTime += await ctxt.Aggregator.RunAsync(
+                                async () =>
+                                {
+                                    await ctxt.ThreadRental.SynchronizationContext;
+                                    TimeSpan invokeTime = await this.InvokeTest(ctxt, testClassInstance);
+                                    return invokeTime;
+                                },
+                                TimeSpan.Zero);
+
+                            // Set an early version of TestResultState so anything done in PostInvoke can understand whether
+                            // it looks like the test is passing, failing, or dynamically skipped
+                            var currentException = ctxt.Aggregator.ToException();
+                            var currentSkipReason = ctxt.GetSkipReason(currentException);
+                            var currentExecutionTime = (decimal)elapsedTime.TotalMilliseconds;
+                            TestResultState testResultState =
+                                currentSkipReason is not null
+                                    ? TestResultState.ForSkipped(currentExecutionTime)
+                                    : TestResultState.FromException(currentExecutionTime, currentException);
+
+                            this.UpdateTestContext(testClassInstance, testResultState);
+
+                            elapsedTime += await ExecutionTimer.MeasureAsync(() => ctxt.Aggregator.RunAsync(async () =>
+                            {
+                                await ctxt.ThreadRental.SynchronizationContext;
+                                this.PostInvoke(ctxt);
+                            }));
+                        }
+
+                        elapsedTime += await ExecutionTimer.MeasureAsync(() => ctxt.Aggregator.RunAsync(async () =>
+                        {
+                            await ctxt.ThreadRental.SynchronizationContext;
+                            await this.DisposeTestClassInstance(ctxt, testClassInstance!);
+                        }));
+
+                        this.UpdateTestContext(null, TestContext.Current.TestState);
+                    }
+
+                    finished.TrySetResult(null);
+                }
+                catch (Exception ex)
+                {
+                    finished.TrySetException(ex);
+                }
             }
         }
+
+        return elapsedTime;
     }
 }
