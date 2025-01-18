@@ -11,11 +11,11 @@ public class CocoaTheoryDiscoverer : TheoryDiscoverer
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments)
     {
-        IXunitTestCase testCase = CocoaUtilities.CreateTestCase(
-            TestCaseKind.DataRow,
+        IXunitTestCase testCase = CocoaUtilities.CreateTestCaseForDataRow(
             discoveryOptions,
             testMethod,
             theoryAttribute,
+            dataRow,
             testMethodArguments);
         return new([testCase]);
     }
@@ -23,12 +23,10 @@ public class CocoaTheoryDiscoverer : TheoryDiscoverer
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute)
     {
-        IXunitTestCase testCase = CocoaUtilities.CreateTestCase(
-            TestCaseKind.DelayEnumerated,
+        IXunitTestCase testCase = CocoaUtilities.CreateTestCaseForTheory(
             discoveryOptions,
             testMethod,
-            theoryAttribute,
-            null);
+            theoryAttribute);
         return new([testCase]);
     }
 }

@@ -11,11 +11,11 @@ public class WpfTheoryDiscoverer : TheoryDiscoverer
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments)
     {
-        IXunitTestCase testCase = WpfUtilities.CreateTestCase(
-            TestCaseKind.DataRow,
+        IXunitTestCase testCase = WpfUtilities.CreateTestCaseForDataRow(
             discoveryOptions,
             testMethod,
             theoryAttribute,
+            dataRow,
             testMethodArguments);
         return new([testCase]);
     }
@@ -23,12 +23,10 @@ public class WpfTheoryDiscoverer : TheoryDiscoverer
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute)
     {
-        IXunitTestCase testCase = WpfUtilities.CreateTestCase(
-            TestCaseKind.DelayEnumerated,
+        IXunitTestCase testCase = WpfUtilities.CreateTestCaseForTheory(
             discoveryOptions,
             testMethod,
-            theoryAttribute,
-            null);
+            theoryAttribute);
         return new([testCase]);
     }
 }

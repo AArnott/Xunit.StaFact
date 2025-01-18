@@ -11,6 +11,6 @@ public class StaFactDiscoverer : FactDiscoverer
     /// <inheritdoc/>
     protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
     {
-        return StaUtilities.CreateTestCase(TestCaseKind.Fact, discoveryOptions, testMethod, factAttribute, null);
+        return StaUtilities.CreateTestCaseForFact(discoveryOptions, testMethod, factAttribute);
     }
 }

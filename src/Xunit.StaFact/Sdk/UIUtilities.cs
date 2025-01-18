@@ -5,20 +5,49 @@ namespace Xunit.Sdk;
 
 internal static class UIUtilities
 {
-    internal static IXunitTestCase CreateTestCase(
-        TestCaseKind kind,
+    private const UITestCase.SyncContextType ContextType = UITestCase.SyncContextType.Portable;
+    private const string? SkipReason = null;
+
+    internal static IXunitTestCase CreateTestCaseForFact(
         ITestFrameworkDiscoveryOptions discoveryOptions,
         IXunitTestMethod testMethod,
-        IFactAttribute factAttribute,
-        object?[]? testMethodArguments)
+        IFactAttribute factAttribute)
     {
-        return Utilities.CreateTestCase(
-            kind,
-            UITestCase.SyncContextType.Portable,
-            null,
+        return Utilities.CreateTestCaseForFact(
+            ContextType,
+            SkipReason,
             discoveryOptions,
             testMethod,
-            factAttribute,
+            factAttribute);
+    }
+
+    internal static IXunitTestCase CreateTestCaseForDataRow(
+        ITestFrameworkDiscoveryOptions discoveryOptions,
+        IXunitTestMethod testMethod,
+        ITheoryAttribute theoryAttribute,
+        ITheoryDataRow dataRow,
+        object?[] testMethodArguments)
+    {
+        return Utilities.CreateTestCaseForDataRow(
+            ContextType,
+            SkipReason,
+            discoveryOptions,
+            testMethod,
+            theoryAttribute,
+            dataRow,
             testMethodArguments);
+    }
+
+    internal static IXunitTestCase CreateTestCaseForTheory(
+        ITestFrameworkDiscoveryOptions discoveryOptions,
+        IXunitTestMethod testMethod,
+        ITheoryAttribute theoryAttribute)
+    {
+        return Utilities.CreateTestCaseForTheory(
+            ContextType,
+            SkipReason,
+            discoveryOptions,
+            testMethod,
+            theoryAttribute);
     }
 }

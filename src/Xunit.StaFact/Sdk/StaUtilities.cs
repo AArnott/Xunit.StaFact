@@ -7,20 +7,49 @@ namespace Xunit.Sdk;
 
 internal static class StaUtilities
 {
-    internal static IXunitTestCase CreateTestCase(
-        TestCaseKind kind,
+    private const UITestCase.SyncContextType ContextType = UITestCase.SyncContextType.None;
+    private static readonly string? SkipReason = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? null : "STA threads only exist on Windows.";
+
+    internal static IXunitTestCase CreateTestCaseForFact(
         ITestFrameworkDiscoveryOptions discoveryOptions,
         IXunitTestMethod testMethod,
-        IFactAttribute theoryAttribute,
-        object?[]? testMethodArguments)
+        IFactAttribute factAttribute)
     {
-        return Utilities.CreateTestCase(
-            kind,
-            UITestCase.SyncContextType.None,
-            RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? null : "STA threads only exist on Windows.",
+        return Utilities.CreateTestCaseForFact(
+            ContextType,
+            SkipReason,
+            discoveryOptions,
+            testMethod,
+            factAttribute);
+    }
+
+    internal static IXunitTestCase CreateTestCaseForDataRow(
+        ITestFrameworkDiscoveryOptions discoveryOptions,
+        IXunitTestMethod testMethod,
+        ITheoryAttribute theoryAttribute,
+        ITheoryDataRow dataRow,
+        object?[] testMethodArguments)
+    {
+        return Utilities.CreateTestCaseForDataRow(
+            ContextType,
+            SkipReason,
             discoveryOptions,
             testMethod,
             theoryAttribute,
+            dataRow,
             testMethodArguments);
+    }
+
+    internal static IXunitTestCase CreateTestCaseForTheory(
+        ITestFrameworkDiscoveryOptions discoveryOptions,
+        IXunitTestMethod testMethod,
+        ITheoryAttribute theoryAttribute)
+    {
+        return Utilities.CreateTestCaseForTheory(
+            ContextType,
+            SkipReason,
+            discoveryOptions,
+            testMethod,
+            theoryAttribute);
     }
 }

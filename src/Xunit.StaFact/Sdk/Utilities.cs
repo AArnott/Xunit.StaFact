@@ -8,22 +8,59 @@ namespace Xunit.Sdk;
 
 internal static class Utilities
 {
-    internal static IXunitTestCase CreateTestCase(
-        TestCaseKind kind,
+    internal static IXunitTestCase CreateTestCaseForFact(
         UITestCase.SyncContextType synchronizationContextType,
         string? skipReason,
         ITestFrameworkDiscoveryOptions discoveryOptions,
         IXunitTestMethod testMethod,
-        IFactAttribute attribute,
-        object?[]? testMethodArguments)
+        IFactAttribute factAttribute)
     {
         (string TestCaseDisplayName, bool Explicit, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
         Dictionary<string, HashSet<string>> traits;
-        UISettingsAttribute settings;
 
-        details = TestIntrospectionHelper.GetTestCaseDetails(discoveryOptions, testMethod, attribute);
-        settings = GetSettings(testMethod);
-        traits = testMethod.Traits.ToReadWrite(StringComparer.OrdinalIgnoreCase);
+        details = TestIntrospectionHelper.GetTestCaseDetails(discoveryOptions, testMethod, factAttribute);
+        traits = GetTraits(testMethod);
+
+        if (skipReason is not null)
+        {
+            return new SkippedTestCase(
+               details.ResolvedTestMethod,
+               details.TestCaseDisplayName,
+               details.UniqueID,
+               details.Explicit,
+               skipReason,
+               traits);
+        }
+
+        return new UITestCase(
+            GetSettings(testMethod),
+            synchronizationContextType,
+            details.ResolvedTestMethod,
+            details.TestCaseDisplayName,
+            details.UniqueID,
+            details.Explicit,
+            details.SkipReason,
+            details.SkipType,
+            details.SkipUnless,
+            details.SkipWhen,
+            traits,
+            timeout: details.Timeout);
+    }
+
+    internal static IXunitTestCase CreateTestCaseForDataRow(
+        UITestCase.SyncContextType synchronizationContextType,
+        string? skipReason,
+        ITestFrameworkDiscoveryOptions discoveryOptions,
+        IXunitTestMethod testMethod,
+        ITheoryAttribute theoryAttribute,
+        ITheoryDataRow dataRow,
+        object?[] testMethodArguments)
+    {
+        (string TestCaseDisplayName, bool Explicit, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
+        Dictionary<string, HashSet<string>> traits;
+
+        details = TestIntrospectionHelper.GetTestCaseDetailsForTheoryDataRow(discoveryOptions, testMethod, theoryAttribute, dataRow, testMethodArguments);
+        traits = GetTraits(testMethod);
 
         if (skipReason is not null)
         {
@@ -37,31 +74,8 @@ internal static class Utilities
                testMethodArguments);
         }
 
-        if (kind == TestCaseKind.DelayEnumerated)
-        {
-            return new UIDelayEnumeratedTestCase(
-                settings,
-                synchronizationContextType,
-                details.ResolvedTestMethod,
-                details.TestCaseDisplayName,
-                details.UniqueID,
-                details.Explicit,
-                (attribute as ITheoryAttribute)?.SkipTestWithoutData ?? false,
-                details.SkipReason,
-                details.SkipType,
-                details.SkipUnless,
-                details.SkipWhen,
-                traits,
-                timeout: details.Timeout);
-        }
-
-        // Fact and DataRow test case kinds both result in a UITestCase.
-        // The only difference is that DataRow should have test method
-        // arguments, and Fact should not. The caller should pass null
-        // for the test method arguments when the test case kind is Fact,
-        // so we can use the same code path for both kinds.
         return new UITestCase(
-            settings,
+            GetSettings(testMethod),
             synchronizationContextType,
             details.ResolvedTestMethod,
             details.TestCaseDisplayName,
@@ -76,7 +90,52 @@ internal static class Utilities
             timeout: details.Timeout);
     }
 
+    internal static IXunitTestCase CreateTestCaseForTheory(
+        UITestCase.SyncContextType synchronizationContextType,
+        string? skipReason,
+        ITestFrameworkDiscoveryOptions discoveryOptions,
+        IXunitTestMethod testMethod,
+        ITheoryAttribute attribute)
+    {
+        (string TestCaseDisplayName, bool Explicit, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
+        Dictionary<string, HashSet<string>> traits;
+
+        details = TestIntrospectionHelper.GetTestCaseDetails(discoveryOptions, testMethod, attribute);
+        traits = GetTraits(testMethod);
+
+        if (skipReason is not null)
+        {
+            return new SkippedTestCase(
+               details.ResolvedTestMethod,
+               details.TestCaseDisplayName,
+               details.UniqueID,
+               details.Explicit,
+               skipReason,
+               traits);
+        }
+
+        return new UIDelayEnumeratedTestCase(
+            GetSettings(testMethod),
+            synchronizationContextType,
+            details.ResolvedTestMethod,
+            details.TestCaseDisplayName,
+            details.UniqueID,
+            details.Explicit,
+            attribute.SkipTestWithoutData,
+            details.SkipReason,
+            details.SkipType,
+            details.SkipUnless,
+            details.SkipWhen,
+            traits,
+            timeout: details.Timeout);
+    }
+
     internal static SyncContextAwaiter GetAwaiter(this SynchronizationContext synchronizationContext) => new SyncContextAwaiter(synchronizationContext);
+
+    private static Dictionary<string, HashSet<string>> GetTraits(IXunitTestMethod testMethod)
+    {
+        return testMethod.Traits.ToReadWrite(StringComparer.OrdinalIgnoreCase);
+    }
 
     private static UISettingsAttribute GetSettings(IXunitTestMethod testMethod)
     {

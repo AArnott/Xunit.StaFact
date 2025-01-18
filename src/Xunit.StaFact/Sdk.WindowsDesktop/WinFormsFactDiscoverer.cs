@@ -11,11 +11,9 @@ public class WinFormsFactDiscoverer : FactDiscoverer
     /// <inheritdoc/>
     protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
     {
-        return WinFormsUtilities.CreateTestCase(
-            TestCaseKind.Fact,
+        return WinFormsUtilities.CreateTestCaseForFact(
             discoveryOptions,
             testMethod,
-            factAttribute,
-            null);
+            factAttribute);
     }
 }

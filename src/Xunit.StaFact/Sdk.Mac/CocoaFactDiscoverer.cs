@@ -11,6 +11,6 @@ public class CocoaFactDiscoverer : FactDiscoverer
     /// <inheritdoc/>
     protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
     {
-        return CocoaUtilities.CreateTestCase(TestCaseKind.Fact, discoveryOptions, testMethod, factAttribute, null);
+        return CocoaUtilities.CreateTestCaseForFact(discoveryOptions, testMethod, factAttribute);
     }
 }

@@ -11,11 +11,11 @@ public class StaTheoryDiscoverer : TheoryDiscoverer
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments)
     {
-        IXunitTestCase testCase = StaUtilities.CreateTestCase(
-            TestCaseKind.DataRow,
+        IXunitTestCase testCase = StaUtilities.CreateTestCaseForDataRow(
             discoveryOptions,
             testMethod,
             theoryAttribute,
+            dataRow,
             testMethodArguments);
         return new([testCase]);
     }
@@ -23,12 +23,10 @@ public class StaTheoryDiscoverer : TheoryDiscoverer
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute)
     {
-        IXunitTestCase testCase = StaUtilities.CreateTestCase(
-            TestCaseKind.DelayEnumerated,
+        IXunitTestCase testCase = StaUtilities.CreateTestCaseForTheory(
             discoveryOptions,
             testMethod,
-            theoryAttribute,
-            null);
+            theoryAttribute);
         return new([testCase]);
     }
 }
