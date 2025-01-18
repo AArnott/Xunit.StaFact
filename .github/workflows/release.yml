@@ -67,7 +67,7 @@ jobs:
     - name: 🔻 Download deployables artifacts
       uses: actions/download-artifact@v4
       with:
-        name: deployables-Linux
+        name: deployables-Windows # linux build omits the macOS APIs
         path: ${{ runner.temp }}/deployables
         run-id: ${{ steps.findrunid.outputs.runid }}
         github-token: ${{ github.token }}
