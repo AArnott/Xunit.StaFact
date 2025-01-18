@@ -70,7 +70,7 @@ public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase, ISe
 
         base.Serialize(data);
         data.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.settings.MaxAttempts);
-        data.AddValue(nameof(this.synchronizationContextType), (int)this.synchronizationContextType);
+        data.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
     }
 
     protected override void Deserialize(IXunitSerializationInfo data)
@@ -85,6 +85,6 @@ public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase, ISe
         {
             MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)),
         };
-        this.synchronizationContextType = (UITestCase.SyncContextType)data.GetValue<int>(nameof(this.synchronizationContextType));
+        this.synchronizationContextType = data.GetValue<UITestCase.SyncContextType>(nameof(this.synchronizationContextType));
     }
 }

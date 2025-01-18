@@ -156,7 +156,7 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
 
         base.Serialize(data);
         data.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.settings.MaxAttempts);
-        data.AddValue(nameof(this.synchronizationContextType), (int)this.synchronizationContextType);
+        data.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
     }
 
     protected override void Deserialize(IXunitSerializationInfo data)
@@ -171,7 +171,7 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
         {
             MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)),
         };
-        this.synchronizationContextType = (SyncContextType)data.GetValue<int>(nameof(this.synchronizationContextType));
+        this.synchronizationContextType = data.GetValue<SyncContextType>(nameof(this.synchronizationContextType));
     }
 
     private class NullAdapter : UISynchronizationContext.Adapter
