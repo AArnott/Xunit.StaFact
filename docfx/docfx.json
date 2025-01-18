@@ -13,6 +13,11 @@
 		}
 	],
 	"build": {
+    "markdownEngineProperties": {
+      "markdigExtensions": [
+        "Footnotes"
+      ]
+    },
 		"content": [
 			{
 				"files": [
