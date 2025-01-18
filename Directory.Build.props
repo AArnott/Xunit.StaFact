@@ -32,7 +32,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)strongname.snk</AssemblyOriginatorKeyFile>
 
-    <PackageProjectUrl>https://github.com/AArnott/Xunit.StaFact</PackageProjectUrl>
+    <PackageProjectUrl>https://aarnott.github.io/Xunit.StaFact/</PackageProjectUrl>
     <Company>Andrew Arnott</Company>
     <Authors>Andrew Arnott</Authors>
     <Copyright>© Andrew Arnott. All rights reserved.</Copyright>
