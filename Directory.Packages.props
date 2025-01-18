@@ -8,7 +8,6 @@
   <ItemGroup>
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="xunit.v3.extensibility.core" Version="1.0.0" />
-    <PackageVersion Include="xunit.v3.runner.console" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup Label="Library.Template">
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
