@@ -43,6 +43,12 @@ public async Task WpfFact_OnSTAThread()
 }
 ```
 
-See more [samples](test/Xunit.StaFact.Tests/Samples.cs).
+See more in [our getting started doc](http://aarnott.github.io/Xunit.StaFact/docs/getting-started.html).
+
+## Sponsorships
+
+[<img src="https://api.gitsponsors.com/api/badge/img?id=50272212" height="20">](https://api.gitsponsors.com/api/badge/link?p=zLZosNROWnzKkmLw+odrlmAWZua305ZyB+Gk9Mee5zO++zVWRJfireSMoRbaSCPzMbRRg4IB6EMe7Q+0KYhPMn1lqivctlAfN4MSlS4mNb7u550EKWraNsFRlAsmQdhDdyuctJD6p65LtdXCxRf9aQ==)
+[GitHub Sponsors](https://github.com/sponsors/AArnott)
+[Zcash](zcash:u1vv2ws6xhs72faugmlrasyeq298l05rrj6wfw8hr3r29y3czev5qt4ugp7kylz6suu04363ze92dfg8ftxf3237js0x9p5r82fgy47xkjnw75tqaevhfh0rnua72hurt22v3w3f7h8yt6mxaa0wpeeh9jcm359ww3rl6fj5ylqqv54uuwrs8q4gys9r3cxdm3yslsh3rt6p7wznzhky7)
 
 [NuPkg]: https://www.nuget.org/packages/Xunit.StaFact
