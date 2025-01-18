@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 
 public class Samples
 {
+    #region UIFact
     /// <summary>
     /// Demonstrates that the <see cref="UIFactAttribute"/> can run on all platforms,
     /// and emulates a UI thread (not specific to WPF or WinForms) with a <see cref="SynchronizationContext"/>
@@ -15,28 +16,36 @@ public class Samples
     {
         int initialThread = Environment.CurrentManagedThreadId;
         Assert.NotNull(SynchronizationContext.Current);
-        ApartmentState expectedApartment = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ApartmentState.STA : ApartmentState.Unknown;
+        ApartmentState expectedApartment = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? ApartmentState.STA
+            : ApartmentState.Unknown;
         Assert.Equal(expectedApartment, Thread.CurrentThread.GetApartmentState());
 
         await Task.Yield();
         Assert.Equal(initialThread, Environment.CurrentManagedThreadId);
         Assert.NotNull(SynchronizationContext.Current);
     }
+    #endregion
 
+    #region Fact
     /// <summary>
     /// Demonstrates that xunit [Fact] behavior is to invoke the test on an MTA thread.
     /// </summary>
     [Fact]
     public async Task Fact_OnMTAThread()
     {
-        ApartmentState expectedApartment = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ApartmentState.MTA : ApartmentState.Unknown;
+        ApartmentState expectedApartment = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? ApartmentState.MTA
+            : ApartmentState.Unknown;
         Assert.Equal(expectedApartment, Thread.CurrentThread.GetApartmentState());
         await Task.Yield();
         Assert.Equal(expectedApartment, Thread.CurrentThread.GetApartmentState());
     }
+    #endregion
 
-#if NETFRAMEWORK && !NON_WINDOWS
+#if NETFRAMEWORK || WINDOWS
 
+    #region WpfFact
     /// <summary>
     /// Demonstrates that <see cref="WpfFactAttribute"/> invokes tests expecting an STA thread
     /// specifically with a WPF SynchronizationContext.
@@ -45,14 +54,16 @@ public class Samples
     public async Task WpfFact_OnSTAThread()
     {
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
-        Assert.IsType<System.Windows.Threading.DispatcherSynchronizationContext>(SynchronizationContext.Current);
+        Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
 
         await Task.Yield();
 
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
-        Assert.IsType<System.Windows.Threading.DispatcherSynchronizationContext>(SynchronizationContext.Current);
+        Assert.IsType<DispatcherSynchronizationContext>(SynchronizationContext.Current);
     }
+    #endregion
 
+    #region WinFormsFact
     /// <summary>
     /// Demonstrates that <see cref="WinFormsFactAttribute"/> invokes tests expecting an STA thread
     /// specifically with a WinForms SynchronizationContext.
@@ -61,17 +72,20 @@ public class Samples
     public async Task WinFormsFact_OnSTAThread()
     {
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
-        Assert.IsType<System.Windows.Forms.WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
+        Assert.IsType<WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
 
         await Task.Yield();
 
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState()); // still there
-        Assert.IsType<System.Windows.Forms.WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
+        Assert.IsType<WindowsFormsSynchronizationContext>(SynchronizationContext.Current);
     }
+    #endregion
 
+    #region StaFact
     /// <summary>
     /// Demonstrates that <see cref="StaFactAttribute"/> invokes tests expecting an STA thread
-    /// but with no <see cref="SynchronizationContext"/> at all, so any yielding await will return on the threadpool (an MTA thread).
+    /// but with no <see cref="SynchronizationContext"/> at all, so any yielding await will
+    /// return on the threadpool (an MTA thread).
     /// </summary>
     [StaFact]
     public async Task StaWithoutSyncContext()
@@ -85,6 +99,7 @@ public class Samples
         Assert.Equal(ApartmentState.MTA, Thread.CurrentThread.GetApartmentState());
         Assert.Null(SynchronizationContext.Current);
     }
+    #endregion
 
 #endif
 }
