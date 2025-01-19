@@ -4,10 +4,14 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <XunitV3LibraryVersion>1.0.0</XunitV3LibraryVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
-    <PackageVersion Include="xunit.v3.extensibility.core" Version="1.0.0" />
+    <PackageVersion Include="xunit.v3.extensibility.core" Version="1.0.1" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(MSBuildProjectName)'=='Xunit.StaFact'">
+    <PackageVersion Update="xunit.v3.extensibility.core" Version="$(XunitV3LibraryVersion)" />
   </ItemGroup>
   <ItemGroup Label="Library.Template">
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />

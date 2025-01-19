@@ -9,6 +9,10 @@
 			"groupName": "nbgv and nerdbank.gitversioning updates"
 		},
 		{
+			"matchJsonata": ["groupName='XunitV3LibraryVersion' or sharedVariableName='XunitV3LibraryVersion'"],
+			"enabled": false
+		},
+		{
 			"matchPackageNames": ["xunit*"],
 			"groupName": "xunit"
 		},
