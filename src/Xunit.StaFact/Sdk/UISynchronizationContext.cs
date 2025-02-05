@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 
 namespace Xunit.Sdk;
@@ -114,7 +115,9 @@ internal class UISynchronizationContext : SynchronizationContext
     {
         if (this.pumpingEnded)
         {
-            throw new InvalidOperationException($"The message pump in '{this.name}' isn't running any more.");
+            // Include the stack trace in the exception message itself because in test runs,
+            // the only thing reported for diagnosing this failure is the exception message.
+            throw new InvalidOperationException($"The message pump in '{this.name}' isn't running any more. {new StackTrace()}");
         }
 
         lock (this.messageQueue)
