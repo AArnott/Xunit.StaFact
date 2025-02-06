@@ -1,7 +1,6 @@
 // Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 
 namespace Xunit.Sdk;
@@ -53,10 +52,12 @@ internal class UISynchronizationContext : SynchronizationContext
                 },
                 TaskScheduler.Default);
 
-            // Now run the message loop until the task completes.
-            while (!untilCompleted.IsCompleted)
+            // Now run the message loop until the task completes
+            // and drain all messages from the queue.
+            bool empty = false;
+            while (!untilCompleted.IsCompleted || !empty)
             {
-                this.TryOneWorkItem();
+                empty = !this.TryOneWorkItem(untilCompleted.IsCompleted);
             }
         }
         finally
@@ -71,9 +72,20 @@ internal class UISynchronizationContext : SynchronizationContext
     {
         if (this.pumpingEnded)
         {
-            // Include the stack trace in the exception message itself because in test runs,
-            // the only thing reported for diagnosing this failure is the exception message.
-            throw new InvalidOperationException($"The message pump in '{this.name}' isn't running any more. {new StackTrace()}");
+            if (Environment.GetEnvironmentVariable("XUNIT_STAFACT_STRICT") == "1")
+            {
+                // Fail fast if the message pump has already ended.
+                // This can be a maddeningly difficult bug to diagnose in tests otherwise.
+                // We really need a dump of the test process to diagnose this so we can see all the threads
+                // at the moment this happened.
+                Environment.FailFast($"The message pump in '{this.name}' isn't running any more.");
+            }
+
+            // The message pump isn't running any more. The test is over.
+            // Anyone requesting the main thread hopefully doesn't matter to the test.
+            // We'll run the delegate anyways, just on the threadpool.
+            Task.Run(() => d(state));
+            return;
         }
 
         lock (this.messageQueue)
@@ -142,14 +154,18 @@ internal class UISynchronizationContext : SynchronizationContext
         }
     }
 
-    private bool TryOneWorkItem()
+    private bool TryOneWorkItem(bool doNotWait)
     {
         KeyValuePair<SendOrPostCallback, object?> work = default;
         lock (this.messageQueue)
         {
             if (this.messageQueue.Count == 0)
             {
-                Monitor.Wait(this.messageQueue);
+                if (!doNotWait)
+                {
+                    Monitor.Wait(this.messageQueue);
+                }
+
                 return false;
             }
 
