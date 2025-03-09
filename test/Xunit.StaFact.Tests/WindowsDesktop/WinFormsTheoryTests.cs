@@ -2,7 +2,7 @@
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.Reflection;
-using DesktopTheoryAttribute = Xunit.WpfTheoryAttribute;
+using DesktopTheoryAttribute = Xunit.WinFormsTheoryAttribute;
 
 public class WinFormsTheoryTests
 {
