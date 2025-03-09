@@ -9,7 +9,7 @@ Click on the badge to find its latest version and the instructions for consuming
 
 ## Default Fact behavior
 
-[!code-csharp[](../../samples/Samples.cs#Fact)]
+[!code-csharp[](../../samples/SampleTests.cs#Fact)]
 
 ## Usage
 
@@ -18,19 +18,19 @@ Click on the badge to find its latest version and the instructions for consuming
 Best when you need basic UI thread semantics for tests that may run on any OS.
 You'll get an STA thread on Windows.
 
-[!code-csharp[](../../samples/Samples.cs#UIFact)]
+[!code-csharp[](../../samples/SampleTests.cs#UIFact)]
 
 ### WPF
 
 More closely resembles WPF-specific semantics including a WPF-specific @System.Threading.SynchronizationContext.
 
-[!code-csharp[](../../samples/Samples.cs#WpfFact)]
+[!code-csharp[](../../samples/SampleTests.cs#WpfFact)]
 
 ### WinForms
 
 More closely resembles WinForms-specific semantics including a WinForms-specific @System.Threading.SynchronizationContext.
 
-[!code-csharp[](../../samples/Samples.cs#WinFormsFact)]
+[!code-csharp[](../../samples/SampleTests.cs#WinFormsFact)]
 
 ### STA thread
 
@@ -38,4 +38,4 @@ Guarantees the test to run on an STA thread.
 Applicable only on Windows.
 Because no @System.Threading.SynchronizationContext is applied by default, an async test will resume on a threadpool thread instead of the test thread after a yielding await.
 
-[!code-csharp[](../../samples/Samples.cs#STAFact)]
+[!code-csharp[](../../samples/SampleTests.cs#STAFact)]

@@ -3,7 +3,7 @@
 
 using System.Runtime.InteropServices;
 
-public class Samples
+public class SampleTests
 {
     #region UIFact
     /// <summary>
