@@ -44,7 +44,7 @@ public class SkippedTestCase : XunitTestCase
         string? sourceFilePath = null,
         int? sourceLineNumber = null,
         int? timeout = null)
-        : base(testMethod, testCaseDisplayName, uniqueID, @explicit, skipReason, null, null, null, traits, testMethodArguments, sourceFilePath, sourceLineNumber, timeout)
+        : base(testMethod, testCaseDisplayName, uniqueID, @explicit, null, skipReason, null, null, null, traits, testMethodArguments, sourceFilePath, sourceLineNumber, timeout)
     {
     }
 }

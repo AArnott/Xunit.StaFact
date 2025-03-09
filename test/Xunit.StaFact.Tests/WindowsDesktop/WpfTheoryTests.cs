@@ -13,7 +13,7 @@ public class WpfTheoryTests
         new object[] { 3, 4 },
     };
 
-    [WpfTheory]
+    [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     public async Task WpfTheory_OnSTAThread(int arg)
@@ -27,7 +27,7 @@ public class WpfTheoryTests
     }
 
     [Trait("TestCategory", "FailureExpected")]
-    [WpfTheory]
+    [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     public async Task WpfTheoryFails(int arg)
@@ -40,14 +40,14 @@ public class WpfTheoryTests
         Assert.False(arg == 0 || arg == 1);
     }
 
-    [WpfTheory]
+    [DesktopTheory]
     [MemberData(nameof(MemberDataSource))]
     public void MemberBasedTheory(int a, int b)
     {
         Assert.Equal(b, a + 1);
     }
 
-    [WpfTheory, Trait("TestCategory", "FailureExpected")]
+    [DesktopTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(1)]
     public async Task OperationCanceledException_Thrown(int a)
     {
@@ -56,7 +56,7 @@ public class WpfTheoryTests
         throw new OperationCanceledException();
     }
 
-    [WpfTheory]
+    [DesktopTheory]
     [MemberData(nameof(NonSerializableObject.Data), MemberType = typeof(NonSerializableObject))]
     public void ThreadAffinitizedDataObject(NonSerializableObject o)
     {
@@ -64,7 +64,7 @@ public class WpfTheoryTests
         Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
     }
 
-    [WpfTheory, Trait("TestCategory", "FailureExpected")]
+    [DesktopTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
 
@@ -88,5 +88,13 @@ public class WpfTheoryTests
     {
         _ = arg;
         Assert.Fail("Failure expected.");
+    }
+
+    [DesktopTheory(SkipExceptions = [typeof(SkipOnThisException)])]
+    [InlineData(0)]
+    public void CanSkipOnSpecificExceptions(int arg)
+    {
+        _ = arg;
+        throw new SkipOnThisException();
     }
 }

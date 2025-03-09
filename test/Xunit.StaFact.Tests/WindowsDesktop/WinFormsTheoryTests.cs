@@ -6,7 +6,7 @@ using DesktopTheoryAttribute = Xunit.WpfTheoryAttribute;
 
 public class WinFormsTheoryTests
 {
-    [WinFormsTheory]
+    [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     public async Task WinFormsTheory_OnSTAThread(int arg)
@@ -20,7 +20,7 @@ public class WinFormsTheoryTests
     }
 
     [Trait("TestCategory", "FailureExpected")]
-    [WinFormsTheory]
+    [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     public async Task WinFormsTheoryFails(int arg)
@@ -33,7 +33,7 @@ public class WinFormsTheoryTests
         Assert.False(arg == 0 || arg == 1);
     }
 
-    [WinFormsTheory]
+    [DesktopTheory]
     [MemberData(nameof(NonSerializableObject.Data), MemberType = typeof(NonSerializableObject))]
     public void ThreadAffinitizedDataObject(NonSerializableObject o)
     {
@@ -41,7 +41,7 @@ public class WinFormsTheoryTests
         Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
     }
 
-    [WinFormsTheory, Trait("TestCategory", "FailureExpected")]
+    [DesktopTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
 
@@ -65,5 +65,13 @@ public class WinFormsTheoryTests
     {
         _ = arg;
         Assert.Fail("Failure expected.");
+    }
+
+    [DesktopTheory(SkipExceptions = [typeof(SkipOnThisException)])]
+    [InlineData(0)]
+    public void CanSkipOnSpecificExceptions(int arg)
+    {
+        _ = arg;
+        throw new SkipOnThisException();
     }
 }

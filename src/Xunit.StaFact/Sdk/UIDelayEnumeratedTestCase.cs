@@ -24,6 +24,7 @@ public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase, ISe
         string uniqueID,
         bool @explicit,
         bool skipTestWithoutData,
+        Type[]? skipExceptions = null,
         string? skipReason = null,
         Type? skipType = null,
         string? skipUnless = null,
@@ -32,7 +33,7 @@ public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase, ISe
         string? sourceFilePath = null,
         int? sourceLineNumber = null,
         int? timeout = null)
-        : base(testMethod, testCaseDisplayName, uniqueID, @explicit, skipTestWithoutData, skipReason, skipType, skipUnless, skipWhen, traits, sourceFilePath, sourceLineNumber, timeout)
+        : base(testMethod, testCaseDisplayName, uniqueID, @explicit, skipTestWithoutData, skipExceptions, skipReason, skipType, skipUnless, skipWhen, traits, sourceFilePath, sourceLineNumber, timeout)
     {
         this.settings = settings;
         this.synchronizationContextType = synchronizationContextType;

@@ -40,7 +40,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
     }
 
-    [UITheory]
+    [DesktopTheory]
     [InlineData(0)]
     public void CtorAndTestMethodInvokedInSameContext(int arg)
     {
@@ -49,7 +49,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(0, arg);
     }
 
-    [UITheory]
+    [DesktopTheory]
     [InlineData(0)]
     public async Task CtorAndTestMethodInvokedInSameContext_AcrossYields(int arg)
     {
@@ -59,7 +59,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(0, arg);
     }
 
-    [UITheory]
+    [DesktopTheory]
     [InlineData(0)]
     public async Task PassAfterYield(int arg)
     {
@@ -68,7 +68,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(0, arg);
     }
 
-    [UITheory]
+    [DesktopTheory]
     [InlineData(0)]
     public async Task PassAfterDelay(int arg)
     {
@@ -77,7 +77,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(0, arg);
     }
 
-    [UITheory, Trait("TestCategory", "FailureExpected")]
+    [DesktopTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public async Task FailAfterYield(int arg)
     {
@@ -85,7 +85,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(1, arg);
     }
 
-    [UITheory, Trait("TestCategory", "FailureExpected")]
+    [DesktopTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public async Task FailAfterDelay(int arg)
     {
@@ -93,7 +93,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(1, arg);
     }
 
-    [UITheory, Trait("TestCategory", "FailureExpected")]
+    [DesktopTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public async Task FailAfterYield_Task(int arg)
     {
@@ -101,7 +101,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(1, arg);
     }
 
-    [UITheory, Trait("TestCategory", "FailureExpected")]
+    [DesktopTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public async Task FailAfterDelay_Task(int arg)
     {
@@ -109,7 +109,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(1, arg);
     }
 
-    [UITheory]
+    [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     public async Task UITheory_OnSingleThreadedSyncContext(int arg)
@@ -123,7 +123,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
     }
 
     [Trait("TestCategory", "FailureExpected")]
-    [UITheory]
+    [DesktopTheory]
     [InlineData(1)]
     public async Task UITheoryFails(int arg)
     {
@@ -135,7 +135,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.False(arg == 0 || arg == 1);
     }
 
-    [UITheory]
+    [DesktopTheory]
     [MemberData(nameof(NonSerializableObject.Data), MemberType = typeof(NonSerializableObject))]
     public void ThreadAffinitizedDataObject(NonSerializableObject o)
     {
@@ -143,7 +143,7 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(Environment.CurrentManagedThreadId, o.ThreadId);
     }
 
-    [UITheory, Trait("TestCategory", "FailureExpected")]
+    [DesktopTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public void JustFailVoid(int a) => throw new InvalidOperationException("Expected failure " + a);
 
@@ -167,5 +167,13 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
     {
         _ = arg;
         Assert.Fail("Failure expected.");
+    }
+
+    [DesktopTheory(SkipExceptions = [typeof(SkipOnThisException)])]
+    [InlineData(0)]
+    public void CanSkipOnSpecificExceptions(int arg)
+    {
+        _ = arg;
+        throw new SkipOnThisException();
     }
 }
