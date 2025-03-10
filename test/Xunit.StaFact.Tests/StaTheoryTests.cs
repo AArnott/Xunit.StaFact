@@ -12,7 +12,7 @@ public partial class StaTheoryTests
         new object[] { 3, 4 },
     };
 
-    [StaTheory]
+    [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     public async Task StaTheory_OnSTAThread(int arg)
@@ -29,7 +29,7 @@ public partial class StaTheoryTests
     }
 
     [Trait("TestCategory", "FailureExpected")]
-    [StaTheory]
+    [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
     public async Task StaTheoryFails(int arg)
@@ -45,7 +45,7 @@ public partial class StaTheoryTests
         Assert.False(arg == 0 || arg == 1);
     }
 
-    [StaTheory]
+    [DesktopTheory]
     [MemberData(nameof(MemberDataSource))]
     public void MemberBasedTheory(int a, int b)
     {
@@ -61,7 +61,7 @@ public partial class StaTheoryTests
         throw new OperationCanceledException();
     }
 
-    [StaTheory]
+    [DesktopTheory]
     [MemberData(nameof(NonSerializableObject.Data), MemberType = typeof(NonSerializableObject))]
     public void ThreadAffinitizedDataObject(NonSerializableObject o)
     {
@@ -93,5 +93,13 @@ public partial class StaTheoryTests
     {
         _ = arg;
         Assert.Fail("Failure expected.");
+    }
+
+    [DesktopTheory(SkipExceptions = [typeof(SkipOnThisException)])]
+    [InlineData(0)]
+    public void CanSkipOnSpecificExceptions(int arg)
+    {
+        _ = arg;
+        throw new SkipOnThisException();
     }
 }

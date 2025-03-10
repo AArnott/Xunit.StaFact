@@ -95,6 +95,12 @@ public class WpfFactTests
         Assert.Fail("Failure expected.");
     }
 
+    [DesktopFact(SkipExceptions = [typeof(SkipOnThisException)])]
+    public void CanSkipOnSpecificExceptions()
+    {
+        throw new SkipOnThisException();
+    }
+
     private void AssertThreadCharacteristics()
     {
         Assert.IsType<DesktopSyncContext>(SynchronizationContext.Current);

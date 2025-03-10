@@ -15,7 +15,7 @@ internal static class Utilities
         IXunitTestMethod testMethod,
         IFactAttribute factAttribute)
     {
-        (string TestCaseDisplayName, bool Explicit, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
+        (string TestCaseDisplayName, bool Explicit, Type[]? SkipExceptions, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
         Dictionary<string, HashSet<string>> traits;
 
         details = TestIntrospectionHelper.GetTestCaseDetails(discoveryOptions, testMethod, factAttribute);
@@ -39,6 +39,7 @@ internal static class Utilities
             details.TestCaseDisplayName,
             details.UniqueID,
             details.Explicit,
+            details.SkipExceptions,
             details.SkipReason,
             details.SkipType,
             details.SkipUnless,
@@ -56,7 +57,7 @@ internal static class Utilities
         ITheoryDataRow dataRow,
         object?[] testMethodArguments)
     {
-        (string TestCaseDisplayName, bool Explicit, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
+        (string TestCaseDisplayName, bool Explicit, Type[]? SkipExceptions, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
         Dictionary<string, HashSet<string>> traits;
 
         details = TestIntrospectionHelper.GetTestCaseDetailsForTheoryDataRow(discoveryOptions, testMethod, theoryAttribute, dataRow, testMethodArguments);
@@ -81,6 +82,7 @@ internal static class Utilities
             details.TestCaseDisplayName,
             details.UniqueID,
             details.Explicit,
+            details.SkipExceptions,
             details.SkipReason,
             details.SkipType,
             details.SkipUnless,
@@ -97,7 +99,7 @@ internal static class Utilities
         IXunitTestMethod testMethod,
         ITheoryAttribute attribute)
     {
-        (string TestCaseDisplayName, bool Explicit, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
+        (string TestCaseDisplayName, bool Explicit, Type[]? SkipExceptions, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
         Dictionary<string, HashSet<string>> traits;
 
         details = TestIntrospectionHelper.GetTestCaseDetails(discoveryOptions, testMethod, attribute);
@@ -122,6 +124,7 @@ internal static class Utilities
             details.UniqueID,
             details.Explicit,
             attribute.SkipTestWithoutData,
+            details.SkipExceptions,
             details.SkipReason,
             details.SkipType,
             details.SkipUnless,

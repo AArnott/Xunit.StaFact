@@ -40,14 +40,14 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
     }
 
-    [UIFact]
+    [DesktopFact]
     public void CtorAndTestMethodInvokedInSameContext()
     {
         Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
     }
 
-    [UIFact]
+    [DesktopFact]
     public async Task CtorAndTestMethodInvokedInSameContext_AcrossYields()
     {
         await Task.Yield();
@@ -55,49 +55,49 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
     }
 
-    [UIFact]
+    [DesktopFact]
     public async Task PassAfterYield()
     {
         // This will post to the SynchronizationContext before yielding.
         await Task.Yield();
     }
 
-    [UIFact]
+    [DesktopFact]
     public async Task PassAfterDelay()
     {
         // This won't post to the SynchronizationContext till after the delay.
         await Task.Delay(10);
     }
 
-    [UIFact, Trait("TestCategory", "FailureExpected")]
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
     public async Task FailAfterYield()
     {
         await Task.Yield();
         Assert.False(true);
     }
 
-    [UIFact, Trait("TestCategory", "FailureExpected")]
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
     public async Task FailAfterDelay()
     {
         await Task.Delay(10);
         Assert.False(true);
     }
 
-    [UIFact, Trait("TestCategory", "FailureExpected")]
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
     public async Task FailAfterYield_Task()
     {
         await Task.Yield();
         Assert.False(true);
     }
 
-    [UIFact, Trait("TestCategory", "FailureExpected")]
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
     public async Task FailAfterDelay_Task()
     {
         await Task.Delay(10);
         Assert.False(true);
     }
 
-    [UIFact]
+    [DesktopFact]
     public async Task UIFact_OnSingleThreadedSyncContext()
     {
         int initialThread = Environment.CurrentManagedThreadId;
@@ -107,7 +107,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         Assert.Same(syncContext, SynchronizationContext.Current);
     }
 
-    [UIFact]
+    [DesktopFact]
     public async Task SendBackFromOtherThread()
     {
         SynchronizationContext sc = SynchronizationContext.Current ?? throw new InvalidOperationException("No SynchronizationContext");
@@ -126,7 +126,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         Assert.True(delegateComplete);
     }
 
-    [UIFact]
+    [DesktopFact]
     public async Task SendBackFromOtherThread_Throws()
     {
         SynchronizationContext sc = SynchronizationContext.Current ?? throw new InvalidOperationException("No SynchronizationContext");
@@ -142,7 +142,7 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         });
     }
 
-    [UIFact, Trait("TestCategory", "FailureExpected")]
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
     public void JustFailVoid() => throw new InvalidOperationException("Expected failure.");
 
     [DesktopFact]
@@ -158,6 +158,12 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
     public void FailsAllRetries()
     {
         Assert.Fail("Failure expected.");
+    }
+
+    [DesktopFact(SkipExceptions = [typeof(SkipOnThisException)])]
+    public void CanSkipOnSpecificExceptions()
+    {
+        throw new SkipOnThisException();
     }
 
     [UISettings(MaxAttempts = 2)]

@@ -85,6 +85,12 @@ public class WinFormsFactTests
         Assert.Fail("Failure expected.");
     }
 
+    [DesktopFact(SkipExceptions = [typeof(SkipOnThisException)])]
+    public void CanSkipOnSpecificExceptions()
+    {
+        throw new SkipOnThisException();
+    }
+
     private void AssertThreadCharacteristics()
     {
         Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);

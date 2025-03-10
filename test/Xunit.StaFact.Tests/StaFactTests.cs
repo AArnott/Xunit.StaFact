@@ -11,7 +11,7 @@ public class StaFactTests
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
     }
 
-    [StaFact]
+    [DesktopFact]
     public async Task StaWithoutSyncContext()
     {
         Assert.Null(SynchronizationContext.Current);
@@ -23,14 +23,14 @@ public class StaFactTests
         Assert.Equal(ApartmentState.MTA, Thread.CurrentThread.GetApartmentState());
     }
 
-    [StaFact]
+    [DesktopFact]
     public void Sta_Void()
     {
         Assert.Null(SynchronizationContext.Current);
         Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
     }
 
-    [StaFact, Trait("TestCategory", "FailureExpected")]
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     public async void AsyncVoid_IsNotSupported()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -39,7 +39,7 @@ public class StaFactTests
         // async void tests aren't supportable when you have no SynchronizationContext.
     }
 
-    [StaFact, Trait("TestCategory", "FailureExpected")]
+    [DesktopFact, Trait("TestCategory", "FailureExpected")]
     public void JustFailVoid() => throw new InvalidOperationException("Expected failure.");
 
     [DesktopFact]
@@ -55,5 +55,11 @@ public class StaFactTests
     public void FailsAllRetries()
     {
         Assert.Fail("Failure expected.");
+    }
+
+    [DesktopFact(SkipExceptions = [typeof(SkipOnThisException)])]
+    public void CanSkipOnSpecificExceptions()
+    {
+        throw new SkipOnThisException();
     }
 }

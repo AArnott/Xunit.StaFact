@@ -34,6 +34,7 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
     /// <param name="testCaseDisplayName">The display name for the test case.</param>
     /// <param name="uniqueID">The unique ID for the test case.</param>
     /// <param name="explicit">Indicates whether the test case was marked as explicit.</param>
+    /// <param name="skipExceptions">The value obtained from <see cref="IFactAttribute.SkipExceptions"/>.</param>
     /// <param name="skipReason">The value obtained from <see cref="IFactAttribute.Skip"/>.</param>
     /// <param name="skipType">The value obtained from <see cref="IFactAttribute.SkipType"/>.</param>
     /// <param name="skipUnless">The value obtained from <see cref="IFactAttribute.SkipUnless"/>.</param>
@@ -50,6 +51,7 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
         string testCaseDisplayName,
         string uniqueID,
         bool @explicit,
+        Type[]? skipExceptions = null,
         string? skipReason = null,
         Type? skipType = null,
         string? skipUnless = null,
@@ -59,7 +61,7 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
         string? sourceFilePath = null,
         int? sourceLineNumber = null,
         int? timeout = null)
-        : base(testMethod, testCaseDisplayName, uniqueID, @explicit, skipReason, skipType, skipUnless, skipWhen, traits, testMethodArguments, sourceFilePath, sourceLineNumber, timeout)
+        : base(testMethod, testCaseDisplayName, uniqueID, @explicit, skipExceptions, skipReason, skipType, skipUnless, skipWhen, traits, testMethodArguments, sourceFilePath, sourceLineNumber, timeout)
     {
         this.settings = settings;
         settings.ApplyTraits(this);
