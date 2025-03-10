@@ -93,7 +93,7 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
         ExceptionAggregator aggregator,
         CancellationTokenSource cancellationTokenSource)
     {
-        var task = Task.Run(
+        Task<RunSummary> task = Task.Run(
             async () =>
             {
                 using ThreadRental threadRental = await ThreadRental.CreateAsync(adapter, testCase.TestMethod);
