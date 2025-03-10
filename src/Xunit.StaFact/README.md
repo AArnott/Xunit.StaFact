@@ -5,6 +5,7 @@ Simply use `[WpfFact]`, `[WinFormsFact]`, `[StaFact]` or the cross-platform `[UI
 Theory variants of these attributes allow for parameterized testing. Check out the xunit.combinatorial NuGet package for pairwise or combinatorial testing with theories.
 
 Use v1.x versions of this package for use with xUnit v2.
-Use v2.x or later versions of this package for use with xUnit v3.
+Use v2.0 versions of this package for use with xUnit.v3 v1.x.
+Use v2.1+ versions of this package for use with xUnit.v3 v2+.
 
 [See our full product documentation](https://aarnott.github.io/Xunit.StaFact/).
