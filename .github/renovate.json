@@ -13,7 +13,13 @@
 		},
 		{
 			"matchPackageNames": ["xunit*"],
-			"groupName": "xunit"
+			"matchUpdateTypes": ["major"],
+			"groupName": "xunit major updates"
+		},
+		{
+			"matchPackageNames": ["xunit*"],
+			"matchUpdateTypes": ["minor", "patch"],
+			"enabled": false
 		},
 		{
 			"matchDatasources": ["dotnet-version", "docker"],
