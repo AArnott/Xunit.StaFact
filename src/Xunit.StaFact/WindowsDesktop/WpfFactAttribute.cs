@@ -1,6 +1,7 @@
 // Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Runtime.CompilerServices;
 using System.Windows.Threading;
 using Xunit.Sdk;
 
@@ -15,4 +16,13 @@ namespace Xunit;
 [XunitTestCaseDiscoverer(typeof(WpfFactDiscoverer))]
 public class WpfFactAttribute : FactAttribute
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WpfFactAttribute"/> class.
+    /// </summary>
+    public WpfFactAttribute(
+        [CallerFilePath] string? sourceFilePath = null,
+        [CallerLineNumber] int sourceLineNumber = -1)
+        : base(sourceFilePath, sourceLineNumber)
+    {
+    }
 }

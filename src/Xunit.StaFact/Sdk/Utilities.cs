@@ -15,7 +15,7 @@ internal static class Utilities
         IXunitTestMethod testMethod,
         IFactAttribute factAttribute)
     {
-        (string TestCaseDisplayName, bool Explicit, Type[]? SkipExceptions, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
+        (string TestCaseDisplayName, bool Explicit, Type[]? SkipExceptions, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, string? SourceFilePath, int? SourceLineNumber, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
         Dictionary<string, HashSet<string>> traits;
 
         details = TestIntrospectionHelper.GetTestCaseDetails(discoveryOptions, testMethod, factAttribute);
@@ -29,7 +29,9 @@ internal static class Utilities
                details.UniqueID,
                details.Explicit,
                skipReason,
-               traits);
+               traits,
+               sourceFilePath: details.SourceFilePath,
+               sourceLineNumber: details.SourceLineNumber);
         }
 
         return new UITestCase(
@@ -45,6 +47,8 @@ internal static class Utilities
             details.SkipUnless,
             details.SkipWhen,
             traits,
+            sourceFilePath: details.SourceFilePath,
+            sourceLineNumber: details.SourceLineNumber,
             timeout: details.Timeout);
     }
 
@@ -57,7 +61,7 @@ internal static class Utilities
         ITheoryDataRow dataRow,
         object?[] testMethodArguments)
     {
-        (string TestCaseDisplayName, bool Explicit, Type[]? SkipExceptions, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
+        (string TestCaseDisplayName, bool Explicit, Type[]? SkipExceptions, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, string? SourceFilePath, int? SourceLineNumber, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
         Dictionary<string, HashSet<string>> traits;
 
         details = TestIntrospectionHelper.GetTestCaseDetailsForTheoryDataRow(discoveryOptions, testMethod, theoryAttribute, dataRow, testMethodArguments);
@@ -72,7 +76,9 @@ internal static class Utilities
                details.Explicit,
                skipReason,
                traits,
-               testMethodArguments);
+               testMethodArguments,
+               sourceFilePath: details.SourceFilePath,
+               sourceLineNumber: details.SourceLineNumber);
         }
 
         return new UITestCase(
@@ -89,6 +95,8 @@ internal static class Utilities
             details.SkipWhen,
             traits,
             testMethodArguments,
+            sourceFilePath: details.SourceFilePath,
+            sourceLineNumber: details.SourceLineNumber,
             timeout: details.Timeout);
     }
 
@@ -99,7 +107,7 @@ internal static class Utilities
         IXunitTestMethod testMethod,
         ITheoryAttribute attribute)
     {
-        (string TestCaseDisplayName, bool Explicit, Type[]? SkipExceptions, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
+        (string TestCaseDisplayName, bool Explicit, Type[]? SkipExceptions, string? SkipReason, Type? SkipType, string? SkipUnless, string? SkipWhen, string? SourceFilePath, int? SourceLineNumber, int Timeout, string UniqueID, IXunitTestMethod ResolvedTestMethod) details;
         Dictionary<string, HashSet<string>> traits;
 
         details = TestIntrospectionHelper.GetTestCaseDetails(discoveryOptions, testMethod, attribute);
@@ -113,7 +121,9 @@ internal static class Utilities
                details.UniqueID,
                details.Explicit,
                skipReason,
-               traits);
+               traits,
+               sourceFilePath: details.SourceFilePath,
+               sourceLineNumber: details.SourceLineNumber);
         }
 
         return new UIDelayEnumeratedTestCase(
@@ -130,6 +140,8 @@ internal static class Utilities
             details.SkipUnless,
             details.SkipWhen,
             traits,
+            sourceFilePath: details.SourceFilePath,
+            sourceLineNumber: details.SourceLineNumber,
             timeout: details.Timeout);
     }
 

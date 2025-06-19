@@ -1,4 +1,12 @@
+Xunit.StaFactAttribute.StaFactAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
+Xunit.StaTheoryAttribute.StaTheoryAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
+Xunit.UIFactAttribute.UIFactAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
 Xunit.UISettingsAttribute
 Xunit.UISettingsAttribute.MaxAttempts.get -> int
 Xunit.UISettingsAttribute.MaxAttempts.set -> void
 Xunit.UISettingsAttribute.UISettingsAttribute() -> void
+Xunit.UITheoryAttribute.UITheoryAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
+Xunit.WinFormsFactAttribute.WinFormsFactAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
+Xunit.WinFormsTheoryAttribute.WinFormsTheoryAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
+Xunit.WpfFactAttribute.WpfFactAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
+Xunit.WpfTheoryAttribute.WpfTheoryAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
