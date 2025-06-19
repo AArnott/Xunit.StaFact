@@ -1,4 +1,0 @@
-Xunit.UISettingsAttribute
-Xunit.UISettingsAttribute.MaxAttempts.get -> int
-Xunit.UISettingsAttribute.MaxAttempts.set -> void
-Xunit.UISettingsAttribute.UISettingsAttribute() -> void

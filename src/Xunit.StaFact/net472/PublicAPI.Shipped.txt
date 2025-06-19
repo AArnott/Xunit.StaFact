@@ -83,3 +83,7 @@ Xunit.WpfFactAttribute
 Xunit.WpfFactAttribute.WpfFactAttribute() -> void
 Xunit.WpfTheoryAttribute
 Xunit.WpfTheoryAttribute.WpfTheoryAttribute() -> void
+Xunit.UISettingsAttribute
+Xunit.UISettingsAttribute.MaxAttempts.get -> int
+Xunit.UISettingsAttribute.MaxAttempts.set -> void
+Xunit.UISettingsAttribute.UISettingsAttribute() -> void

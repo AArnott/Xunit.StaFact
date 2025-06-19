@@ -1,1 +1,64 @@
 #nullable enable
+override Xunit.Sdk.CocoaFactDiscoverer.CreateTestCase(Xunit.Sdk.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.v3.IXunitTestMethod! testMethod, Xunit.v3.IFactAttribute! factAttribute) -> Xunit.v3.IXunitTestCase!
+override Xunit.Sdk.CocoaTheoryDiscoverer.CreateTestCasesForDataRow(Xunit.Sdk.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.v3.IXunitTestMethod! testMethod, Xunit.v3.ITheoryAttribute! theoryAttribute, Xunit.ITheoryDataRow! dataRow, object?[]! testMethodArguments) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<Xunit.v3.IXunitTestCase!>!>
+override Xunit.Sdk.CocoaTheoryDiscoverer.CreateTestCasesForTheory(Xunit.Sdk.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.v3.IXunitTestMethod! testMethod, Xunit.v3.ITheoryAttribute! theoryAttribute) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<Xunit.v3.IXunitTestCase!>!>
+override Xunit.Sdk.StaFactDiscoverer.CreateTestCase(Xunit.Sdk.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.v3.IXunitTestMethod! testMethod, Xunit.v3.IFactAttribute! factAttribute) -> Xunit.v3.IXunitTestCase!
+override Xunit.Sdk.StaTheoryDiscoverer.CreateTestCasesForDataRow(Xunit.Sdk.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.v3.IXunitTestMethod! testMethod, Xunit.v3.ITheoryAttribute! theoryAttribute, Xunit.ITheoryDataRow! dataRow, object?[]! testMethodArguments) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<Xunit.v3.IXunitTestCase!>!>
+override Xunit.Sdk.StaTheoryDiscoverer.CreateTestCasesForTheory(Xunit.Sdk.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.v3.IXunitTestMethod! testMethod, Xunit.v3.ITheoryAttribute! theoryAttribute) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<Xunit.v3.IXunitTestCase!>!>
+override Xunit.Sdk.UIDelayEnumeratedTestCase.Deserialize(Xunit.Sdk.IXunitSerializationInfo! data) -> void
+override Xunit.Sdk.UIDelayEnumeratedTestCase.Serialize(Xunit.Sdk.IXunitSerializationInfo! data) -> void
+override Xunit.Sdk.UIFactDiscoverer.CreateTestCase(Xunit.Sdk.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.v3.IXunitTestMethod! testMethod, Xunit.v3.IFactAttribute! factAttribute) -> Xunit.v3.IXunitTestCase!
+override Xunit.Sdk.UITestCase.Deserialize(Xunit.Sdk.IXunitSerializationInfo! data) -> void
+override Xunit.Sdk.UITestCase.Serialize(Xunit.Sdk.IXunitSerializationInfo! data) -> void
+override Xunit.Sdk.UITestRunner.RunTest(Xunit.Sdk.UITestRunnerContext! ctxt) -> System.Threading.Tasks.ValueTask<System.TimeSpan>
+override Xunit.Sdk.UITheoryDiscoverer.CreateTestCasesForDataRow(Xunit.Sdk.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.v3.IXunitTestMethod! testMethod, Xunit.v3.ITheoryAttribute! theoryAttribute, Xunit.ITheoryDataRow! dataRow, object?[]! testMethodArguments) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<Xunit.v3.IXunitTestCase!>!>
+override Xunit.Sdk.UITheoryDiscoverer.CreateTestCasesForTheory(Xunit.Sdk.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.v3.IXunitTestMethod! testMethod, Xunit.v3.ITheoryAttribute! theoryAttribute) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<Xunit.v3.IXunitTestCase!>!>
+static Xunit.Sdk.UITestRunner.Instance.get -> Xunit.Sdk.UITestRunner!
+Xunit.CocoaFactAttribute
+Xunit.CocoaFactAttribute.CocoaFactAttribute() -> void
+Xunit.CocoaTheoryAttribute
+Xunit.CocoaTheoryAttribute.CocoaTheoryAttribute() -> void
+Xunit.Sdk.CocoaFactDiscoverer
+Xunit.Sdk.CocoaFactDiscoverer.CocoaFactDiscoverer() -> void
+Xunit.Sdk.CocoaTheoryDiscoverer
+Xunit.Sdk.CocoaTheoryDiscoverer.CocoaTheoryDiscoverer() -> void
+Xunit.Sdk.SkippedTestCase
+Xunit.Sdk.SkippedTestCase.SkippedTestCase() -> void
+Xunit.Sdk.StaFactDiscoverer
+Xunit.Sdk.StaFactDiscoverer.StaFactDiscoverer() -> void
+Xunit.Sdk.StaTheoryDiscoverer
+Xunit.Sdk.StaTheoryDiscoverer.StaTheoryDiscoverer() -> void
+Xunit.Sdk.UIDelayEnumeratedTestCase
+Xunit.Sdk.UIDelayEnumeratedTestCase.Run(Xunit.Sdk.ExplicitOption explicitOption, Xunit.v3.IMessageBus! messageBus, object?[]! constructorArguments, Xunit.v3.ExceptionAggregator aggregator, System.Threading.CancellationTokenSource! cancellationTokenSource) -> System.Threading.Tasks.ValueTask<Xunit.v3.RunSummary>
+Xunit.Sdk.UIDelayEnumeratedTestCase.UIDelayEnumeratedTestCase() -> void
+Xunit.Sdk.UIFactDiscoverer
+Xunit.Sdk.UIFactDiscoverer.UIFactDiscoverer() -> void
+Xunit.Sdk.UITestCase
+Xunit.Sdk.UITestCase.Run(Xunit.Sdk.ExplicitOption explicitOption, Xunit.v3.IMessageBus! messageBus, object?[]! constructorArguments, Xunit.v3.ExceptionAggregator aggregator, System.Threading.CancellationTokenSource! cancellationTokenSource) -> System.Threading.Tasks.ValueTask<Xunit.v3.RunSummary>
+Xunit.Sdk.UITestCase.SyncContextType
+Xunit.Sdk.UITestCase.SyncContextType.Cocoa = 2 -> Xunit.Sdk.UITestCase.SyncContextType
+Xunit.Sdk.UITestCase.SyncContextType.None = 0 -> Xunit.Sdk.UITestCase.SyncContextType
+Xunit.Sdk.UITestCase.SyncContextType.Portable = 1 -> Xunit.Sdk.UITestCase.SyncContextType
+Xunit.Sdk.UITestCase.UITestCase() -> void
+Xunit.Sdk.UITestCaseRunner
+Xunit.Sdk.UITestCaseRunner.Run(Xunit.v3.IXunitTestCase! testCase, Xunit.v3.IMessageBus! messageBus, Xunit.v3.ExceptionAggregator aggregator, System.Threading.CancellationTokenSource! cancellationTokenSource, string! displayName, string? skipReason, Xunit.Sdk.ExplicitOption explicitOption, object?[]! constructorArguments) -> System.Threading.Tasks.ValueTask<Xunit.v3.RunSummary>
+Xunit.Sdk.UITestCaseRunnerContext
+Xunit.Sdk.UITestCaseRunnerContext.Settings.get -> Xunit.UISettingsAttribute!
+Xunit.Sdk.UITestRunner
+Xunit.Sdk.UITestRunner.UITestRunner() -> void
+Xunit.Sdk.UITestRunnerContext
+Xunit.Sdk.UITestRunnerContext.Settings.get -> Xunit.UISettingsAttribute!
+Xunit.Sdk.UITheoryDiscoverer
+Xunit.Sdk.UITheoryDiscoverer.UITheoryDiscoverer() -> void
+Xunit.StaFactAttribute
+Xunit.StaFactAttribute.StaFactAttribute() -> void
+Xunit.StaTheoryAttribute
+Xunit.StaTheoryAttribute.StaTheoryAttribute() -> void
+Xunit.UIFactAttribute
+Xunit.UIFactAttribute.UIFactAttribute() -> void
+Xunit.UISettingsAttribute
+Xunit.UISettingsAttribute.MaxAttempts.get -> int
+Xunit.UISettingsAttribute.MaxAttempts.set -> void
+Xunit.UISettingsAttribute.UISettingsAttribute() -> void
+Xunit.UITheoryAttribute
+Xunit.UITheoryAttribute.UITheoryAttribute() -> void
