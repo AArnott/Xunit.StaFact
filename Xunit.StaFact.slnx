@@ -1,0 +1,47 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="DebugMac" />
+    <BuildType Name="Release" />
+    <BuildType Name="ReleaseMac" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="nuget.config" />
+    <File Path="README.md" />
+    <File Path="version.json" />
+  </Folder>
+  <Folder Name="/src/">
+    <File Path="src/.editorconfig" />
+    <File Path="src/Directory.Build.props" />
+    <File Path="src/Directory.Build.targets" />
+    <Project Path="src/Xunit.StaFact/Xunit.StaFact.csproj">
+      <BuildType Solution="DebugMac|*" Project="Debug" />
+      <BuildType Solution="ReleaseMac|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Folder Name="/test/">
+    <File Path="test/.editorconfig" />
+    <File Path="test/Directory.Build.props" />
+    <File Path="test/Directory.Build.targets" />
+    <Project Path="test/Xunit.StaFact.Tests.Mac/Xunit.StaFact.Tests.Mac.csproj">
+      <BuildType Solution="DebugMac|*" Project="Debug" />
+      <BuildType Solution="ReleaseMac|*" Project="Release" />
+      <Build Solution="Debug|*" Project="false" />
+      <Build Solution="Release|*" Project="false" />
+    </Project>
+    <Project Path="test/Xunit.StaFact.Tests/Xunit.StaFact.Tests.csproj">
+      <BuildType Solution="DebugMac|*" Project="Debug" />
+      <BuildType Solution="ReleaseMac|*" Project="Release" />
+    </Project>
+  </Folder>
+  <Project Path="samples/Samples.csproj">
+    <BuildType Solution="DebugMac|*" Project="Debug" />
+    <BuildType Solution="ReleaseMac|*" Project="Debug" />
+  </Project>
+</Solution>
