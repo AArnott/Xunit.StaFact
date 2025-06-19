@@ -15,9 +15,9 @@ override Xunit.Sdk.UITheoryDiscoverer.CreateTestCasesForDataRow(Xunit.Sdk.ITestF
 override Xunit.Sdk.UITheoryDiscoverer.CreateTestCasesForTheory(Xunit.Sdk.ITestFrameworkDiscoveryOptions! discoveryOptions, Xunit.v3.IXunitTestMethod! testMethod, Xunit.v3.ITheoryAttribute! theoryAttribute) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<Xunit.v3.IXunitTestCase!>!>
 static Xunit.Sdk.UITestRunner.Instance.get -> Xunit.Sdk.UITestRunner!
 Xunit.CocoaFactAttribute
-Xunit.CocoaFactAttribute.CocoaFactAttribute() -> void
+Xunit.CocoaFactAttribute.CocoaFactAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
 Xunit.CocoaTheoryAttribute
-Xunit.CocoaTheoryAttribute.CocoaTheoryAttribute() -> void
+Xunit.CocoaTheoryAttribute.CocoaTheoryAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
 Xunit.Sdk.CocoaFactDiscoverer
 Xunit.Sdk.CocoaFactDiscoverer.CocoaFactDiscoverer() -> void
 Xunit.Sdk.CocoaTheoryDiscoverer
@@ -51,14 +51,14 @@ Xunit.Sdk.UITestRunnerContext.Settings.get -> Xunit.UISettingsAttribute!
 Xunit.Sdk.UITheoryDiscoverer
 Xunit.Sdk.UITheoryDiscoverer.UITheoryDiscoverer() -> void
 Xunit.StaFactAttribute
-Xunit.StaFactAttribute.StaFactAttribute() -> void
+Xunit.StaFactAttribute.StaFactAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
 Xunit.StaTheoryAttribute
-Xunit.StaTheoryAttribute.StaTheoryAttribute() -> void
+Xunit.StaTheoryAttribute.StaTheoryAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
 Xunit.UIFactAttribute
-Xunit.UIFactAttribute.UIFactAttribute() -> void
+Xunit.UIFactAttribute.UIFactAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
 Xunit.UISettingsAttribute
 Xunit.UISettingsAttribute.MaxAttempts.get -> int
 Xunit.UISettingsAttribute.MaxAttempts.set -> void
 Xunit.UISettingsAttribute.UISettingsAttribute() -> void
 Xunit.UITheoryAttribute
-Xunit.UITheoryAttribute.UITheoryAttribute() -> void
+Xunit.UITheoryAttribute.UITheoryAttribute(string? sourceFilePath = null, int sourceLineNumber = -1) -> void
