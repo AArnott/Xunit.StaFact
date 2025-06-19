@@ -4,14 +4,14 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-    <XunitV3LibraryVersion>2.0.0</XunitV3LibraryVersion>
+    <XunitV3LibraryVersion>3.0.0-pre.25</XunitV3LibraryVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
-    <PackageVersion Include="xunit.analyzers" Version="1.20.0" />
-    <PackageVersion Include="xunit.v3.assert" Version="2.0.0" />
-    <PackageVersion Include="xunit.v3.extensibility.core" Version="2.0.0" />
-    <PackageVersion Include="xunit.v3.runner.inproc.console" Version="2.0.0" />
+    <PackageVersion Include="xunit.analyzers" Version="1.23.0-pre.3" />
+    <PackageVersion Include="xunit.v3.assert" Version="3.0.0-pre.25" />
+    <PackageVersion Include="xunit.v3.extensibility.core" Version="3.0.0-pre.25" />
+    <PackageVersion Include="xunit.v3.runner.inproc.console" Version="3.0.0-pre.25" />
   </ItemGroup>
   <ItemGroup Condition="'$(MSBuildProjectName)'=='Xunit.StaFact'">
     <PackageVersion Update="xunit.v3.extensibility.core" Version="$(XunitV3LibraryVersion)" />
@@ -19,7 +19,7 @@
   <ItemGroup Label="Library.Template">
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.1" />
-    <PackageVersion Include="xunit.v3" Version="2.0.0" />
+    <PackageVersion Include="xunit.v3" Version="3.0.0-pre.25" />
   </ItemGroup>
   <ItemGroup>
     <!-- Put repo-specific GlobalPackageReference items in this group. -->
