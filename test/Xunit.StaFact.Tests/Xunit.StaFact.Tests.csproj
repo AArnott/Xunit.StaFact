@@ -17,9 +17,7 @@
     <None Include="@(ExcludedCompileItems)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="xunit.runner.visualstudio" />
-    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.v3.mtp-v2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Xunit.StaFact\Xunit.StaFact.csproj" />
