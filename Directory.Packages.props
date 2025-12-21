@@ -8,7 +8,6 @@
     <XunitV3LibraryVersion>3.2.1</XunitV3LibraryVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="4.14.0" />
     <PackageVersion Include="xunit.analyzers" Version="1.26.0" />
     <PackageVersion Include="xunit.v3.assert" Version="$(XunitV3LibraryVersion)" />
     <PackageVersion Include="xunit.v3.extensibility.core" Version="$(XunitV3LibraryVersion)" />

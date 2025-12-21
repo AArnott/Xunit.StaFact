@@ -33,11 +33,6 @@ Theory variants of these attributes allow for parameterized testing. Check out t
     <None Include="@(ExcludedCompileItems)" />
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="$(TargetFramework)\PublicAPI.Shipped.txt" />
-    <AdditionalFiles Include="$(TargetFramework)\PublicAPI.Unshipped.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" PrivateAssets="all" />
     <PackageReference Include="xunit.v3.extensibility.core" />
   </ItemGroup>
 </Project>
