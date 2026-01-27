@@ -41,7 +41,7 @@ public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
             throw new ArgumentNullException(nameof(ctxt));
         }
 
-        var @class = ctxt.Test.TestMethod.TestClass.Class;
+        Type @class = ctxt.Test.TestMethod.TestClass.Class;
 
         // Handle static test classes - they don't need to be instantiated
         // Static classes are both Abstract and Sealed in .NET reflection
