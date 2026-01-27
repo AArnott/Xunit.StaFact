@@ -62,4 +62,3 @@ public static class StaticTestClassTests
         Assert.True(value > 0);
     }
 }
-
