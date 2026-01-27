@@ -34,6 +34,26 @@ public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
         return await this.Run(ctxt);
     }
 
+    protected override async ValueTask<(object? Instance, SynchronizationContext? SyncContext, ExecutionContext? ExecutionContext)> CreateTestClassInstance(UITestRunnerContext ctxt)
+    {
+        if (ctxt is null)
+        {
+            throw new ArgumentNullException(nameof(ctxt));
+        }
+
+        var @class = ctxt.Test.TestMethod.TestClass.Class;
+
+        // Handle static test classes - they don't need to be instantiated
+        // Static classes are both Abstract and Sealed in .NET reflection
+        if (@class.IsAbstract && @class.IsSealed)
+        {
+            return (null, SynchronizationContext.Current, ExecutionContext.Capture());
+        }
+
+        // For non-static classes, use the base implementation
+        return await base.CreateTestClassInstance(ctxt);
+    }
+
     protected async override ValueTask<TimeSpan> RunTest(UITestRunnerContext ctxt)
     {
         if (ctxt is null)
