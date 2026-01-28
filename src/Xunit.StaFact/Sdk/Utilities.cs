@@ -168,12 +168,35 @@ internal static class Utilities
 
     private static IEnumerable<UISettingsAttribute> GetSettingsAttributes(IXunitTestMethod testMethod)
     {
-        if (testMethod.TestClass.Class.GetCustomAttributes(typeof(UISettingsAttribute), true).SingleOrDefault() is UISettingsAttribute classLevel)
+        UISettingsAttribute? classLevel = null;
+        UISettingsAttribute? methodLevel = null;
+
+        try
+        {
+            var classAttributes = testMethod.TestClass.Class.GetCustomAttributes(typeof(UISettingsAttribute), true);
+            classLevel = classAttributes.FirstOrDefault() as UISettingsAttribute;
+        }
+        catch (InvalidOperationException)
+        {
+            // Static classes may cause GetCustomAttributes to throw, so we swallow this exception
+        }
+
+        try
+        {
+            var methodAttributes = testMethod.Method.GetCustomAttributes(typeof(UISettingsAttribute), true);
+            methodLevel = methodAttributes.FirstOrDefault() as UISettingsAttribute;
+        }
+        catch (InvalidOperationException)
+        {
+            // In case method attributes also have issues
+        }
+
+        if (classLevel is not null)
         {
             yield return classLevel;
         }
 
-        if (testMethod.Method.GetCustomAttributes(typeof(UISettingsAttribute), true).SingleOrDefault() is UISettingsAttribute methodLevel)
+        if (methodLevel is not null)
         {
             yield return methodLevel;
         }
