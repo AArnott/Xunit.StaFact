@@ -13,6 +13,12 @@ public class WpfTheoryTests
         new object[] { 3, 4 },
     };
 
+    public static IEnumerable<TheoryDataRow<string>> TraitDataRows =>
+    [
+        new TheoryDataRow<string>("hello")
+            .WithTrait("rowid", "properties"),
+    ];
+
     [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
@@ -96,5 +102,12 @@ public class WpfTheoryTests
     {
         _ = arg;
         throw new SkipOnThisException();
+    }
+
+    [DesktopTheory]
+    [MemberData(nameof(TraitDataRows))]
+    public void TheoryDataRowTraitsAreDiscovered(string s)
+    {
+        Assert.Equal("hello", s);
     }
 }
