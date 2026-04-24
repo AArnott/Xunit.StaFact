@@ -65,7 +65,7 @@ internal static class Utilities
         Dictionary<string, HashSet<string>> traits;
 
         details = TestIntrospectionHelper.GetTestCaseDetailsForTheoryDataRow(discoveryOptions, testMethod, theoryAttribute, dataRow, testMethodArguments);
-        traits = GetTraits(testMethod);
+        traits = TestIntrospectionHelper.GetTraits(testMethod, dataRow);
 
         if (skipReason is not null)
         {

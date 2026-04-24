@@ -16,6 +16,12 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.NotNull(this.ctorSyncContext);
     }
 
+    public static IEnumerable<TheoryDataRow<string>> TraitDataRows =>
+    [
+        new TheoryDataRow<string>("hello")
+            .WithTrait("rowid", "properties"),
+    ];
+
     public void Dispose()
     {
         Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
@@ -175,5 +181,12 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
     {
         _ = arg;
         throw new SkipOnThisException();
+    }
+
+    [DesktopTheory]
+    [MemberData(nameof(TraitDataRows))]
+    public void TheoryDataRowTraitsAreDiscovered(string s)
+    {
+        Assert.Equal("hello", s);
     }
 }

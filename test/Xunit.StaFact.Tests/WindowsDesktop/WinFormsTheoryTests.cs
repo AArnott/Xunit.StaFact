@@ -6,6 +6,12 @@ using DesktopTheoryAttribute = Xunit.WinFormsTheoryAttribute;
 
 public class WinFormsTheoryTests
 {
+    public static IEnumerable<TheoryDataRow<string>> TraitDataRows =>
+    [
+        new TheoryDataRow<string>("hello")
+            .WithTrait("rowid", "properties"),
+    ];
+
     [DesktopTheory]
     [InlineData(0)]
     [InlineData(1)]
@@ -73,5 +79,12 @@ public class WinFormsTheoryTests
     {
         _ = arg;
         throw new SkipOnThisException();
+    }
+
+    [DesktopTheory]
+    [MemberData(nameof(TraitDataRows))]
+    public void TheoryDataRowTraitsAreDiscovered(string s)
+    {
+        Assert.Equal("hello", s);
     }
 }
