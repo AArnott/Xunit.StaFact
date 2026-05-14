@@ -65,6 +65,7 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
             }
         }
 
+        await using var methodFixtureMappings = new FixtureMappingManager("method");
         await using UITestCaseRunnerContext ctxt = new(
             this.settings,
             this.threadRental,
@@ -76,7 +77,8 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
             displayName,
             skipReason,
             explicitOption,
-            constructorArguments);
+            constructorArguments,
+            methodFixtureMappings);
 
         await ctxt.InitializeAsync();
 
@@ -136,7 +138,8 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
                 ctxt.ExplicitOption,
                 ctxt.Aggregator.Clone(),
                 ctxt.CancellationTokenSource,
-                ctxt.BeforeAfterTestAttributes);
+                ctxt.BeforeAfterTestAttributes,
+                ctxt.CaseFixtureMappings);
             result.Aggregate(summary);
             if (summary.Failed == 0)
             {

@@ -14,8 +14,9 @@ public class UITestRunnerContext : XunitTestRunnerBaseContext<IXunitTest>
         ExceptionAggregator aggregator,
         CancellationTokenSource cancellationTokenSource,
         IReadOnlyCollection<IBeforeAfterTestAttribute> beforeAfterTestAttributes,
-        object?[] constructorArguments)
-        : base(test, messageBus, explicitOption, aggregator, cancellationTokenSource, beforeAfterTestAttributes, constructorArguments)
+        object?[] constructorArguments,
+        FixtureMappingManager caseFixtureMappings)
+        : base(test, messageBus, explicitOption, aggregator, cancellationTokenSource, beforeAfterTestAttributes, constructorArguments, caseFixtureMappings)
     {
         this.Settings = settings;
         this.ThreadRental = threadRental;

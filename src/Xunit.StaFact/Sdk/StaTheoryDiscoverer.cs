@@ -9,7 +9,7 @@ namespace Xunit.Sdk;
 public class StaTheoryDiscoverer : TheoryDiscoverer
 {
     /// <inheritdoc/>
-    protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments)
+    protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments, string? index)
     {
         IXunitTestCase testCase = StaUtilities.CreateTestCaseForDataRow(
             discoveryOptions,

@@ -5,10 +5,10 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <MicrosoftTestingPlatformVersion>2.2.2</MicrosoftTestingPlatformVersion>
-    <XunitV3LibraryVersion>3.2.2</XunitV3LibraryVersion>
+    <XunitV3LibraryVersion>4.0.0-pre.108</XunitV3LibraryVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="xunit.analyzers" Version="1.27.0" />
+    <PackageVersion Include="xunit.analyzers" Version="2.0.0-pre.51" />
     <PackageVersion Include="xunit.v3.assert" Version="$(XunitV3LibraryVersion)" />
     <PackageVersion Include="xunit.v3.extensibility.core" Version="$(XunitV3LibraryVersion)" />
     <PackageVersion Include="xunit.v3.runner.inproc.console" Version="$(XunitV3LibraryVersion)" />
