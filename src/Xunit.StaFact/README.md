@@ -8,5 +8,6 @@ Use v1.x versions of this package for use with xUnit v2.
 Use v2.0 versions of this package for use with xUnit.v3 v1.x.
 Use v2.1+ versions of this package for use with xUnit.v3 v2+.
 Use v3.0+ versions of this package for use with xunit.v3 v3+
+Use v4.0+ versions of this package for use with xunit.v3 v4+
 
 [See our full product documentation](https://aarnott.github.io/Xunit.StaFact/).
