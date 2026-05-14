@@ -19,6 +19,7 @@ For xUnit v2 support | Use Xunit.STAFact 1.x
 For xUnit.v3 1.x support | Use Xunit.STAFact 2.0
 For xUnit.v3 2.x support | Use Xunit.STAFact 2.1+
 For xUnit.v3 3.x support | Use Xunit.STAFact 3.x
+For xUnit.v3 4.x support | Use Xunit.STAFact 4.x
 
 ## Features
 

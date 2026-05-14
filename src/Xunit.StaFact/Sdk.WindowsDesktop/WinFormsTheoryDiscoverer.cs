@@ -9,7 +9,7 @@ namespace Xunit.Sdk;
 public class WinFormsTheoryDiscoverer : TheoryDiscoverer
 {
     /// <inheritdoc/>
-    protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments)
+    protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments, string? index)
     {
         IXunitTestCase testCase = WinFormsUtilities.CreateTestCaseForDataRow(
             discoveryOptions,
