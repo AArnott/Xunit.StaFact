@@ -58,6 +58,15 @@ Param (
 $EnvVars = @{}
 $PrependPath = @()
 
+if ($IsMacOS) {
+    $appleDeveloperDir = & "$PSScriptRoot\tools\Get-AppleDeveloperDir.ps1"
+    if ($appleDeveloperDir) {
+        Write-Host "Setting DEVELOPER_DIR to $appleDeveloperDir so dotnet can build macOS targets." -ForegroundColor Yellow
+        $EnvVars['DEVELOPER_DIR'] = $appleDeveloperDir
+        $env:DEVELOPER_DIR = $appleDeveloperDir
+    }
+}
+
 if (!$NoPrerequisites) {
     if (!$NoNuGetCredProvider) {
         & "$PSScriptRoot\tools\Install-NuGetCredProvider.ps1" -AccessToken $AccessToken -Force:$UpgradePrerequisites
