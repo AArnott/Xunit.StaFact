@@ -16,9 +16,8 @@ public class UITestCaseRunnerContext : XunitTestCaseRunnerBaseContext<IXunitTest
         string displayName,
         string? skipReason,
         ExplicitOption explicitOption,
-        object?[] constructorArguments,
-        FixtureMappingManager methodFixtureMappings)
-        : base(testCase, tests, messageBus, aggregator, cancellationTokenSource, displayName, skipReason, explicitOption, constructorArguments, methodFixtureMappings)
+        object?[] constructorArguments)
+        : base(testCase, tests, messageBus, aggregator, cancellationTokenSource, displayName, skipReason, explicitOption, constructorArguments)
     {
         this.Settings = settings;
         this.ThreadRental = threadRental;
