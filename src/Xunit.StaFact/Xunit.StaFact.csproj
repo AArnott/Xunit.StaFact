@@ -2,9 +2,9 @@
   <PropertyGroup>
     <!-- The first TFM to be listed is the lucky one that determines which files show up in Solution Explorer. -->
     <TargetFrameworks>net472;netstandard2.0;net8.0;net8.0-windows</TargetFrameworks>
-    <!-- Exclude for Linux, which does not support building macOS projects
+    <!-- Exclude for Linux and Windows, which do not support building macOS projects
          (see https://github.com/xamarin/xamarin-macios/issues/17287). -->
-    <TargetFrameworks Condition="!$([MSBuild]::IsOsPlatform('Linux'))">$(TargetFrameworks);net9.0-macos15.0</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(TargetFrameworks);net9.0-macos15.0</TargetFrameworks>
     <RootNamespace>Xunit</RootNamespace>
 
     <Description>Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms SynchronizationContext, or even a cross-platform generic UI thread emulation with a SynchronizationContext that keeps code running on a "main thread" for that test.
