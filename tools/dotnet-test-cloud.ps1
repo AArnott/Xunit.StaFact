@@ -13,6 +13,8 @@
     A switch to run the tests in an x86 process.
 .PARAMETER dotnet32
     The path to a 32-bit dotnet executable to use.
+.PARAMETER NoCoverage
+    A switch to skip code coverage collection.
 #>
 [CmdletBinding()]
 Param(
@@ -20,7 +22,8 @@ Param(
   [string]$Agent = 'Local',
   [switch]$PublishResults,
   [switch]$x86,
-  [string]$dotnet32
+  [string]$dotnet32,
+  [switch]$NoCoverage
 )
 
 $RepoRoot = (Resolve-Path "$PSScriptRoot/..").Path
@@ -67,10 +70,12 @@ if ($isMTP) {
         ,'--hangdump'
         ,'--hangdump-timeout','120s'
         ,'--crashdump'
+        ,'--crashdump-type','Heap'
+        # The native crash report accompanies the dump and is often the only way to identify the
+        # faulting thread and instruction when a test host dies of an access violation on Linux.
+        ,'--crash-report-if-supported'
     )
     $mtpArgs = @(
-        ,'--coverage'
-        ,'--coverage-output-format','cobertura'
         ,'--diagnostic'
         ,'--diagnostic-output-directory',$testLogs
         ,'--diagnostic-verbosity','Information'
@@ -78,13 +83,20 @@ if ($isMTP) {
         ,'--report-trx'
     )
 
+    if (-not $NoCoverage) {
+        $mtpArgs += @(
+            ,'--coverage'
+            ,'--coverage-output-format','cobertura'
+            ,'--coverage-settings',"$PSScriptRoot/test.runsettings"
+        )
+    }
+
     & $dotnet test --solution $RepoRoot `
         --no-build `
         -c $Configuration `
         -bl:"$testBinLog" `
         --filter-not-trait 'TestCategory=FailsInCloudTest' `
         --filter-not-trait 'TestCategory=FailureExpected' `
-        --coverage-settings "$PSScriptRoot/test.runsettings" `
         @frameworks `
         @mtpArgs `
         @dumpSwitches `
@@ -94,18 +106,25 @@ if ($isMTP) {
     $trxFiles = Get-ChildItem -Recurse -Path $testLogs\*.trx
 } else {
     $testDiagLog = Join-Path $ArtifactStagingFolder (Join-Path test_logs diag.log)
+    $coverageArgs = @()
+    if (-not $NoCoverage) {
+        $coverageArgs = @(
+            ,'--collect','Code Coverage;Format=cobertura'
+            ,'--settings',"$PSScriptRoot/test.runsettings"
+        )
+    }
+
     & $dotnet test $RepoRoot `
         --no-build `
         -c $Configuration `
         --filter "TestCategory!=FailsInCloudTest & TestCategory!=FailureExpected" `
-        --collect "Code Coverage;Format=cobertura" `
-        --settings "$PSScriptRoot/test.runsettings" `
         --blame-hang-timeout 60s `
         --blame-crash `
         -bl:"$testBinLog" `
         --diag "$testDiagLog;TraceLevel=info" `
         --logger trx `
         @frameworks `
+        @coverageArgs `
         @extraArgs
     if ($LASTEXITCODE -ne 0) { $failedTests += 1 }
 
