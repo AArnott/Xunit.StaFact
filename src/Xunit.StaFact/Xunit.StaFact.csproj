@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!-- The first TFM to be listed is the lucky one that determines which files show up in Solution Explorer. -->
-    <TargetFrameworks>net472;netstandard2.0;net8.0;net8.0-windows;net8.0-windows10.0.17763.0</TargetFrameworks>
+    <TargetFrameworks>net472;netstandard2.0;net8.0;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net8.0-windows10.0.17763.0</TargetFrameworks>
     <!-- Exclude for Linux and Windows, which do not support building macOS projects
          (see https://github.com/xamarin/xamarin-macios/issues/17287). -->
     <TargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(TargetFrameworks);net9.0-macos15.0</TargetFrameworks>
