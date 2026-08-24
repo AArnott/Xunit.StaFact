@@ -7,6 +7,7 @@ Xunit test attributes            | Supported OS's   | SynchronizationContext    
 @Xunit.UIFactAttribute, @Xunit.UITheoryAttribute | All              | Yes[^1]                              | yes[^2]         |
 @Xunit.WpfFactAttribute, @Xunit.WpfTheoryAttribute           | Windows only[^3] | @System.Windows.Threading.DispatcherSynchronizationContext   | yes             |
 @Xunit.WinFormsFactAttribute, @Xunit.WinFormsTheoryAttribute | Windows only[^3] | @System.Windows.Forms.WindowsFormsSynchronizationContext | yes             |
+@Xunit.WinUIFactAttribute, @Xunit.WinUITheoryAttribute       | Windows 10 1809+[^4] | @Microsoft.UI.Dispatching.DispatcherQueueSynchronizationContext | yes       |
 @Xunit.StaFactAttribute, @Xunit.StaTheoryAttribute           | Windows only[^3] | No                                   | yes             |
 @Xunit.CocoaFactAttribute, @Xunit.CocoaTheoryAttribute       | Mac OSX only[^3] | Yes[^1]                              | no              |
 
@@ -16,7 +17,9 @@ This attribute offers a means to add automated retries to a test's execution for
 ## Shared UI thread fixtures
 
 By default, every fact or theory in this package runs on a newly created thread that is disposed when that test finishes.
-This avoids sharing thread-affine state and allows unrelated tests to run concurrently.
+This avoids sharing thread-affine state and allows unrelated tests to run concurrently. WinUI tests still get a fresh
+thread, but their XAML lifetimes are serialized within the process because overlapping WinUI XAML managers can terminate
+the test process.
 
 Some UI frameworks retain thread-affine objects in static caches, or a suite may intentionally host an application-level
 object for several tests. In those cases, opt in to a shared thread with an xUnit class or collection fixture.
@@ -28,6 +31,7 @@ Test attribute | Compatible fixture
 @Xunit.StaFactAttribute, @Xunit.StaTheoryAttribute | @Xunit.StaThreadFixture
 @Xunit.WpfFactAttribute, @Xunit.WpfTheoryAttribute | @Xunit.WpfThreadFixture
 @Xunit.WinFormsFactAttribute, @Xunit.WinFormsTheoryAttribute | @Xunit.WinFormsThreadFixture
+@Xunit.WinUIFactAttribute, @Xunit.WinUITheoryAttribute | @Xunit.WinUIThreadFixture
 @Xunit.CocoaFactAttribute, @Xunit.CocoaTheoryAttribute | @Xunit.CocoaThreadFixture
 
 ### Class scope
@@ -65,7 +69,7 @@ and cleanup runs before that thread is shut down.
 
 [!code-csharp[](../../samples/SharedThreadSamples.cs#SharedThreadFixture)]
 
-The portable UI, WPF, WinForms, and Cocoa fixtures install their corresponding synchronization context.
+The portable UI, WPF, WinForms, WinUI, and Cocoa fixtures install their corresponding synchronization context.
 The STA fixture intentionally does not install one, matching @Xunit.StaFactAttribute behavior; after a yielding
 `await`, code may resume on a thread-pool thread.
 
@@ -84,3 +88,5 @@ The STA fixture intentionally does not install one, matching @Xunit.StaFactAttri
 [^2]: STA thread only applies on Windows. On other operating systems, an MTA thread is used.
 
 [^3]: Windows-only attributes result in the test to result in "Skipped" on other operating systems.
+
+[^4]: WinUI attributes require a Windows-versioned target framework such as `net8.0-windows10.0.17763.0`.

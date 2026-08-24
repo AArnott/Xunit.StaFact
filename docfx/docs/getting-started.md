@@ -32,6 +32,42 @@ More closely resembles WinForms-specific semantics including a WinForms-specific
 
 [!code-csharp[](../../samples/SampleTests.cs#WinFormsFact)]
 
+### WinUI
+
+Use @Xunit.WinUIFactAttribute or @Xunit.WinUITheoryAttribute to initialize WinUI XAML and run a test with a
+@Microsoft.UI.Dispatching.DispatcherQueueSynchronizationContext. The test project must use a Windows-versioned
+target framework such as `net8.0-windows10.0.17763.0`.
+
+An unpackaged test executable that uses these attributes must also enable Windows App SDK bootstrap initialization:
+
+```xml
+<PropertyGroup>
+  <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+  <WindowsPackageType>None</WindowsPackageType>
+  <WindowsAppSdkBootstrapInitialize>false</WindowsAppSdkBootstrapInitialize>
+  <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+</PropertyGroup>
+```
+
+`WindowsAppSDKSelfContained` allows tests to run on machines that do not have the Windows App SDK runtime installed.
+Choose a runtime identifier that matches the test process architecture. For a framework-dependent test host instead,
+omit `WindowsAppSDKSelfContained` and `RuntimeIdentifier`, and set `WindowsAppSdkBootstrapInitialize` to `true`.
+These properties are not required for projects that use only the portable UI, STA, WPF, or WinForms attributes.
+
+```csharp
+[WinUIFact]
+public async Task ControlStaysOnDispatcherQueue()
+{
+    var button = new Microsoft.UI.Xaml.Controls.Button();
+    Assert.True(button.DispatcherQueue.HasThreadAccess);
+
+    await Task.Yield();
+
+    Assert.True(button.DispatcherQueue.HasThreadAccess);
+}
+```
+
 ### STA thread
 
 Guarantees the test to run on an STA thread.

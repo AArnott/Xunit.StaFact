@@ -2,17 +2,18 @@
   <PropertyGroup>
     <!-- The first TFM to be listed is the lucky one that determines which files show up in Solution Explorer. -->
     <TargetFrameworks>net472;netstandard2.0;net8.0;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net8.0-windows10.0.17763.0</TargetFrameworks>
     <!-- Exclude for Linux and Windows, which do not support building macOS projects
          (see https://github.com/xamarin/xamarin-macios/issues/17287). -->
     <TargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(TargetFrameworks);net9.0-macos15.0</TargetFrameworks>
     <RootNamespace>Xunit</RootNamespace>
 
-    <Description>Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms SynchronizationContext, or even a cross-platform generic UI thread emulation with a SynchronizationContext that keeps code running on a "main thread" for that test.
+    <Description>Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms or WinUI SynchronizationContext, or even a cross-platform generic UI thread emulation with a SynchronizationContext that keeps code running on a "main thread" for that test.
 
-Simply use [WpfFact], [WinFormsFact], [StaFact] or the cross-platform [UIFact] on your test method to run your test under conditions that most closely match the main thread in your application.
+Simply use [WpfFact], [WinFormsFact], [WinUIFact], [StaFact] or the cross-platform [UIFact] on your test method to run your test under conditions that most closely match the main thread in your application.
 
 Theory variants of these attributes allow for parameterized testing. Check out the xunit.combinatorial nuget package for pairwise or combinatorial testing with theories.</Description>
-    <PackageTags>STA xunit testing unit WPF WinForms testing</PackageTags>
+    <PackageTags>STA xunit testing unit WPF WinForms WinUI testing</PackageTags>
     <PackageValidationBaselineVersion>3.0.13</PackageValidationBaselineVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -33,6 +34,7 @@ Theory variants of these attributes allow for parameterized testing. Check out t
     <None Include="@(ExcludedCompileItems)" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Condition="'$(TargetFramework)'=='net8.0-windows10.0.17763.0'" />
     <PackageReference Include="xunit.v3.extensibility.core" />
   </ItemGroup>
 </Project>
