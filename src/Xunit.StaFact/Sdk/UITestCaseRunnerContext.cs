@@ -10,15 +10,15 @@ public class UITestCaseRunnerContext : XunitTestCaseRunnerBaseContext<IXunitTest
         ThreadRental threadRental,
         IXunitTestCase testCase,
         IReadOnlyCollection<IXunitTest> tests,
+        ExplicitOption explicitOption,
         IMessageBus messageBus,
         ExceptionAggregator aggregator,
-        CancellationTokenSource cancellationTokenSource,
         string displayName,
         string? skipReason,
-        ExplicitOption explicitOption,
-        object?[] constructorArguments,
+        CancellationTokenSource cancellationTokenSource,
         ParallelMode parallelMode,
         ExecutionScheduler scheduler,
+        object?[] constructorArguments,
         FixtureMappingManager methodFixtureMappings)
         : base(testCase, tests, explicitOption, messageBus, aggregator, displayName, skipReason, cancellationTokenSource, parallelMode, scheduler, constructorArguments, methodFixtureMappings)
     {

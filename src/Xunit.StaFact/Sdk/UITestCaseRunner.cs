@@ -73,15 +73,15 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
             this.threadRental,
             testCase,
             tests,
+            explicitOption,
             messageBus,
             aggregator,
-            cancellationTokenSource,
             displayName,
             skipReason,
-            explicitOption,
-            constructorArguments,
+            cancellationTokenSource,
             parallelMode,
             scheduler,
+            constructorArguments,
             methodFixtureMappings);
 
         await ctxt.InitializeAsync();
@@ -148,9 +148,9 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
                 ctxt.ExplicitOption,
                 ctxt.Aggregator.Clone(),
                 ctxt.CancellationTokenSource,
+                ctxt.BeforeAfterTestAttributes,
                 ctxt.ParallelMode,
                 ctxt.Scheduler,
-                ctxt.BeforeAfterTestAttributes,
                 ctxt.CaseFixtureMappings);
             result.Aggregate(summary);
             if (summary.Failed == 0)

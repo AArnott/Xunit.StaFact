@@ -1,6 +1,4 @@
 // Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-using Xunit.v3;
-
-[assembly: Parallelization(MaxThreads = Counter.MaxCount)]
+[assembly: Xunit.v3.Parallelization(MaxThreads = Counter.MaxCount)]
