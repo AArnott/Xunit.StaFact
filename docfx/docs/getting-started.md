@@ -44,10 +44,15 @@ An unpackaged test executable that uses these attributes must also enable Window
 <PropertyGroup>
   <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
   <WindowsPackageType>None</WindowsPackageType>
-  <WindowsAppSdkBootstrapInitialize>true</WindowsAppSdkBootstrapInitialize>
+  <WindowsAppSdkBootstrapInitialize>false</WindowsAppSdkBootstrapInitialize>
+  <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
 </PropertyGroup>
 ```
 
+`WindowsAppSDKSelfContained` allows tests to run on machines that do not have the Windows App SDK runtime installed.
+Choose a runtime identifier that matches the test process architecture. For a framework-dependent test host instead,
+omit `WindowsAppSDKSelfContained` and `RuntimeIdentifier`, and set `WindowsAppSdkBootstrapInitialize` to `true`.
 These properties are not required for projects that use only the portable UI, STA, WPF, or WinForms attributes.
 
 ```csharp
