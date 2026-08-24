@@ -38,6 +38,18 @@ Use @Xunit.WinUIFactAttribute or @Xunit.WinUITheoryAttribute to initialize WinUI
 @Microsoft.UI.Dispatching.DispatcherQueueSynchronizationContext. The test project must use a Windows-versioned
 target framework such as `net8.0-windows10.0.17763.0`.
 
+An unpackaged test executable that uses these attributes must also enable Windows App SDK bootstrap initialization:
+
+```xml
+<PropertyGroup>
+  <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+  <WindowsPackageType>None</WindowsPackageType>
+  <WindowsAppSdkBootstrapInitialize>true</WindowsAppSdkBootstrapInitialize>
+</PropertyGroup>
+```
+
+These properties are not required for projects that use only the portable UI, STA, WPF, or WinForms attributes.
+
 ```csharp
 [WinUIFact]
 public async Task ControlStaysOnDispatcherQueue()
