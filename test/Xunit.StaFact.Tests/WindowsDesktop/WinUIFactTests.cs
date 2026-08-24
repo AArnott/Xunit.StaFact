@@ -39,8 +39,15 @@ public class WinUIFactTests
         var button = new WinUIButton();
         var window = new WinUIWindow();
 
-        Assert.True(button.DispatcherQueue.HasThreadAccess);
-        Assert.True(window.DispatcherQueue.HasThreadAccess);
+        try
+        {
+            Assert.True(button.DispatcherQueue.HasThreadAccess);
+            Assert.True(window.DispatcherQueue.HasThreadAccess);
+        }
+        finally
+        {
+            window.Close();
+        }
     }
 
     [WinUIFact, Trait("TestCategory", "FailureExpected")]
