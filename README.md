@@ -3,9 +3,9 @@
 [![Build Status](https://dev.azure.com/andrewarnott/OSS/_apis/build/status/Xunit.StaFact)](https://dev.azure.com/andrewarnott/OSS/_build/latest?definitionId=22)
 [![NuGet package](https://img.shields.io/nuget/v/xunit.stafact.svg)][NuPkg]
 
-Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms SynchronizationContext, or even a cross-platform generic UI thread emulation with a SynchronizationContext that keeps code running on a "main thread" for that test.
+Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms or WinUI SynchronizationContext, or even a cross-platform generic UI thread emulation with a SynchronizationContext that keeps code running on a "main thread" for that test.
 
-Simply use `[WpfFact]`, `[WinFormsFact]`, `[StaFact]` or the cross-platform `[UIFact]` on your test method to run your test under conditions that most closely match the main thread in your application.
+Simply use `[WpfFact]`, `[WinFormsFact]`, `[WinUIFact]`, `[StaFact]` or the cross-platform `[UIFact]` on your test method to run your test under conditions that most closely match the main thread in your application.
 
 Theory variants of these attributes allow for parameterized testing. Check out the xunit.combinatorial nuget package for pairwise or combinatorial testing with theories.
 
@@ -30,6 +30,7 @@ Xunit test attributes            | Supported OS's   | SynchronizationContext    
 `[UIFact, UITheory]`             | All              | Yes<sup>1</sup>                                 | yes<sup>2</sup>            |
 `[WpfFact, WpfTheory]`           | Windows only<sup>3</sup>    | `DispatcherSynchronizationContext`   | yes             |
 `[WinFormsFact, WinFormsTheory]` | Windows only<sup>3</sup>    | `WindowsFormsSynchronizationContext` | yes             |
+`[WinUIFact, WinUITheory]`       | Windows 10 1809+<sup>4</sup> | `DispatcherQueueSynchronizationContext` | yes          |
 `[StaFact, StaTheory]`           | Windows only<sup>3</sup>    | No                                   | yes             |
 `[CocoaFact, CocoaTheory]`       | Mac OSX only<sup>3</sup>    | Yes<sup>1</sup>                                 | no              |
 
@@ -39,13 +40,15 @@ Xunit test attributes            | Supported OS's   | SynchronizationContext    
 
 <sup>3</sup> Windows-only attributes result in the test to result in "Skipped" on other operating systems.
 
+<sup>4</sup> WinUI attributes require a Windows-versioned target framework such as `net8.0-windows10.0.17763.0`.
+
 We also offer a `[UISettingsAttribute]` that can be applied to individual test methods or test classes to control the behavior of the various UI test attributes.
 This attribute offers a means to add automated retries to a test's execution for unstable tests.
 
 ## Samples
 
 ```csharp
-[UIFact] // or [WinFormsFact] or [WpfFact]
+[UIFact] // or [WinFormsFact], [WpfFact], or [WinUIFact]
 public async Task WpfFact_OnSTAThread()
 {
     Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());

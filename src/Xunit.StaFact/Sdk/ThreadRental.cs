@@ -44,7 +44,7 @@ internal class ThreadRental : IDisposable
 
         try
         {
-            this.syncContext.Send(_ => this.SyncContextAdapter.Cleanup(), null);
+            this.SyncContextAdapter.Cleanup(this.syncContext);
         }
         finally
         {

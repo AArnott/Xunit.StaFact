@@ -97,6 +97,13 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
         /// Use the <see cref="System.Windows.Forms.WindowsFormsSynchronizationContext"/>, which is only available on Desktop.
         /// </summary>
         WinForms,
+
+#if WINDOWS10_0_17763_0_OR_GREATER
+        /// <summary>
+        /// Use the <see cref="Microsoft.UI.Dispatching.DispatcherQueueSynchronizationContext"/>, which is available with WinUI.
+        /// </summary>
+        WinUI,
+#endif
 #endif
     }
 
@@ -149,6 +156,11 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
 
             case SyncContextType.WinForms:
                 return WinFormsSynchronizationContextAdapter.Default;
+
+#if WINDOWS10_0_17763_0_OR_GREATER
+            case SyncContextType.WinUI:
+                return WinUISynchronizationContextAdapter.Default;
+#endif
 #endif
             default:
                 throw new NotSupportedException("Unsupported type of SynchronizationContext.");

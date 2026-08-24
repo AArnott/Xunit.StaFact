@@ -32,6 +32,25 @@ More closely resembles WinForms-specific semantics including a WinForms-specific
 
 [!code-csharp[](../../samples/SampleTests.cs#WinFormsFact)]
 
+### WinUI
+
+Use @Xunit.WinUIFactAttribute or @Xunit.WinUITheoryAttribute to initialize WinUI XAML and run a test with a
+@Microsoft.UI.Dispatching.DispatcherQueueSynchronizationContext. The test project must use a Windows-versioned
+target framework such as `net8.0-windows10.0.17763.0`.
+
+```csharp
+[WinUIFact]
+public async Task ControlStaysOnDispatcherQueue()
+{
+    var button = new Microsoft.UI.Xaml.Controls.Button();
+    Assert.True(button.DispatcherQueue.HasThreadAccess);
+
+    await Task.Yield();
+
+    Assert.True(button.DispatcherQueue.HasThreadAccess);
+}
+```
+
 ### STA thread
 
 Guarantees the test to run on an STA thread.

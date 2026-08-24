@@ -33,6 +33,13 @@ internal abstract class SyncContextAdapter
     internal abstract void PumpTill(SynchronizationContext syncContext, Task task);
 
     /// <summary>
+    /// Runs cleanup on the synchronization context thread.
+    /// </summary>
+    /// <param name="syncContext">The synchronization context to clean up.</param>
+    internal virtual void Cleanup(SynchronizationContext syncContext)
+        => syncContext.Send(_ => this.Cleanup(), null);
+
+    /// <summary>
     /// Clean up this instance.
     /// </summary>
     internal virtual void Cleanup()
