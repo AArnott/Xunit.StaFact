@@ -22,8 +22,14 @@ public abstract class UIThreadFixtureBase : IAsyncLifetime
         this.threadName = this.GetType().FullName ?? this.GetType().Name;
     }
 
+    /// <summary>
+    /// Gets the adapter that creates and pumps this fixture's synchronization context.
+    /// </summary>
     internal SyncContextAdapter SyncContextAdapter { get; }
 
+    /// <summary>
+    /// Gets the thread rental owned by this fixture.
+    /// </summary>
     internal ThreadRental ThreadRental => this.threadRental ?? throw new ObjectDisposedException(this.GetType().FullName);
 
     /// <summary>

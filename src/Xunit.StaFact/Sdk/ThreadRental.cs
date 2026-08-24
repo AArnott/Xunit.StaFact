@@ -57,8 +57,8 @@ internal class ThreadRental : IDisposable
 
     internal static async Task<ThreadRental> CreateAsync(SyncContextAdapter syncContextAdapter, string threadName)
     {
-        var disposalTaskSource = new TaskCompletionSource<object?>();
-        var syncContextSource = new TaskCompletionSource<SynchronizationContext>();
+        var disposalTaskSource = new TaskCompletionSource<object?>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var syncContextSource = new TaskCompletionSource<SynchronizationContext>(TaskCreationOptions.RunContinuationsAsynchronously);
         var thread = new Thread(() =>
         {
             SynchronizationContext uiSyncContext;
