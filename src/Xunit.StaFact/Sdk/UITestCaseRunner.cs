@@ -31,7 +31,10 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
        string displayName,
        string? skipReason,
        ExplicitOption explicitOption,
-       object?[] constructorArguments)
+       object?[] constructorArguments,
+       ParallelMode parallelMode,
+       ExecutionScheduler scheduler,
+       FixtureMappingManager methodFixtureMappings)
     {
         if (testCase is null)
         {
@@ -76,7 +79,10 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
             displayName,
             skipReason,
             explicitOption,
-            constructorArguments);
+            constructorArguments,
+            parallelMode,
+            scheduler,
+            methodFixtureMappings);
 
         await ctxt.InitializeAsync();
 
@@ -91,7 +97,10 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
         IMessageBus messageBus,
         object?[] constructorArguments,
         ExceptionAggregator aggregator,
-        CancellationTokenSource cancellationTokenSource)
+        CancellationTokenSource cancellationTokenSource,
+        ParallelMode parallelMode,
+        ExecutionScheduler scheduler,
+        FixtureMappingManager methodFixtureMappings)
     {
         Task<RunSummary> task = Task.Run(
             async () =>
@@ -107,7 +116,10 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
                     testCase.TestCaseDisplayName,
                     testCase.SkipReason,
                     explicitOption,
-                    constructorArguments);
+                    constructorArguments,
+                    parallelMode,
+                    scheduler,
+                    methodFixtureMappings);
             },
             cancellationTokenSource.Token);
 
@@ -136,7 +148,10 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
                 ctxt.ExplicitOption,
                 ctxt.Aggregator.Clone(),
                 ctxt.CancellationTokenSource,
-                ctxt.BeforeAfterTestAttributes);
+                ctxt.ParallelMode,
+                ctxt.Scheduler,
+                ctxt.BeforeAfterTestAttributes,
+                ctxt.CaseFixtureMappings);
             result.Aggregate(summary);
             if (summary.Failed == 0)
             {

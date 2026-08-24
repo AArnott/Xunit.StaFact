@@ -16,7 +16,10 @@ public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
         ExplicitOption explicitOption,
         ExceptionAggregator aggregator,
         CancellationTokenSource cancellationTokenSource,
-        IReadOnlyCollection<IBeforeAfterTestAttribute> beforeAfterAttributes)
+        ParallelMode parallelMode,
+        ExecutionScheduler scheduler,
+        IReadOnlyCollection<IBeforeAfterTestAttribute> beforeAfterAttributes,
+        FixtureMappingManager caseFixtureMappings)
     {
         await using UITestRunnerContext ctxt = new(
             settings,
@@ -26,8 +29,11 @@ public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
             explicitOption,
             aggregator,
             cancellationTokenSource,
+            parallelMode,
+            scheduler,
             beforeAfterAttributes,
-            constructorArguments);
+            constructorArguments,
+            caseFixtureMappings);
 
         await ctxt.InitializeAsync();
 

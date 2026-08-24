@@ -44,7 +44,10 @@ public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase, ISe
        IMessageBus messageBus,
        object?[] constructorArguments,
        ExceptionAggregator aggregator,
-       CancellationTokenSource cancellationTokenSource)
+       CancellationTokenSource cancellationTokenSource,
+       ParallelMode parallelMode,
+       ExecutionScheduler scheduler,
+       FixtureMappingManager methodFixtureMappings)
     {
         if (cancellationTokenSource is null)
         {
@@ -59,7 +62,10 @@ public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase, ISe
             messageBus,
             constructorArguments,
             aggregator,
-            cancellationTokenSource);
+            cancellationTokenSource,
+            parallelMode,
+            scheduler,
+            methodFixtureMappings);
     }
 
     protected override void Serialize(IXunitSerializationInfo data)
