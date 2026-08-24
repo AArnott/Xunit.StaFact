@@ -101,10 +101,10 @@ if ($isMTP) {
         --no-build `
         -c $Configuration `
         -bl:"$testBinLog" `
+        @frameworks `
         -- `
         --filter-not-trait 'TestCategory=FailsInCloudTest' `
         --filter-not-trait 'TestCategory=FailureExpected' `
-        @frameworks `
         @mtpArgs `
         @dumpSwitches `
         @extraArgs
