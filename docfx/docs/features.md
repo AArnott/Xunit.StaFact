@@ -17,7 +17,9 @@ This attribute offers a means to add automated retries to a test's execution for
 ## Shared UI thread fixtures
 
 By default, every fact or theory in this package runs on a newly created thread that is disposed when that test finishes.
-This avoids sharing thread-affine state and allows unrelated tests to run concurrently.
+This avoids sharing thread-affine state and allows unrelated tests to run concurrently. WinUI tests still get a fresh
+thread, but their XAML lifetimes are serialized within the process because overlapping WinUI XAML managers can terminate
+the test process.
 
 Some UI frameworks retain thread-affine objects in static caches, or a suite may intentionally host an application-level
 object for several tests. In those cases, opt in to a shared thread with an xUnit class or collection fixture.

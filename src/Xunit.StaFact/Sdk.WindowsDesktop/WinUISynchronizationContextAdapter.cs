@@ -12,8 +12,13 @@ internal class WinUISynchronizationContextAdapter : SyncContextAdapter
 {
     internal static readonly SyncContextAdapter Default = new WinUISynchronizationContextAdapter();
 
+    private static readonly SemaphoreSlim XamlManagerGate = new(1, 1);
+
     [ThreadStatic]
     private static DispatcherQueueController? dispatcherQueueController;
+
+    [ThreadStatic]
+    private static bool ownsXamlManagerGate;
 
     [ThreadStatic]
     private static WindowsXamlManager? windowsXamlManager;
@@ -24,16 +29,22 @@ internal class WinUISynchronizationContextAdapter : SyncContextAdapter
 
     internal override SynchronizationContext Create(string name)
     {
-        dispatcherQueueController = DispatcherQueueController.CreateOnCurrentThread();
+        XamlManagerGate.Wait();
+        ownsXamlManagerGate = true;
         try
         {
+            dispatcherQueueController = DispatcherQueueController.CreateOnCurrentThread();
             windowsXamlManager = WindowsXamlManager.InitializeForCurrentThread();
             return new DispatcherQueueSynchronizationContext(dispatcherQueueController.DispatcherQueue);
         }
         catch
         {
-            dispatcherQueueController.ShutdownQueue();
+            windowsXamlManager?.Dispose();
+            windowsXamlManager = null;
+            dispatcherQueueController?.ShutdownQueue();
             dispatcherQueueController = null;
+            ownsXamlManagerGate = false;
+            XamlManagerGate.Release();
             throw;
         }
     }
@@ -48,9 +59,20 @@ internal class WinUISynchronizationContextAdapter : SyncContextAdapter
             CancellationToken.None,
             TaskContinuationOptions.ExecuteSynchronously,
             TaskScheduler.Default);
-        controller.DispatcherQueue.RunEventLoop();
-        controller.ShutdownQueue();
-        dispatcherQueueController = null;
+        try
+        {
+            controller.DispatcherQueue.RunEventLoop();
+        }
+        finally
+        {
+            controller.ShutdownQueue();
+            dispatcherQueueController = null;
+            if (ownsXamlManagerGate)
+            {
+                ownsXamlManagerGate = false;
+                XamlManagerGate.Release();
+            }
+        }
     }
 
     internal override void Cleanup(SynchronizationContext synchronizationContext)
