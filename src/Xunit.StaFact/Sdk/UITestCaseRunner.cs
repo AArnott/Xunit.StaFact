@@ -105,21 +105,31 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
         Task<RunSummary> task = Task.Run(
             async () =>
             {
-                using ThreadRental threadRental = await ThreadRental.CreateAsync(adapter, testCase.TestMethod);
-                await threadRental.SynchronizationContext;
-                var runner = new UITestCaseRunner(settings, threadRental);
-                return await runner.Run(
-                    testCase,
-                    messageBus,
-                    aggregator,
-                    cancellationTokenSource,
-                    testCase.TestCaseDisplayName,
-                    testCase.SkipReason,
-                    explicitOption,
-                    constructorArguments,
-                    parallelMode,
-                    scheduler,
-                    methodFixtureMappings);
+                UIThreadFixtureBase? sharedThreadFixture = GetSharedThreadFixture(constructorArguments, adapter);
+                ThreadRental? ownedThreadRental = null;
+                try
+                {
+                    ThreadRental threadRental = sharedThreadFixture?.ThreadRental
+                        ?? (ownedThreadRental = await ThreadRental.CreateAsync(adapter, testCase.TestMethod));
+                    await threadRental.SynchronizationContext;
+                    var runner = new UITestCaseRunner(settings, threadRental);
+                    return await runner.Run(
+                        testCase,
+                        messageBus,
+                        aggregator,
+                        cancellationTokenSource,
+                        testCase.TestCaseDisplayName,
+                        testCase.SkipReason,
+                        explicitOption,
+                        constructorArguments,
+                        parallelMode,
+                        scheduler,
+                        methodFixtureMappings);
+                }
+                finally
+                {
+                    ownedThreadRental?.Dispose();
+                }
             },
             cancellationTokenSource.Token);
 
@@ -160,6 +170,24 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
         }
 
         return result;
+    }
+
+    private static UIThreadFixtureBase? GetSharedThreadFixture(object?[] constructorArguments, SyncContextAdapter adapter)
+    {
+        UIThreadFixtureBase[] sharedThreadFixtures = constructorArguments.OfType<UIThreadFixtureBase>().ToArray();
+        UIThreadFixtureBase? sharedThreadFixture = sharedThreadFixtures.FirstOrDefault();
+        if (sharedThreadFixtures.Any(fixture => !ReferenceEquals(fixture, sharedThreadFixture)))
+        {
+            throw new InvalidOperationException("A UI test class may receive only one shared UI thread fixture.");
+        }
+
+        if (sharedThreadFixture is not null && !ReferenceEquals(sharedThreadFixture.SyncContextAdapter, adapter))
+        {
+            throw new InvalidOperationException(
+                $"The {sharedThreadFixture.GetType().FullName} fixture is not compatible with this test's synchronization context.");
+        }
+
+        return sharedThreadFixture;
     }
 
     private sealed class FilteringMessageBus : IMessageBus

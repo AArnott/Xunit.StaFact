@@ -39,3 +39,13 @@ Applicable only on Windows.
 Because no @System.Threading.SynchronizationContext is applied by default, an async test will resume on a threadpool thread instead of the test thread after a yielding await.
 
 [!code-csharp[](../../samples/SampleTests.cs#STAFact)]
+
+## Sharing a UI thread between tests
+
+By default, each UI fact or theory gets a fresh thread. When thread-affine state must outlive one test,
+register a shared-thread fixture and receive it in the test class constructor:
+
+[!code-csharp[](../../samples/SharedThreadSamples.cs#ClassSharedThread)]
+
+See [Shared UI thread fixtures](features.md#shared-ui-thread-fixtures) for collection scope,
+fixture lifecycle hooks, supported fixture types, and concurrency behavior.
