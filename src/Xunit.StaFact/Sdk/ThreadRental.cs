@@ -9,6 +9,7 @@ internal class ThreadRental : IDisposable
 {
     private readonly TaskCompletionSource<object?> disposalTaskSource;
     private readonly SynchronizationContext syncContext;
+    private int disposing;
 
     private ThreadRental(SyncContextAdapter syncContextAdapter, TaskCompletionSource<object?> disposalTaskSource, SynchronizationContext uiSyncContextSource)
     {
@@ -36,24 +37,47 @@ internal class ThreadRental : IDisposable
 
     public void Dispose()
     {
-        this.SyncContextAdapter.Cleanup();
-        this.disposalTaskSource.TrySetResult(null);
+        if (Interlocked.Exchange(ref this.disposing, 1) != 0)
+        {
+            return;
+        }
+
+        try
+        {
+            this.syncContext.Send(_ => this.SyncContextAdapter.Cleanup(), null);
+        }
+        finally
+        {
+            this.disposalTaskSource.TrySetResult(null);
+        }
     }
 
     internal static async Task<ThreadRental> CreateAsync(SyncContextAdapter syncContextAdapter, ITestMethod testMethod)
+        => await CreateAsync(syncContextAdapter, $"{testMethod.TestClass.TestClassName}.{testMethod.MethodName}");
+
+    internal static async Task<ThreadRental> CreateAsync(SyncContextAdapter syncContextAdapter, string threadName)
     {
-        var disposalTaskSource = new TaskCompletionSource<object?>();
-        var syncContextSource = new TaskCompletionSource<SynchronizationContext>();
-        var threadName = $"{testMethod.TestClass.TestClassName}.{testMethod.MethodName}";
+        var disposalTaskSource = new TaskCompletionSource<object?>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var syncContextSource = new TaskCompletionSource<SynchronizationContext>(TaskCreationOptions.RunContinuationsAsynchronously);
         var thread = new Thread(() =>
         {
-            SynchronizationContext uiSyncContext = syncContextAdapter.Create(threadName);
-            if (syncContextAdapter.ShouldSetAsCurrent)
+            SynchronizationContext uiSyncContext;
+            try
             {
-                SynchronizationContext.SetSynchronizationContext(uiSyncContext);
+                uiSyncContext = syncContextAdapter.Create(threadName);
+                if (syncContextAdapter.ShouldSetAsCurrent)
+                {
+                    SynchronizationContext.SetSynchronizationContext(uiSyncContext);
+                }
+
+                syncContextAdapter.InitializeThread();
+            }
+            catch (Exception ex)
+            {
+                syncContextSource.TrySetException(ex);
+                return;
             }
 
-            syncContextAdapter.InitializeThread();
             syncContextSource.SetResult(uiSyncContext);
             syncContextAdapter.PumpTill(uiSyncContext, disposalTaskSource.Task);
         });
