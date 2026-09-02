@@ -4,7 +4,7 @@
   <PropertyGroup>
 <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-<MicrosoftTestingPlatformVersion>2.3.3</MicrosoftTestingPlatformVersion>
+<MicrosoftTestingPlatformVersion>2.4.0</MicrosoftTestingPlatformVersion>
 <XunitV3LibraryVersion>4.0.0</XunitV3LibraryVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -18,7 +18,7 @@
     <PackageVersion Update="xunit.v3.extensibility.core" Version="$(XunitV3LibraryVersion)" />
   </ItemGroup>
   <ItemGroup Label="Library.Template">
-    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.10.0" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.11.0" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CrashDump" Version="$(MicrosoftTestingPlatformVersion)" />
     <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="$(MicrosoftTestingPlatformVersion)" />
     <PackageVersion Include="Microsoft.Testing.Extensions.Telemetry" Version="$(MicrosoftTestingPlatformVersion)" />
