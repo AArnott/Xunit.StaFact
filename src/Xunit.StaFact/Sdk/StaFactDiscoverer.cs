@@ -6,10 +6,10 @@ namespace Xunit.Sdk;
 /// <summary>
 /// The discovery class for the <see cref="StaFactAttribute"/>.
 /// </summary>
-public class StaFactDiscoverer : IXunitTestCaseDiscoverer
+public class StaFactDiscoverer : FactDiscoverer
 {
     /// <inheritdoc/>
-    public ValueTask<IReadOnlyCollection<IXunitTestCase>> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
+    public override ValueTask<IReadOnlyCollection<IXunitTestCase>> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
     {
         return new(StaUtilities.CreateTestCasesForFact(discoveryOptions, testMethod, factAttribute));
     }

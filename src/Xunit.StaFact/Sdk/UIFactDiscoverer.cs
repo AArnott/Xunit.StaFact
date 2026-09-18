@@ -6,10 +6,10 @@ namespace Xunit.Sdk;
 /// <summary>
 /// The discovery class for the <see cref="UIFactAttribute"/>.
 /// </summary>
-public class UIFactDiscoverer : IXunitTestCaseDiscoverer
+public class UIFactDiscoverer : FactDiscoverer
 {
     /// <inheritdoc/>
-    public ValueTask<IReadOnlyCollection<IXunitTestCase>> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
+    public override ValueTask<IReadOnlyCollection<IXunitTestCase>> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
     {
         return new(UIUtilities.CreateTestCasesForFact(discoveryOptions, testMethod, factAttribute));
     }

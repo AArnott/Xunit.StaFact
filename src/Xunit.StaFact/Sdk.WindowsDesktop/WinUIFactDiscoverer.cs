@@ -8,10 +8,10 @@ namespace Xunit.Sdk;
 /// <summary>
 /// The discovery class for <see cref="WinUIFactAttribute"/>.
 /// </summary>
-public class WinUIFactDiscoverer : IXunitTestCaseDiscoverer
+public class WinUIFactDiscoverer : FactDiscoverer
 {
     /// <inheritdoc/>
-    public ValueTask<IReadOnlyCollection<IXunitTestCase>> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
+    public override ValueTask<IReadOnlyCollection<IXunitTestCase>> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
     {
         return new(WinUIUtilities.CreateTestCasesForFact(
             discoveryOptions,
