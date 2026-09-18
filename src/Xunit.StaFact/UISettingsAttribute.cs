@@ -29,6 +29,12 @@ public sealed class UISettingsAttribute : Attribute
 
     internal static UISettingsAttribute Default => new() { MaxAttempts = 1 };
 
+    /// <summary>
+    /// Gets or sets the culture selected for one discovered test case.
+    /// </summary>
+    /// <remarks>
+    /// This value is populated from <see cref="Cultures"/> during discovery and is serialized with the test case.
+    /// </remarks>
     internal string? Culture { get; set; }
 
     /// <summary>
