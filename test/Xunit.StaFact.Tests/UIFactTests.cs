@@ -1,11 +1,13 @@
 // Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Concurrent;
 using System.Reflection;
 using DesktopFactAttribute = Xunit.UIFactAttribute;
 
 public partial class UIFactTests : IDisposable, IAsyncLifetime
 {
+    private static readonly ConcurrentDictionary<string, int> CultureRetryAttempts = new();
     private readonly SynchronizationContext? ctorSyncContext;
     private readonly int ctorThreadId;
 
@@ -105,6 +107,31 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         await Task.Yield();
         Assert.Equal(initialThread, Environment.CurrentManagedThreadId);
         Assert.Same(syncContext, SynchronizationContext.Current);
+    }
+
+    [DesktopFact]
+    [UISettings(Cultures = new[] { "en-US", "fr-FR" })]
+    public async Task ExecutesUnderEachConfiguredCulture()
+    {
+        string culture = CultureInfo.CurrentCulture.Name;
+        Assert.Equal(culture, CultureInfo.CurrentUICulture.Name);
+        Assert.Contains(culture, new[] { "en-US", "fr-FR" });
+
+        await Task.Yield();
+
+        Assert.Equal(culture, CultureInfo.CurrentCulture.Name);
+        Assert.Equal(culture, CultureInfo.CurrentUICulture.Name);
+        Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
+        Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
+    }
+
+    [DesktopFact]
+    [UISettings(MaxAttempts = 2, Cultures = new[] { "en-US", "fr-FR" })]
+    public void RetriesIndependentlyForEachCulture()
+    {
+        string culture = CultureInfo.CurrentCulture.Name;
+        int attempt = CultureRetryAttempts.AddOrUpdate(culture, 1, (_, value) => value + 1);
+        Assert.Equal(2, attempt);
     }
 
     [DesktopFact]

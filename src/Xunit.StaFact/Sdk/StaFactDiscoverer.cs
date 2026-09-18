@@ -9,8 +9,8 @@ namespace Xunit.Sdk;
 public class StaFactDiscoverer : FactDiscoverer
 {
     /// <inheritdoc/>
-    protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
+    public override ValueTask<IReadOnlyCollection<IXunitTestCase>> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
     {
-        return StaUtilities.CreateTestCaseForFact(discoveryOptions, testMethod, factAttribute);
+        return new(StaUtilities.CreateTestCasesForFact(discoveryOptions, testMethod, factAttribute));
     }
 }

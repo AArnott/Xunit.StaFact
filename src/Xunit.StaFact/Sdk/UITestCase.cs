@@ -176,6 +176,7 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
 
         base.Serialize(data);
         data.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.settings.MaxAttempts);
+        data.AddValue(nameof(UISettingsAttribute.Culture), this.settings.Culture);
         data.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
     }
 
@@ -190,6 +191,7 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
         this.settings = new()
         {
             MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)),
+            Culture = data.GetValue<string?>(nameof(UISettingsAttribute.Culture)),
         };
         this.synchronizationContextType = data.GetValue<SyncContextType>(nameof(this.synchronizationContextType));
     }

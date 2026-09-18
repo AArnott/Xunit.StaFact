@@ -38,6 +38,21 @@ public class WpfFactTests
         this.AssertThreadCharacteristics();
     }
 
+    [DesktopFact]
+    [UISettings(Cultures = new[] { "fr-FR" })]
+    public async Task ExecutesUnderConfiguredCulture()
+    {
+        Assert.Equal("fr-FR", System.Globalization.CultureInfo.CurrentCulture.Name);
+        Assert.Equal("fr-FR", System.Globalization.CultureInfo.CurrentUICulture.Name);
+        this.AssertThreadCharacteristics();
+
+        await Task.Yield();
+
+        Assert.Equal("fr-FR", System.Globalization.CultureInfo.CurrentCulture.Name);
+        Assert.Equal("fr-FR", System.Globalization.CultureInfo.CurrentUICulture.Name);
+        this.AssertThreadCharacteristics();
+    }
+
     [DesktopFact, Trait("TestCategory", "FailureExpected")]
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     public async void AsyncVoid_IsNotSupported()

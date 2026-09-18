@@ -7,6 +7,15 @@ namespace Xunit;
 public sealed class UISettingsAttribute : Attribute
 {
     /// <summary>
+    /// Gets or sets the cultures under which to execute a test.
+    /// </summary>
+    /// <value>
+    /// <para>Leave unset to inherit the value from an attribute applied to a containing type.</para>
+    /// <para>Set one or more valid culture names to execute the test once for each culture.</para>
+    /// </value>
+    public string[]? Cultures { get; set; }
+
+    /// <summary>
     /// Gets or sets the maximum number of retry attempts for a test.
     /// </summary>
     /// <value>
@@ -21,6 +30,14 @@ public sealed class UISettingsAttribute : Attribute
     internal static UISettingsAttribute Default => new() { MaxAttempts = 1 };
 
     /// <summary>
+    /// Gets or sets the culture selected for one discovered test case.
+    /// </summary>
+    /// <remarks>
+    /// This value is populated from <see cref="Cultures"/> during discovery and is serialized with the test case.
+    /// </remarks>
+    internal string? Culture { get; set; }
+
+    /// <summary>
     /// Applies traits to a test case based on the settings in this attribute.
     /// </summary>
     /// <param name="testCase">The test case to add traits to.</param>
@@ -31,6 +48,14 @@ public sealed class UISettingsAttribute : Attribute
             if (!testCase.Traits.ContainsKey("MaxAttempts"))
             {
                 testCase.Traits.Add("MaxAttempts", new() { this.MaxAttempts.ToString() });
+            }
+        }
+
+        if (this.Culture is not null)
+        {
+            if (!testCase.Traits.ContainsKey("Culture"))
+            {
+                testCase.Traits.Add("Culture", new() { this.Culture });
             }
         }
     }
