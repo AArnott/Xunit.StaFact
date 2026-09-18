@@ -1,6 +1,7 @@
 // Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Globalization;
 using System.Text;
 
 namespace Xunit.Sdk;
@@ -149,19 +150,7 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
         for (int i = 0; i < this.settings.MaxAttempts; i++)
         {
             bool finalAttempt = i == this.settings.MaxAttempts - 1;
-            RunSummary summary = await UITestRunner.Instance.Run(
-                ctxt.Settings,
-                ctxt.ThreadRental,
-                test,
-                finalAttempt ? ctxt.MessageBus : new FilteringMessageBus(ctxt.MessageBus),
-                ctxt.ConstructorArguments,
-                ctxt.ExplicitOption,
-                ctxt.Aggregator.Clone(),
-                ctxt.CancellationTokenSource,
-                ctxt.BeforeAfterTestAttributes,
-                ctxt.ParallelMode,
-                ctxt.Scheduler,
-                ctxt.CaseFixtureMappings);
+            RunSummary summary = await this.RunTestAttempt(ctxt, test, finalAttempt);
             result.Aggregate(summary);
             if (summary.Failed == 0)
             {
@@ -188,6 +177,47 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
         }
 
         return sharedThreadFixture;
+    }
+
+    private async ValueTask<RunSummary> RunTestAttempt(UITestCaseRunnerContext ctxt, IXunitTest test, bool finalAttempt)
+    {
+        await ctxt.ThreadRental.SynchronizationContext;
+        CultureInfo? originalCulture = null;
+        CultureInfo? originalUICulture = null;
+        try
+        {
+            if (this.settings.Culture is not null)
+            {
+                originalCulture = CultureInfo.CurrentCulture;
+                originalUICulture = CultureInfo.CurrentUICulture;
+                CultureInfo culture = new(this.settings.Culture, useUserOverride: false);
+                CultureInfo.CurrentCulture = culture;
+                CultureInfo.CurrentUICulture = culture;
+            }
+
+            return await UITestRunner.Instance.Run(
+                ctxt.Settings,
+                ctxt.ThreadRental,
+                test,
+                finalAttempt ? ctxt.MessageBus : new FilteringMessageBus(ctxt.MessageBus),
+                ctxt.ConstructorArguments,
+                ctxt.ExplicitOption,
+                ctxt.Aggregator.Clone(),
+                ctxt.CancellationTokenSource,
+                ctxt.BeforeAfterTestAttributes,
+                ctxt.ParallelMode,
+                ctxt.Scheduler,
+                ctxt.CaseFixtureMappings);
+        }
+        finally
+        {
+            if (originalCulture is not null && originalUICulture is not null)
+            {
+                await ctxt.ThreadRental.SynchronizationContext;
+                CultureInfo.CurrentCulture = originalCulture;
+                CultureInfo.CurrentUICulture = originalUICulture;
+            }
+        }
     }
 
     private sealed class FilteringMessageBus : IMessageBus

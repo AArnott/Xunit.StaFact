@@ -128,6 +128,24 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.True(arg == 0 || arg == 1);
     }
 
+    [DesktopTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [UISettings(Cultures = new[] { "en-US", "fr-FR" })]
+    public async Task ExecutesEachDataRowUnderEachConfiguredCulture(int arg)
+    {
+        string culture = CultureInfo.CurrentCulture.Name;
+        Assert.Equal(culture, CultureInfo.CurrentUICulture.Name);
+        Assert.Contains(culture, new[] { "en-US", "fr-FR" });
+        Assert.True(arg == 0 || arg == 1);
+
+        await Task.Yield();
+
+        Assert.Equal(culture, CultureInfo.CurrentCulture.Name);
+        Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
+        Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
+    }
+
     [Trait("TestCategory", "FailureExpected")]
     [DesktopTheory]
     [InlineData(1)]

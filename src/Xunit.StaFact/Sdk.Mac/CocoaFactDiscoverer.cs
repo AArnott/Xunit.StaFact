@@ -6,11 +6,11 @@ namespace Xunit.Sdk;
 /// <summary>
 /// The discovery class for <see cref="CocoaFactDiscoverer"/>.
 /// </summary>
-public class CocoaFactDiscoverer : FactDiscoverer
+public class CocoaFactDiscoverer : IXunitTestCaseDiscoverer
 {
     /// <inheritdoc/>
-    protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
+    public ValueTask<IReadOnlyCollection<IXunitTestCase>> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
     {
-        return CocoaUtilities.CreateTestCaseForFact(discoveryOptions, testMethod, factAttribute);
+        return new(CocoaUtilities.CreateTestCasesForFact(discoveryOptions, testMethod, factAttribute));
     }
 }

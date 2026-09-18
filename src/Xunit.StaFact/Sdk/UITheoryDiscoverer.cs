@@ -11,22 +11,22 @@ public class UITheoryDiscoverer : TheoryDiscoverer
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments, string? index)
     {
-        IXunitTestCase testCase = UIUtilities.CreateTestCaseForDataRow(
+        IReadOnlyCollection<IXunitTestCase> testCases = UIUtilities.CreateTestCasesForDataRow(
             discoveryOptions,
             testMethod,
             theoryAttribute,
             dataRow,
             testMethodArguments);
-        return new([testCase]);
+        return new(testCases);
     }
 
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute)
     {
-        IXunitTestCase testCase = UIUtilities.CreateTestCaseForTheory(
+        IReadOnlyCollection<IXunitTestCase> testCases = UIUtilities.CreateTestCasesForTheory(
             discoveryOptions,
             testMethod,
             theoryAttribute);
-        return new([testCase]);
+        return new(testCases);
     }
 }

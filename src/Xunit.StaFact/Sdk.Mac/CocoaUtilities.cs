@@ -8,12 +8,12 @@ internal static class CocoaUtilities
     private const UITestCase.SyncContextType ContextType = UITestCase.SyncContextType.Cocoa;
     private const string? SkipReason = null;
 
-    internal static IXunitTestCase CreateTestCaseForFact(
+    internal static IReadOnlyCollection<IXunitTestCase> CreateTestCasesForFact(
         ITestFrameworkDiscoveryOptions discoveryOptions,
         IXunitTestMethod testMethod,
         IFactAttribute factAttribute)
     {
-        return Utilities.CreateTestCaseForFact(
+        return Utilities.CreateTestCasesForFact(
             ContextType,
             SkipReason,
             discoveryOptions,
@@ -21,14 +21,14 @@ internal static class CocoaUtilities
             factAttribute);
     }
 
-    internal static IXunitTestCase CreateTestCaseForDataRow(
+    internal static IReadOnlyCollection<IXunitTestCase> CreateTestCasesForDataRow(
         ITestFrameworkDiscoveryOptions discoveryOptions,
         IXunitTestMethod testMethod,
         ITheoryAttribute theoryAttribute,
         ITheoryDataRow dataRow,
         object?[] testMethodArguments)
     {
-        return Utilities.CreateTestCaseForDataRow(
+        return Utilities.CreateTestCasesForDataRow(
             ContextType,
             SkipReason,
             discoveryOptions,
@@ -38,12 +38,12 @@ internal static class CocoaUtilities
             testMethodArguments);
     }
 
-    internal static IXunitTestCase CreateTestCaseForTheory(
+    internal static IReadOnlyCollection<IXunitTestCase> CreateTestCasesForTheory(
         ITestFrameworkDiscoveryOptions discoveryOptions,
         IXunitTestMethod testMethod,
         ITheoryAttribute theoryAttribute)
     {
-        return Utilities.CreateTestCaseForTheory(
+        return Utilities.CreateTestCasesForTheory(
             ContextType,
             SkipReason,
             discoveryOptions,

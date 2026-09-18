@@ -6,14 +6,14 @@ namespace Xunit.Sdk;
 /// <summary>
 /// The discovery class for <see cref="WinFormsFactAttribute"/>.
 /// </summary>
-public class WinFormsFactDiscoverer : FactDiscoverer
+public class WinFormsFactDiscoverer : IXunitTestCaseDiscoverer
 {
     /// <inheritdoc/>
-    protected override IXunitTestCase CreateTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
+    public ValueTask<IReadOnlyCollection<IXunitTestCase>> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, IFactAttribute factAttribute)
     {
-        return WinFormsUtilities.CreateTestCaseForFact(
+        return new(WinFormsUtilities.CreateTestCasesForFact(
             discoveryOptions,
             testMethod,
-            factAttribute);
+            factAttribute));
     }
 }

@@ -13,23 +13,23 @@ public class WinUITheoryDiscoverer : TheoryDiscoverer
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForDataRow(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute, ITheoryDataRow dataRow, object?[] testMethodArguments, string? index)
     {
-        IXunitTestCase testCase = WinUIUtilities.CreateTestCaseForDataRow(
+        IReadOnlyCollection<IXunitTestCase> testCases = WinUIUtilities.CreateTestCasesForDataRow(
             discoveryOptions,
             testMethod,
             theoryAttribute,
             dataRow,
             testMethodArguments);
-        return new([testCase]);
+        return new(testCases);
     }
 
     /// <inheritdoc/>
     protected override ValueTask<IReadOnlyCollection<IXunitTestCase>> CreateTestCasesForTheory(ITestFrameworkDiscoveryOptions discoveryOptions, IXunitTestMethod testMethod, ITheoryAttribute theoryAttribute)
     {
-        IXunitTestCase testCase = WinUIUtilities.CreateTestCaseForTheory(
+        IReadOnlyCollection<IXunitTestCase> testCases = WinUIUtilities.CreateTestCasesForTheory(
             discoveryOptions,
             testMethod,
             theoryAttribute);
-        return new([testCase]);
+        return new(testCases);
     }
 }
 

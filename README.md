@@ -44,6 +44,22 @@ Xunit test attributes            | Supported OS's   | SynchronizationContext    
 
 We also offer a `[UISettingsAttribute]` that can be applied to individual test methods or test classes to control the behavior of the various UI test attributes.
 This attribute offers a means to add automated retries to a test's execution for unstable tests.
+Set `MaxAttempts` to the total number of attempts. Set `Cultures` to run each test independently under one or more
+cultures; each culture receives its own result, retry policy, display-name suffix, and `Culture` trait.
+
+```csharp
+[WpfFact]
+[UISettings(MaxAttempts = 3, Cultures = new[] { "en-US", "fr-FR" })]
+public async Task LocalizedUiTest()
+{
+    Assert.Equal(CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture);
+}
+```
+
+`Cultures` applies both `CultureInfo.CurrentCulture` and `CultureInfo.CurrentUICulture` with user overrides disabled,
+and restores both after execution. A method-level setting overrides the corresponding class-level setting. Use xUnit's
+`[CulturedFact]` or `[CulturedTheory]` for ordinary tests; use `UISettings.Cultures` when combining cultures with
+Xunit.StaFact's custom thread or synchronization-context execution.
 
 ## Samples
 

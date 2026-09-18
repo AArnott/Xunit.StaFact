@@ -77,6 +77,7 @@ public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase, ISe
 
         base.Serialize(data);
         data.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.settings.MaxAttempts);
+        data.AddValue(nameof(UISettingsAttribute.Culture), this.settings.Culture);
         data.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
     }
 
@@ -91,6 +92,7 @@ public class UIDelayEnumeratedTestCase : XunitDelayEnumeratedTheoryTestCase, ISe
         this.settings = new()
         {
             MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)),
+            Culture = data.GetValue<string?>(nameof(UISettingsAttribute.Culture)),
         };
         this.synchronizationContextType = data.GetValue<UITestCase.SyncContextType>(nameof(this.synchronizationContextType));
     }

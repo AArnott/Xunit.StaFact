@@ -10,12 +10,12 @@ internal static class WpfUtilities
     private const UITestCase.SyncContextType ContextType = UITestCase.SyncContextType.WPF;
     private static readonly string? SkipReason = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? null : "WPF only exists on Windows.";
 
-    internal static IXunitTestCase CreateTestCaseForFact(
+    internal static IReadOnlyCollection<IXunitTestCase> CreateTestCasesForFact(
         ITestFrameworkDiscoveryOptions discoveryOptions,
         IXunitTestMethod testMethod,
         IFactAttribute factAttribute)
     {
-        return Utilities.CreateTestCaseForFact(
+        return Utilities.CreateTestCasesForFact(
             ContextType,
             SkipReason,
             discoveryOptions,
@@ -23,14 +23,14 @@ internal static class WpfUtilities
             factAttribute);
     }
 
-    internal static IXunitTestCase CreateTestCaseForDataRow(
+    internal static IReadOnlyCollection<IXunitTestCase> CreateTestCasesForDataRow(
         ITestFrameworkDiscoveryOptions discoveryOptions,
         IXunitTestMethod testMethod,
         ITheoryAttribute theoryAttribute,
         ITheoryDataRow dataRow,
         object?[] testMethodArguments)
     {
-        return Utilities.CreateTestCaseForDataRow(
+        return Utilities.CreateTestCasesForDataRow(
             ContextType,
             SkipReason,
             discoveryOptions,
@@ -40,12 +40,12 @@ internal static class WpfUtilities
             testMethodArguments);
     }
 
-    internal static IXunitTestCase CreateTestCaseForTheory(
+    internal static IReadOnlyCollection<IXunitTestCase> CreateTestCasesForTheory(
         ITestFrameworkDiscoveryOptions discoveryOptions,
         IXunitTestMethod testMethod,
         ITheoryAttribute theoryAttribute)
     {
-        return Utilities.CreateTestCaseForTheory(
+        return Utilities.CreateTestCasesForTheory(
             ContextType,
             SkipReason,
             discoveryOptions,
