@@ -9,7 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
-    <PackageVersion Include="xunit.analyzers" Version="2.0.0" />
+    <PackageVersion Include="xunit.analyzers" Version="2.1.0" />
     <PackageVersion Include="xunit.v3.assert" Version="$(XunitV3LibraryVersion)" />
     <PackageVersion Include="xunit.v3.extensibility.core" Version="$(XunitV3LibraryVersion)" />
     <PackageVersion Include="xunit.v3.runner.inproc.console" Version="$(XunitV3LibraryVersion)" />
