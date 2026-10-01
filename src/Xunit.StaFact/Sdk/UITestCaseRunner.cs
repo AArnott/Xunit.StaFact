@@ -1,6 +1,7 @@
 // Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Diagnostics;
 using System.Text;
 
 namespace Xunit.Sdk;
@@ -106,7 +107,13 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
             async () =>
             {
                 using ThreadRental threadRental = await ThreadRental.CreateAsync(adapter, testCase.TestMethod);
-                await threadRental.SynchronizationContext;
+
+                // Keep timeout reporting independent of a blocked UI thread.
+                if (testCase.Timeout <= 0 || Debugger.IsAttached)
+                {
+                    await threadRental.SynchronizationContext;
+                }
+
                 var runner = new UITestCaseRunner(settings, threadRental);
                 return await runner.Run(
                     testCase,

@@ -13,6 +13,12 @@ Xunit test attributes            | Supported OS's   | SynchronizationContext    
 We also offer a @Xunit.UISettingsAttribute that can be applied to individual test methods or test classes to control the behavior of the various UI test attributes.
 This attribute offers a means to add automated retries to a test's execution for unstable tests.
 
+UI fact and theory attributes support a per-test timeout in milliseconds,
+covering construction, initialization, invocation, and disposal. A timeout fails the test and
+cancels its test cancellation token without waiting for the UI thread to finish. Code that does
+not observe cancellation may continue running after the failure is reported. Timeouts are
+disabled while a debugger is attached.
+
 
 [^1]: This is a private @System.Threading.SynchronizationContext that works cross-platform and effectively keeps code running on the test's starting thread the way a GUI application's main thread would do.
 
