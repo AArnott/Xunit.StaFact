@@ -111,9 +111,13 @@ public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
                     },
                     null);
 
-                Task completedTask = await Task.WhenAny(finished.Task, Task.Delay(timeout)).ConfigureAwait(false);
+                using CancellationTokenSource delayCancellation = new();
+                Task completedTask = await Task.WhenAny(finished.Task, Task.Delay(timeout, delayCancellation.Token)).ConfigureAwait(false);
+                delayCancellation.Cancel();
                 if (completedTask != finished.Task)
                 {
+                    // Like xunit, we report the timeout without waiting for the test to finish.
+                    // The test continues on the UI thread until it completes or observes the cancellation token.
                     try
                     {
                         TestTimeoutException timeoutException = TestTimeoutException.ForTimedOutTest(timeout);
