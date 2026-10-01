@@ -1,6 +1,8 @@
 // Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Diagnostics;
+
 namespace Xunit.Sdk;
 
 public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
@@ -88,7 +90,45 @@ public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
 
             TaskCompletionSource<object?> finished = new();
 
-            if (executionContext is not null)
+            int timeout = ctxt.Test.Timeout;
+            if (timeout > 0 && !Debugger.IsAttached)
+            {
+                // Post the test to the UI thread rather than invoking it inline,
+                // so that a test that blocks the UI thread cannot prevent us from observing the timeout.
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                ExecutionContext? postedExecutionContext = executionContext ?? ExecutionContext.Capture();
+                ctxt.ThreadRental.SynchronizationContext.Post(
+                    _ =>
+                    {
+                        if (postedExecutionContext is not null)
+                        {
+                            ExecutionContext.Run(postedExecutionContext, RunTest, null);
+                        }
+                        else
+                        {
+                            RunTest(null);
+                        }
+                    },
+                    null);
+
+                Task completedTask = await Task.WhenAny(finished.Task, Task.Delay(timeout)).ConfigureAwait(false);
+                if (completedTask != finished.Task)
+                {
+                    try
+                    {
+                        TestTimeoutException timeoutException = TestTimeoutException.ForTimedOutTest(timeout);
+                        ctxt.Aggregator.Add(timeoutException);
+                        this.UpdateTestContext(null, TestResultState.FromException((decimal)stopwatch.Elapsed.TotalSeconds, timeoutException));
+                    }
+                    finally
+                    {
+                        TestContext.Current.CancelCurrentTest();
+                    }
+
+                    return elapsedTime + stopwatch.Elapsed;
+                }
+            }
+            else if (executionContext is not null)
             {
                 ExecutionContext.Run(executionContext, RunTest, null);
             }
