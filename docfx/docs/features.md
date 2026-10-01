@@ -98,6 +98,12 @@ The STA fixture intentionally does not install one, matching @Xunit.StaFactAttri
 - Do not dispose a fixture directly when xUnit owns it. xUnit disposes it at the end of its class or collection lifetime.
 - Put only state that is intentionally shared into the fixture. Test class instances are still created separately for each test.
 
+UI fact and theory attributes support a per-test timeout in milliseconds,
+covering construction, initialization, invocation, and disposal. A timeout fails the test and
+cancels its test cancellation token without waiting for the UI thread to finish. Code that does
+not observe cancellation may continue running after the failure is reported. Timeouts are
+disabled while a debugger is attached.
+
 
 [^1]: This is a private @System.Threading.SynchronizationContext that works cross-platform and effectively keeps code running on the test's starting thread the way a GUI application's main thread would do.
 

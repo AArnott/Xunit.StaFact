@@ -46,7 +46,8 @@ internal static class Utilities
                 details.SkipWhen,
                 GetCultureTraits(traits, culture),
                 sourceFilePath: details.SourceFilePath,
-                sourceLineNumber: details.SourceLineNumber));
+                sourceLineNumber: details.SourceLineNumber,
+                timeout: details.Timeout));
     }
 
     internal static IReadOnlyCollection<IXunitTestCase> CreateTestCasesForDataRow(

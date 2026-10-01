@@ -1,6 +1,7 @@
 // Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
+using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 
@@ -112,7 +113,13 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
                 {
                     ThreadRental threadRental = sharedThreadFixture?.ThreadRental
                         ?? (ownedThreadRental = await ThreadRental.CreateAsync(adapter, testCase.TestMethod));
-                    await threadRental.SynchronizationContext;
+
+                    // Keep timeout reporting independent of a blocked UI thread.
+                    if (testCase.Timeout <= 0 || Debugger.IsAttached)
+                    {
+                        await threadRental.SynchronizationContext;
+                    }
+
                     var runner = new UITestCaseRunner(settings, threadRental);
                     return await runner.Run(
                         testCase,
@@ -129,7 +136,42 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
                 }
                 finally
                 {
-                    ownedThreadRental?.Dispose();
+                    if (ownedThreadRental is not null)
+                    {
+                        if (testCase.Timeout > 0 && !Debugger.IsAttached)
+                        {
+                            // Cleanup must run on the UI thread without delaying timeout reporting.
+                            ownedThreadRental.SynchronizationContext.Post(
+                                _ =>
+                                {
+                                    try
+                                    {
+                                        ownedThreadRental.Dispose();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        IXunitTestMethod testMethod = testCase.TestMethod;
+                                        IXunitTestClass testClass = testMethod.TestClass;
+                                        IXunitTestCollection testCollection = testClass.TestCollection;
+                                        if (!messageBus.QueueMessage(TestCaseCleanupFailure.FromException(
+                                            ex,
+                                            testCollection.TestAssembly.UniqueID,
+                                            testCollection.UniqueID,
+                                            testClass.UniqueID,
+                                            testMethod.UniqueID,
+                                            testCase.UniqueID)))
+                                        {
+                                            cancellationTokenSource.Cancel();
+                                        }
+                                    }
+                                },
+                                null);
+                        }
+                        else
+                        {
+                            ownedThreadRental.Dispose();
+                        }
+                    }
                 }
             },
             cancellationTokenSource.Token);
@@ -144,6 +186,11 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
         if (ctxt is null)
         {
             throw new ArgumentNullException(nameof(ctxt));
+        }
+
+        if (test is null)
+        {
+            throw new ArgumentNullException(nameof(test));
         }
 
         RunSummary result = default;
@@ -181,7 +228,12 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
 
     private async ValueTask<RunSummary> RunTestAttempt(UITestCaseRunnerContext ctxt, IXunitTest test, bool finalAttempt)
     {
-        await ctxt.ThreadRental.SynchronizationContext;
+        bool useUIThread = test.Timeout <= 0 || Debugger.IsAttached;
+        if (useUIThread)
+        {
+            await ctxt.ThreadRental.SynchronizationContext;
+        }
+
         CultureInfo? originalCulture = null;
         CultureInfo? originalUICulture = null;
         try
@@ -213,7 +265,11 @@ public class UITestCaseRunner : XunitTestCaseRunnerBase<UITestCaseRunnerContext,
         {
             if (originalCulture is not null && originalUICulture is not null)
             {
-                await ctxt.ThreadRental.SynchronizationContext;
+                if (useUIThread)
+                {
+                    await ctxt.ThreadRental.SynchronizationContext;
+                }
+
                 CultureInfo.CurrentCulture = originalCulture;
                 CultureInfo.CurrentUICulture = originalUICulture;
             }
