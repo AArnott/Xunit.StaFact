@@ -74,6 +74,69 @@ public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
             uiSyncContext.SetExceptionAggregator(ctxt.Aggregator);
         }
 
+        int timeout = ctxt.Test.Timeout;
+        if (ctxt.Aggregator.HasExceptions || timeout <= 0 || Debugger.IsAttached)
+        {
+            return await this.RunTestLifecycle(ctxt);
+        }
+
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        TaskCompletionSource<TimeSpan> finished = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        ExecutionContext? executionContext = ExecutionContext.Capture();
+        ctxt.ThreadRental.SynchronizationContext.Post(
+            _ =>
+            {
+                if (executionContext is not null)
+                {
+                    ExecutionContext.Run(executionContext, RunLifecycle, null);
+                }
+                else
+                {
+                    RunLifecycle(null);
+                }
+            },
+            null);
+
+        using CancellationTokenSource delayCancellation = new();
+        Task completedTask = await Task.WhenAny(finished.Task, Task.Delay(timeout, delayCancellation.Token)).ConfigureAwait(false);
+        delayCancellation.Cancel();
+        if (completedTask == finished.Task)
+        {
+            return await finished.Task.ConfigureAwait(false);
+        }
+
+        // Like xunit, report the timeout without waiting for the lifecycle to finish.
+        // The UI thread continues until the test completes or observes cancellation.
+        try
+        {
+            TestTimeoutException timeoutException = TestTimeoutException.ForTimedOutTest(timeout);
+            ctxt.Aggregator.Add(timeoutException);
+            this.UpdateTestContext(null, TestResultState.FromException((decimal)stopwatch.Elapsed.TotalSeconds, timeoutException));
+        }
+        finally
+        {
+            TestContext.Current.CancelCurrentTest();
+        }
+
+        return stopwatch.Elapsed;
+
+        async void RunLifecycle(object? state)
+        {
+            try
+            {
+                SynchronizationContext.SetSynchronizationContext(
+                    ctxt.ThreadRental.SyncContextAdapter.ShouldSetAsCurrent ? ctxt.ThreadRental.SynchronizationContext : null);
+                finished.TrySetResult(await this.RunTestLifecycle(ctxt));
+            }
+            catch (Exception ex)
+            {
+                finished.TrySetException(ex);
+            }
+        }
+    }
+
+    private async ValueTask<TimeSpan> RunTestLifecycle(UITestRunnerContext ctxt)
+    {
         object? testClassInstance = null;
         TimeSpan elapsedTime = TimeSpan.Zero;
 
@@ -90,49 +153,7 @@ public class UITestRunner : XunitTestRunnerBase<UITestRunnerContext, IXunitTest>
 
             TaskCompletionSource<object?> finished = new();
 
-            int timeout = ctxt.Test.Timeout;
-            if (timeout > 0 && !Debugger.IsAttached)
-            {
-                // Post the test to the UI thread rather than invoking it inline,
-                // so that a test that blocks the UI thread cannot prevent us from observing the timeout.
-                Stopwatch stopwatch = Stopwatch.StartNew();
-                ExecutionContext? postedExecutionContext = executionContext ?? ExecutionContext.Capture();
-                ctxt.ThreadRental.SynchronizationContext.Post(
-                    _ =>
-                    {
-                        if (postedExecutionContext is not null)
-                        {
-                            ExecutionContext.Run(postedExecutionContext, RunTest, null);
-                        }
-                        else
-                        {
-                            RunTest(null);
-                        }
-                    },
-                    null);
-
-                using CancellationTokenSource delayCancellation = new();
-                Task completedTask = await Task.WhenAny(finished.Task, Task.Delay(timeout, delayCancellation.Token)).ConfigureAwait(false);
-                delayCancellation.Cancel();
-                if (completedTask != finished.Task)
-                {
-                    // Like xunit, we report the timeout without waiting for the test to finish.
-                    // The test continues on the UI thread until it completes or observes the cancellation token.
-                    try
-                    {
-                        TestTimeoutException timeoutException = TestTimeoutException.ForTimedOutTest(timeout);
-                        ctxt.Aggregator.Add(timeoutException);
-                        this.UpdateTestContext(null, TestResultState.FromException((decimal)stopwatch.Elapsed.TotalSeconds, timeoutException));
-                    }
-                    finally
-                    {
-                        TestContext.Current.CancelCurrentTest();
-                    }
-
-                    return elapsedTime + stopwatch.Elapsed;
-                }
-            }
-            else if (executionContext is not null)
+            if (executionContext is not null)
             {
                 ExecutionContext.Run(executionContext, RunTest, null);
             }
