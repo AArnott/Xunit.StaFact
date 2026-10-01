@@ -71,6 +71,34 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         await Task.Delay(10);
     }
 
+    [DesktopFact(Timeout = 30_000)]
+    public async Task Timeout_NotExceeded()
+    {
+        Assert.Equal(30_000, Assert.IsAssignableFrom<Xunit.v3.IXunitTestCase>(TestContext.Current.TestCase).Timeout);
+        Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
+        Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
+        await Task.Yield();
+        Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
+        Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
+        TestContext.Current.CancellationToken.ThrowIfCancellationRequested();
+    }
+
+#pragma warning disable xUnit1069 // Deliberately ignore the CancellationToken to simulate a blocked UI thread.
+    [DesktopFact(Timeout = 100), Trait("TestCategory", "FailureExpected")]
+    public void Timeout_Exceeded_Sync()
+    {
+        // Deliberately block the UI thread without honoring the CancellationToken.
+        Thread.Sleep(2000);
+        Assert.Fail("The test should have timed out.");
+    }
+#pragma warning restore xUnit1069
+
+    [DesktopFact(Timeout = 100), Trait("TestCategory", "FailureExpected")]
+    public async Task Timeout_Exceeded_Async()
+    {
+        await Task.Delay(2000, TestContext.Current.CancellationToken);
+    }
+
     [DesktopFact, Trait("TestCategory", "FailureExpected")]
     public async Task FailAfterYield()
     {
@@ -109,10 +137,11 @@ public partial class UIFactTests : IDisposable, IAsyncLifetime
         Assert.Same(syncContext, SynchronizationContext.Current);
     }
 
-    [DesktopFact]
+    [DesktopFact(Timeout = 30_000)]
     [UISettings(Cultures = new[] { "en-US", "fr-FR" })]
     public async Task ExecutesUnderEachConfiguredCulture()
     {
+        TestContext.Current.CancellationToken.ThrowIfCancellationRequested();
         string culture = CultureInfo.CurrentCulture.Name;
         Assert.Equal(culture, CultureInfo.CurrentUICulture.Name);
         Assert.Contains(culture, new[] { "en-US", "fr-FR" });

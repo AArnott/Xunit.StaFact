@@ -83,6 +83,39 @@ public class UITheoryTests : IDisposable, IAsyncLifetime
         Assert.Equal(0, arg);
     }
 
+    [DesktopTheory(Timeout = 30_000)]
+    [InlineData(0)]
+    public async Task Timeout_NotExceeded(int arg)
+    {
+        Assert.Equal(30_000, Assert.IsAssignableFrom<Xunit.v3.IXunitTestCase>(TestContext.Current.TestCase).Timeout);
+        Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
+        Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
+        await Task.Yield();
+        Assert.Equal(this.ctorThreadId, Environment.CurrentManagedThreadId);
+        Assert.Same(this.ctorSyncContext, SynchronizationContext.Current);
+        TestContext.Current.CancellationToken.ThrowIfCancellationRequested();
+        Assert.Equal(0, arg);
+    }
+
+#pragma warning disable xUnit1069 // Deliberately ignore the CancellationToken to simulate a blocked UI thread.
+    [DesktopTheory(Timeout = 100), Trait("TestCategory", "FailureExpected")]
+    [InlineData(0)]
+    public void Timeout_Exceeded_Sync(int arg)
+    {
+        // Deliberately block the UI thread without honoring the CancellationToken.
+        Thread.Sleep(2000);
+        Assert.Fail($"The test should have timed out. Arg: {arg}");
+    }
+#pragma warning restore xUnit1069
+
+    [DesktopTheory(Timeout = 100), Trait("TestCategory", "FailureExpected")]
+    [InlineData(0)]
+    public async Task Timeout_Exceeded_Async(int arg)
+    {
+        await Task.Delay(2000, TestContext.Current.CancellationToken);
+        Assert.Equal(0, arg);
+    }
+
     [DesktopTheory, Trait("TestCategory", "FailureExpected")]
     [InlineData(0)]
     public async Task FailAfterYield(int arg)

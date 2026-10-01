@@ -12,9 +12,10 @@ public class SharedUIThreadFixtureTests : IClassFixture<SharedUIThreadFixtureTes
         this.fixture = fixture;
     }
 
-    [UIFact]
+    [UIFact(Timeout = 30_000)]
     public void FactUsesFixtureThread()
     {
+        TestContext.Current.CancellationToken.ThrowIfCancellationRequested();
         Assert.True(this.fixture.Initialized);
         Assert.Equal(this.fixture.ThreadId, Environment.CurrentManagedThreadId);
         Assert.Same(this.fixture.Context, SynchronizationContext.Current);
