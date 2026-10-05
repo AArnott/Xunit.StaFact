@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.Build.Traversal">
   <ItemGroup>
-    <ProjectReference Include="**\*.csproj" Publish="false" />
-    <!-- This project validates the shipping assembly by running the NativeAOT compiler, so CI must publish it. -->
+    <!-- Mac project is built/tested only on macOS via the dedicated workflow step. -->
+    <ProjectReference Include="**\*.csproj" Exclude="Xunit.StaFact.Tests.Mac\**\*.csproj" Publish="false" />
   </ItemGroup>
 
   <Target Name="GetNativeAOTTests" Returns="@(_NativeAOTTest)">
