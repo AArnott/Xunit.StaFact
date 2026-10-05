@@ -3,6 +3,6 @@
   "version": "4.1-beta",
   "publicReleaseRefSpec": [
     "^refs/heads/main$",
-    "^refs/heads/v\d+\.\d+$"
+    "^refs/heads/v\\d+\\.\\d+$"
   ]
 }
