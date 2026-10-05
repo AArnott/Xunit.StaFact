@@ -101,6 +101,8 @@ if ($isMTP) {
         -c $Configuration `
         -bl:"$testBinLog" `
         -- `
+        --filter-not-trait 'TestCategory=FailsInCloudTest' `
+        --filter-not-trait 'TestCategory=FailureExpected' `
         @mtpArgs `
         @dumpSwitches `
         @extraArgs
@@ -147,7 +149,7 @@ if ($isMTP) {
     & $dotnet test $RepoRoot `
         --no-build `
         -c $Configuration `
-        --filter "TestCategory!=FailsInCloudTest" `
+        --filter "TestCategory!=FailsInCloudTest & TestCategory!=FailureExpected" `
         --blame-hang-timeout 60s `
         --blame-crash `
         -bl:"$testBinLog" `
