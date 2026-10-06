@@ -5,6 +5,8 @@
     Runs tests as they are run in cloud test runs.
 .PARAMETER Configuration
     The configuration within which to run tests
+.PARAMETER IncludeNativeAOT
+    Runs the NativeAOT-compiled tests and fails if the expected image is missing.
 .PARAMETER Agent
     The name of the agent. This is used in preparing test run titles.
 .PARAMETER PublishResults
@@ -18,12 +20,13 @@
 #>
 [CmdletBinding()]
 Param(
-  [string]$Configuration = 'Debug',
-  [string]$Agent = 'Local',
-  [switch]$PublishResults,
-  [switch]$x86,
-  [string]$dotnet32,
-  [switch]$NoCoverage
+    [string]$Configuration='Debug',
+    [switch]$IncludeNativeAOT,
+    [string]$Agent='Local',
+    [switch]$PublishResults,
+    [switch]$x86,
+    [string]$dotnet32,
+    [switch]$NoCoverage
 )
 
 $RepoRoot = (Resolve-Path "$PSScriptRoot/..").Path
@@ -35,28 +38,24 @@ if ($x86) {
   $x86RunTitleSuffix = ", x86"
   if ($dotnet32) {
     $dotnet = $dotnet32
-  }
-  else {
+  } else {
     $dotnet32Possibilities = "$PSScriptRoot\../obj/tools/x86/.dotnet/dotnet.exe", "$env:AGENT_TOOLSDIRECTORY/x86/dotnet/dotnet.exe", "${env:ProgramFiles(x86)}\dotnet\dotnet.exe"
-    $dotnet32Matches = $dotnet32Possibilities | ? { Test-Path $_ }
+    $dotnet32Matches = $dotnet32Possibilities |? { Test-Path $_ }
     if ($dotnet32Matches) {
       $dotnet = Resolve-Path @($dotnet32Matches)[0]
       Write-Host "Running tests using `"$dotnet`"" -ForegroundColor DarkGray
-    }
-    else {
+    } else {
       Write-Error "Unable to find 32-bit dotnet.exe"
       exit 1
     }
   }
 }
 
-$frameworks = @()
-if ($IsMacOS -or $IsLinux) {
-  $frameworks += '-f', 'net8.0'
-}
-
 $testBinLog = Join-Path $ArtifactStagingFolder (Join-Path build_logs test.binlog)
 $testLogs = Join-Path $ArtifactStagingFolder test_logs
+if (Test-Path -LiteralPath $testLogs) {
+    Remove-Item -LiteralPath $testLogs -Recurse -Force
+}
 
 $globalJson = Get-Content $PSScriptRoot/../global.json | ConvertFrom-Json
 $isMTP = $globalJson.test.runner -eq 'Microsoft.Testing.Platform'
@@ -101,7 +100,6 @@ if ($isMTP) {
         --no-build `
         -c $Configuration `
         -bl:"$testBinLog" `
-        @frameworks `
         -- `
         --filter-not-trait 'TestCategory=FailsInCloudTest' `
         --filter-not-trait 'TestCategory=FailureExpected' `
@@ -109,6 +107,33 @@ if ($isMTP) {
         @dumpSwitches `
         @extraArgs
     if ($LASTEXITCODE -ne 0) { $failedTests += 1 }
+
+    if ($IncludeNativeAOT) {
+        $nativeAotTests = @(& "$PSScriptRoot/Get-NativeAOTTestProjects.ps1" -Configuration $Configuration)
+        foreach ($nativeAotTest in $nativeAotTests) {
+            $testExecutable = $nativeAotTest.ExecutablePath
+            if (-not (Test-Path -LiteralPath $testExecutable -PathType Leaf)) {
+                Write-Error "Expected NativeAOT TUnit test executable '$testExecutable' was not found."
+                $failedTests += 1
+                continue
+            }
+
+            $nativeAotArgs = @(
+                ,'--diagnostic'
+                ,'--diagnostic-output-directory',$testLogs
+                ,'--diagnostic-verbosity','Information'
+                ,'--results-directory',$testLogs
+                ,'--report-trx'
+                ,'--report-trx-filename',"$($nativeAotTest.ProjectName)_$($nativeAotTest.TargetFramework)_NativeAOT_{arch}.trx"
+            )
+            if ($IsWindows) {
+                $nativeAotArgs += $dumpSwitches
+            }
+            Write-Host "Running NativeAOT TUnit tests from '$testExecutable'." -ForegroundColor Cyan
+            & $testExecutable @nativeAotArgs @extraArgs
+            if ($LASTEXITCODE -ne 0) { $failedTests += 1 }
+        }
+    }
 
     $trxFiles = Get-ChildItem -Recurse -Path $testLogs\*.trx
 } else {
@@ -130,7 +155,6 @@ if ($isMTP) {
         -bl:"$testBinLog" `
         --diag "$testDiagLog;TraceLevel=info" `
         --logger trx `
-        @frameworks `
         @coverageArgs `
         @extraArgs
     if ($LASTEXITCODE -ne 0) { $failedTests += 1 }
@@ -153,8 +177,7 @@ $trxFiles |% {
       if ($storage -match '/(?<tfm>net[^/]+)/(?:(?<rid>[^/]+)/)?(?<lib>[^/]+)\.(dll|exe)$') {
         if ($matches.rid) {
           $runTitle = "$($matches.lib) ($($matches.tfm), $($matches.rid), $Agent)"
-        }
-        else {
+        } else {
           $runTitle = "$($matches.lib) ($($matches.tfm)$x86RunTitleSuffix, $Agent)"
         }
       }

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.Build.Traversal">
+  <ItemGroup>
+    <!-- Mac project is built/tested only on macOS via the dedicated workflow step. -->
+    <ProjectReference Include="**\*.csproj" Exclude="Xunit.StaFact.Tests.Mac\**\*.csproj" Publish="false" />
+  </ItemGroup>
+
+  <Target Name="GetNativeAOTTests" Returns="@(_NativeAOTTest)">
+    <MSBuild Projects="@(ProjectReference)" Targets="GetNativeAOTTestVariants" BuildInParallel="true">
+      <Output TaskParameter="TargetOutputs" ItemName="_NativeAOTTest" />
+    </MSBuild>
+    <ItemGroup>
+      <!-- MSBuild copies reference metadata to returned items; native publishes must retain _IsPublishing. -->
+      <_NativeAOTTest Update="@(_NativeAOTTest)" UndefineProperties="" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="PublishNativeAOTTests" AfterTargets="Publish" DependsOnTargets="GetNativeAOTTests">
+    <MSBuild Projects="@(_NativeAOTTest)" Targets="Publish"
+             Properties="NativeAOT=true;TargetFramework=%(_NativeAOTTest.TargetFramework);_IsPublishing=true"
+             BuildInParallel="true" />
+  </Target>
+</Project>

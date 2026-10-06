@@ -109,6 +109,7 @@ try {
         if ($lastexitcode -ne 0) {
             throw "Failure while restoring packages."
         }
+
     }
 
     if (!$NoToolRestore -and $PSCmdlet.ShouldProcess("dotnet tool", "restore")) {
