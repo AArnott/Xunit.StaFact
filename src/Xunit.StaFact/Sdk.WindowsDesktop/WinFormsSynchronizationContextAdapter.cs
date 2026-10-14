@@ -27,7 +27,7 @@ internal class WinFormsSynchronizationContextAdapter : SyncContextAdapter
         while (!task.IsCompleted)
         {
             Application.DoEvents();
-            if (MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, QS_ALLINPUT, MWMO_INPUTAVAILABLE) == WAIT_FAILED)
+            if (MsgWaitForMultipleObjectsEx(0, 0, 250, QS_ALLINPUT, MWMO_INPUTAVAILABLE) == WAIT_FAILED)
             {
                 throw new Win32Exception();
             }
@@ -39,7 +39,7 @@ internal class WinFormsSynchronizationContextAdapter : SyncContextAdapter
     [DllImport("user32", SetLastError = true)]
     private static extern uint MsgWaitForMultipleObjectsEx(
         uint nCount,
-        IntPtr pHandles,
+        nint pHandles,
         uint dwMilliseconds,
         uint dwWakeMask,
         uint dwFlags);
