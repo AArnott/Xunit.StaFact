@@ -4,7 +4,7 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-    <MicrosoftTestingPlatformVersion>2.4.1</MicrosoftTestingPlatformVersion>
+    <MicrosoftTestingPlatformVersion>2.5.1</MicrosoftTestingPlatformVersion>
     <XunitV3LibraryVersion>4.0.1</XunitV3LibraryVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -18,14 +18,13 @@
     <PackageVersion Update="xunit.v3.extensibility.core" Version="$(XunitV3LibraryVersion)" />
   </ItemGroup>
   <ItemGroup Label="Library.Template">
-    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.11.2" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0" />
     <PackageVersion Include="Microsoft.Testing.Platform" Version="$(MicrosoftTestingPlatformVersion)" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CrashDump" Version="$(MicrosoftTestingPlatformVersion)" />
     <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="$(MicrosoftTestingPlatformVersion)" />
     <PackageVersion Include="Microsoft.Testing.Extensions.Telemetry" Version="$(MicrosoftTestingPlatformVersion)" />
     <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="$(MicrosoftTestingPlatformVersion)" />
     <PackageVersion Include="xunit.v3.mtp-v2" Version="$(XunitV3LibraryVersion)" />
-    <PackageVersion Include="xunit.v3.assert" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>
     <!-- Put repo-specific GlobalPackageReference items in this group. -->
@@ -36,6 +35,6 @@
     <!-- The condition works around https://github.com/dotnet/sdk/issues/44951 -->
     <GlobalPackageReference Include="Nerdbank.GitVersioning" Version="3.11.96-beta" Condition="!('$(TF_BUILD)'=='true' and '$(dotnetformat)'=='true')" />
     <GlobalPackageReference Include="PolySharp" Version="1.16.0" />
-    <GlobalPackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" />
+    <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.3.1-beta" />
   </ItemGroup>
 </Project>
