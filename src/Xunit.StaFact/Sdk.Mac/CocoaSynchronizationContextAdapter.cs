@@ -13,8 +13,8 @@ internal class CocoaSynchronizationContextAdapter : SyncContextAdapter
 
     internal override SynchronizationContext Create(string name) => new CocoaSynchronizationContext(name, this.ShouldSetAsCurrent);
 
-    internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
+    internal override void PumpTill(SynchronizationContext syncContext, Task task)
     {
-        ((CocoaSynchronizationContext)synchronizationContext).PumpMessages(task);
+        ((CocoaSynchronizationContext)syncContext).PumpMessages(task);
     }
 }
