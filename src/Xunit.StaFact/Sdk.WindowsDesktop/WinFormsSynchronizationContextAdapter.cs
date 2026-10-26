@@ -22,7 +22,7 @@ internal class WinFormsSynchronizationContextAdapter : SyncContextAdapter
 
     internal override SynchronizationContext Create(string name) => new WindowsFormsSynchronizationContext();
 
-    internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
+    internal override void PumpTill(SynchronizationContext syncContext, Task task)
     {
         while (!task.IsCompleted)
         {

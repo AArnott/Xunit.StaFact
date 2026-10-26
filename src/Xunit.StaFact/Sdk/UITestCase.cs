@@ -167,33 +167,33 @@ public class UITestCase : XunitTestCase, ISelfExecutingXunitTestCase
         }
     }
 
-    protected override void Serialize(IXunitSerializationInfo data)
+    protected override void Serialize(IXunitSerializationInfo info)
     {
-        if (data is null)
+        if (info is null)
         {
-            throw new ArgumentNullException(nameof(data));
+            throw new ArgumentNullException(nameof(info));
         }
 
-        base.Serialize(data);
-        data.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.settings.MaxAttempts);
-        data.AddValue(nameof(UISettingsAttribute.Culture), this.settings.Culture);
-        data.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
+        base.Serialize(info);
+        info.AddValue(nameof(UISettingsAttribute.MaxAttempts), this.settings.MaxAttempts);
+        info.AddValue(nameof(UISettingsAttribute.Culture), this.settings.Culture);
+        info.AddValue(nameof(this.synchronizationContextType), this.synchronizationContextType);
     }
 
-    protected override void Deserialize(IXunitSerializationInfo data)
+    protected override void Deserialize(IXunitSerializationInfo info)
     {
-        if (data is null)
+        if (info is null)
         {
-            throw new ArgumentNullException(nameof(data));
+            throw new ArgumentNullException(nameof(info));
         }
 
-        base.Deserialize(data);
+        base.Deserialize(info);
         this.settings = new()
         {
-            MaxAttempts = data.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)),
-            Culture = data.GetValue<string?>(nameof(UISettingsAttribute.Culture)),
+            MaxAttempts = info.GetValue<int>(nameof(UISettingsAttribute.MaxAttempts)),
+            Culture = info.GetValue<string?>(nameof(UISettingsAttribute.Culture)),
         };
-        this.synchronizationContextType = data.GetValue<SyncContextType>(nameof(this.synchronizationContextType));
+        this.synchronizationContextType = info.GetValue<SyncContextType>(nameof(this.synchronizationContextType));
     }
 
     private class NullAdapter : UISynchronizationContext.Adapter
