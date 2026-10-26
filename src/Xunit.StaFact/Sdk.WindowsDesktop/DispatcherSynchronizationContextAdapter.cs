@@ -15,7 +15,7 @@ internal class DispatcherSynchronizationContextAdapter : SyncContextAdapter
 
     internal override SynchronizationContext Create(string name) => new DispatcherSynchronizationContext();
 
-    internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
+    internal override void PumpTill(SynchronizationContext syncContext, Task task)
     {
         if (!task.IsCompleted)
         {

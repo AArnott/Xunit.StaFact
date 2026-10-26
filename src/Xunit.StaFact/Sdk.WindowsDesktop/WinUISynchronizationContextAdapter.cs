@@ -49,7 +49,7 @@ internal class WinUISynchronizationContextAdapter : SyncContextAdapter
         }
     }
 
-    internal override void PumpTill(SynchronizationContext synchronizationContext, Task task)
+    internal override void PumpTill(SynchronizationContext syncContext, Task task)
     {
         DispatcherQueueController controller = dispatcherQueueController
             ?? throw new InvalidOperationException("The WinUI dispatcher queue has not been initialized.");
@@ -75,16 +75,16 @@ internal class WinUISynchronizationContextAdapter : SyncContextAdapter
         }
     }
 
-    internal override void Cleanup(SynchronizationContext synchronizationContext)
+    internal override void Cleanup(SynchronizationContext syncContext)
     {
-        if (SynchronizationContext.Current == synchronizationContext)
+        if (SynchronizationContext.Current == syncContext)
         {
             this.Cleanup();
             return;
         }
 
         var completion = new TaskCompletionSource<object?>(TaskCreationOptions.RunContinuationsAsynchronously);
-        synchronizationContext.Post(
+        syncContext.Post(
             _ =>
             {
                 try
