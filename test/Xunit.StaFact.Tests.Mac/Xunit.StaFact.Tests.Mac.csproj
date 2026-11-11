@@ -2,6 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net9.0-macos15.0</TargetFramework>
     <OutputType>Exe</OutputType>
+    <!-- The .NET 11 SDK reports NETSDK1202 for the out-of-support net9.0-macos workload. Remove this after moving to net10.0-macos. -->
+    <CheckEolWorkloads>false</CheckEolWorkloads>
     <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
     <HasUnitTests>true</HasUnitTests>
     <HostArchitecture>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)</HostArchitecture>
