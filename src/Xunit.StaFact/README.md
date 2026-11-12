@@ -2,7 +2,7 @@ Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms 
 
 Simply use `[WpfFact]`, `[WinFormsFact]`, `[WinUIFact]`, `[StaFact]` or the cross-platform `[UIFact]` on your test method to run your test under conditions that most closely match the main thread in your application.
 
-WinUI attributes require a Windows-versioned target framework such as `net8.0-windows10.0.17763.0`.
+WinUI attributes require a Windows-versioned target framework such as `net10.0-windows10.0.17763.0`.
 
 Theory variants of these attributes allow for parameterized testing. Check out the xunit.combinatorial NuGet package for pairwise or combinatorial testing with theories.
 

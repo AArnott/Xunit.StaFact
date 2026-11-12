@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!-- The first TFM to be listed is the lucky one that determines which files show up in Solution Explorer. -->
-    <TargetFrameworks>net472;netstandard2.0;net8.0;net8.0-windows</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net8.0-windows10.0.17763.0</TargetFrameworks>
+    <TargetFrameworks>net472;netstandard2.0;net10.0;net10.0-windows</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net10.0-windows10.0.17763.0</TargetFrameworks>
     <!-- Exclude for Linux and Windows, which do not support building macOS projects
          (see https://github.com/xamarin/xamarin-macios/issues/17287). -->
-    <TargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(TargetFrameworks);net9.0-macos15.0</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(TargetFrameworks);net10.0-macos26.0</TargetFrameworks>
     <RootNamespace>Xunit</RootNamespace>
 
     <Description>Run your xunit-based tests on an STA thread with the WPF Dispatcher, a WinForms or WinUI SynchronizationContext, or even a cross-platform generic UI thread emulation with a SynchronizationContext that keeps code running on a "main thread" for that test.
@@ -16,6 +16,12 @@ Theory variants of these attributes allow for parameterized testing. Check out t
     <PackageTags>STA xunit testing unit WPF WinForms WinUI testing</PackageTags>
     <PackageValidationBaselineVersion>3.0.13</PackageValidationBaselineVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- .NET 8 is no longer shipped. Baseline assets for those frameworks are not required to have a compatible successor. -->
+    <PackageValidationBaselineFrameworkToIgnore Include="net8.0" />
+    <PackageValidationBaselineFrameworkToIgnore Include="net8.0-windows7.0" />
+    <PackageValidationBaselineFrameworkToIgnore Include="net8.0-macos14.0" />
+  </ItemGroup>
   <ItemGroup>
     <ExcludedCompileItems Include="@(Compile)" />
   </ItemGroup>
@@ -34,7 +40,7 @@ Theory variants of these attributes allow for parameterized testing. Check out t
     <None Include="@(ExcludedCompileItems)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.WindowsAppSDK" Condition="'$(TargetFramework)'=='net8.0-windows10.0.17763.0'" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Condition="'$(TargetFramework)'=='net10.0-windows10.0.17763.0'" />
     <PackageReference Include="xunit.v3.extensibility.core" />
   </ItemGroup>
 </Project>
