@@ -36,13 +36,13 @@ More closely resembles WinForms-specific semantics including a WinForms-specific
 
 Use @Xunit.WinUIFactAttribute or @Xunit.WinUITheoryAttribute to initialize WinUI XAML and run a test with a
 @Microsoft.UI.Dispatching.DispatcherQueueSynchronizationContext. The test project must use a Windows-versioned
-target framework such as `net8.0-windows10.0.17763.0`.
+target framework such as `net10.0-windows10.0.17763.0`.
 
 An unpackaged test executable that uses these attributes must also enable Windows App SDK bootstrap initialization:
 
 ```xml
 <PropertyGroup>
-  <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+  <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
   <WindowsPackageType>None</WindowsPackageType>
   <WindowsAppSdkBootstrapInitialize>false</WindowsAppSdkBootstrapInitialize>
   <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
