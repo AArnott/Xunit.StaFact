@@ -40,7 +40,7 @@ Xunit test attributes            | Supported OS's   | SynchronizationContext    
 
 <sup>3</sup> Windows-only attributes result in the test to result in "Skipped" on other operating systems.
 
-<sup>4</sup> WinUI attributes require a Windows-versioned target framework such as `net8.0-windows10.0.17763.0`.
+<sup>4</sup> WinUI attributes require a Windows-versioned target framework such as `net10.0-windows10.0.17763.0`.
 
 We also offer a `[UISettingsAttribute]` that can be applied to individual test methods or test classes to control the behavior of the various UI test attributes.
 This attribute offers a means to add automated retries to a test's execution for unstable tests.

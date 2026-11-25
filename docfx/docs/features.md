@@ -111,4 +111,4 @@ disabled while a debugger is attached.
 
 [^3]: Windows-only attributes result in the test to result in "Skipped" on other operating systems.
 
-[^4]: WinUI attributes require a Windows-versioned target framework such as `net8.0-windows10.0.17763.0`.
+[^4]: WinUI attributes require a Windows-versioned target framework such as `net10.0-windows10.0.17763.0`.
